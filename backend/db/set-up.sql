@@ -1,14 +1,24 @@
--- Create database
-IF DB_ID('FinanceTrack') IS NOT NULL
+USE master;
+GO
+
+-- Drop the database if it exists
+IF EXISTS (SELECT name FROM master.sys.databases WHERE name = N'FinanceTrack')
 BEGIN
     DROP DATABASE FinanceTrack;
-END;
+END
+GO
 
+-- Create the new database
 CREATE DATABASE FinanceTrack;
+GO
+
+-- Set the context to the newly created database
 USE FinanceTrack;
+GO
+
 
 -- Create User Table
-CREATE TABLE User (
+CREATE TABLE [User] (
     id INT PRIMARY KEY IDENTITY(1,1),
     password NVARCHAR(255) NOT NULL,
     first_name NVARCHAR(100) NOT NULL,
@@ -31,7 +41,7 @@ CREATE TABLE Expense (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
 
 -- Create Recurring Expense Table
@@ -44,7 +54,7 @@ CREATE TABLE Recurring_expense (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
 
 -- Create Income Category Table
@@ -62,7 +72,7 @@ CREATE TABLE Income (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Income_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
 
 -- Create Recurring Income Table
@@ -75,7 +85,7 @@ CREATE TABLE Recurring_income (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Income_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
 
 -- Create Investment Category Table
@@ -93,7 +103,7 @@ CREATE TABLE Investment (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Investment_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
 
 -- Create Bank Account Category Table
@@ -110,5 +120,5 @@ CREATE TABLE Bank_account (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Bank_account_category(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES [User](id)
 );
