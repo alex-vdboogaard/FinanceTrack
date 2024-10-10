@@ -1,4 +1,4 @@
-export default class User {
+class User {
   constructor(username, password, firstName, lastName = null, dateJoined = new Date()) {
     this.username = username;
     this.password = password;
@@ -7,4 +7,6 @@ export default class User {
     this.dateJoined = dateJoined;
   }
 }
+
+module.exports = User;
 

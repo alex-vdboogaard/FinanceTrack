@@ -1,5 +1,5 @@
-import User from "./models/User"; // Correct import syntax
+const User = require("./models/User");
 
 const user = new User();
 
-export default user; 
+module.exports = user; 
