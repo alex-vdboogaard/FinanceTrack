@@ -1,7 +1,6 @@
 // src/pages/CoolNotFound.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './NotFound.css'; // Custom CSS for styling
 import Button from '../../components/button/Button';
 
 const NotFound = () => {
