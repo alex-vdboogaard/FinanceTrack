@@ -10,6 +10,7 @@ import Sidebar from './components/navigation/sidebar'
 //pages
 import Home from './pages/home/Home';
 import Transactions from './pages/transactions/Transactions';
+import NotFound from './pages/utility/NotFound';
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Home />} />
           <Route path="/transactions" element={<Transactions />} />
+          {/*Catch not existent routes:*/}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </>
     </Router>
