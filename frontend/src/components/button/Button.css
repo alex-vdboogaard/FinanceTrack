@@ -1,0 +1,28 @@
+.btn {
+    padding: 15px 30px;
+    border-radius: 44px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s linear;
+}
+
+.primary-btn {
+    background-color: #0B1326;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #111d3b;
+}
+
+.secondary-btn {
+    background-color: none;
+    color: #0B1326;
+}
+
+.btn:disabled {
+    background-color: #ccc;
+    color: grey;
+    cursor: not-allowed;
+}

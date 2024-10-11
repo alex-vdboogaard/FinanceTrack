@@ -4,3 +4,12 @@ body {
     margin: 0px;
     display: flex;
 }
+
+h1 {
+    font-size: 40px;
+    color: black;
+}
+
+main {
+    padding: 0px 40px;
+}
