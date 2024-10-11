@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import "./Sidebar.css";
 
 const Sidebar = ({ active = 'home' }) => {
@@ -16,10 +17,6 @@ const Sidebar = ({ active = 'home' }) => {
         localStorage.setItem("collapsed", JSON.stringify(!isCollapsed));
         setIsCollapsed(!isCollapsed);
     };
-    const handleLinkClick = (link) => {
-        setActiveLink(link);
-        window.location.href = (`/${link}`)
-    };
 
     return (
         <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -28,29 +25,40 @@ const Sidebar = ({ active = 'home' }) => {
             </button>
             <nav className="nav">
                 <ul>
-                    <li className={activeLink === 'home' ? 'active' : ''} onClick={() => handleLinkClick('home')}>
-                        <img className='icon' src='../src/assets/home.svg' />
-                        {!isCollapsed && <span>Home</span>}
+                    <li className={activeLink === 'home' ? 'active' : ''}>
+                        <Link to="/overview">
+                            <img className='icon' src='../src/assets/home.svg' />
+                            {!isCollapsed && <span>Home</span>}
+                        </Link></li>
+                    <li className={activeLink === 'transactions' ? 'active' : ''} >
+                        <Link to="/transactions">
+                            <img className='icon' src='../src/assets/transaction.svg' />
+                            {!isCollapsed && <span>Transactions</span>}
+                        </Link>
                     </li>
-                    <li className={activeLink === 'transactions' ? 'active' : ''} onClick={() => handleLinkClick('transactions')}>
-                        <img className='icon' src='../src/assets/transaction.svg' />
-                        {!isCollapsed && <span>Transactions</span>}
+                    <li className={activeLink === 'cards' ? 'active' : ''}>
+                        <Link to="/cards">
+                            <img className='icon' src='../src/assets/cards.svg' />
+                            {!isCollapsed && <span>Cards</span>}
+                        </Link>
                     </li>
-                    <li className={activeLink === 'cards' ? 'active' : ''} onClick={() => handleLinkClick('cards')}>
-                        <img className='icon' src='../src/assets/cards.svg' />
-                        {!isCollapsed && <span>Cards</span>}
+                    <li className={activeLink === 'investments' ? 'active' : ''}>
+                        <Link to="/investments">
+                            <img className='icon' src='../src/assets/investments.svg' />
+                            {!isCollapsed && <span>Investments</span>}
+                        </Link>
                     </li>
-                    <li className={activeLink === 'investments' ? 'active' : ''} onClick={() => handleLinkClick('investments')}>
-                        <img className='icon' src='../src/assets/investments.svg' />
-                        {!isCollapsed && <span>Investments</span>}
+                    <li className={activeLink === 'savings' ? 'active' : ''}>
+                        <Link to="/savings">
+                            <img className='icon' src='../src/assets/savings.svg' />
+                            {!isCollapsed && <span>Savings</span>}
+                        </Link>
                     </li>
-                    <li className={activeLink === 'savings' ? 'active' : ''} onClick={() => handleLinkClick('savings')}>
-                        <img className='icon' src='../src/assets/savings.svg' />
-                        {!isCollapsed && <span>Savings</span>}
-                    </li>
-                    <li className={activeLink === 'statements' ? 'active' : ''} onClick={() => handleLinkClick('statements')}>
-                        <img className='icon' src='../src/assets/statements.svg' />
-                        {!isCollapsed && <span>Statements</span>}
+                    <li className={activeLink === 'statements' ? 'active' : ''}>
+                        <Link to="/statements">
+                            <img className='icon' src='../src/assets/statements.svg' />
+                            {!isCollapsed && <span>Statements</span>}
+                        </Link>
                     </li>
                 </ul>
             </nav>

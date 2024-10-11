@@ -1,18 +1,28 @@
-import { useState } from 'react'
+//global css styles
 import './App.css'
+
+//routes
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+//components
 import Sidebar from './components/navigation/sidebar'
-import Button from './components/button/Button'
+
+//pages
+import Home from './pages/home/Home';
+import Transactions from './pages/transactions/Transactions';
 
 function App() {
   return (
-    <>
-      <Sidebar />
-      <main>
-        <h1>Good afternoon, Alex</h1>
-        <Button onClick={() => alert("Hi!")} className='primary-btn'>+ Add new asset</Button>
-      </main>
-
-    </>
+    <Router>
+      <>
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/overview" element={<Home />} />
+          <Route path="/transactions" element={<Transactions />} />
+        </Routes>
+      </>
+    </Router>
   )
 }
 
