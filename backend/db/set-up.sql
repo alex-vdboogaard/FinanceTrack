@@ -29,7 +29,9 @@ CREATE TABLE Asset (
     boughtFor DECIMAL(10,2) NOT NULL,
     currentValue DECIMAL(10,2) NOT NULL,
     asset_type_id INT, 
+    user_id INT,
     FOREIGN KEY (asset_type_id) REFERENCES Asset_Type(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id)
 );
 
 -- Create Expense Category Table
