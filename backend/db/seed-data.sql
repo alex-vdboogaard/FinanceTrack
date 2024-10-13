@@ -13,11 +13,11 @@ VALUES
 ('Vehicles');
 
 -- Insert data into Asset table
-INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id)
+INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id)
 VALUES 
-('House', 300000.00, 320000.00, 1), -- Real Estate
-('Tesla Stock', 5000.00, 7000.00, 2), -- Stocks
-('Car', 25000.00, 18000.00, 3); -- Vehicles
+('House', 300000.00, 320000.00, 1,1), -- Real Estate
+('Tesla Stock', 5000.00, 7000.00, 2,1), -- Stocks
+('Car', 25000.00, 18000.00, 3,1); -- Vehicles
 
 -- Insert data into Expense_category table
 INSERT INTO Expense_category (name)
