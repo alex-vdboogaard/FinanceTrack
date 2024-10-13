@@ -103,7 +103,7 @@ VALUES
 INSERT INTO Investment (amount, description, date, category_id, user_id)
 VALUES 
 (1000.00, 'Apple Ltd', NOW(), 1, 1), -- Stocks
-(150000.00, 'Coca Cola', NOW(), 1, 2), -- Real Estate
+(150000.00, 'Coca Cola', NOW(), 1, 2); -- Real Estate
 
 -- Insert data into Bank_account_category table
 INSERT INTO Bank_account_category (name)
