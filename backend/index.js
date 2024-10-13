@@ -6,7 +6,11 @@ const mysql = require("mysql2")
 require('dotenv').config();
 const port = process.env.PORT || 3001;
 
+//global
 const user = require("./global");
+
+//routes
+const assets = require("./routes/assets");
 
 const connection = mysql.createConnection({
     host: '127.0.0.1', // Change this if your database is hosted elsewhere
@@ -30,6 +34,9 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false }
 }));
+
+//routes
+app.use("/assets", assets);
 
 app.get("/test", async (req, res) => {
     connection.query('SELECT * FROM `User`', (err, results) => {
