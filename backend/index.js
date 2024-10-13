@@ -2,6 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require('bcrypt');
 const app = express();
+const cors = require("cors");
+
 require('dotenv').config();
 const port = process.env.PORT || 3001;
 
@@ -10,7 +12,7 @@ const assets = require("./routes/assets");
 
 const connection = require("./db/db");
 
-
+app.use(cors());
 app.use(express.json());
 app.use(session({
     secret: process.env.SECRET,

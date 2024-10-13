@@ -30,16 +30,16 @@ const Sidebar = ({ active = 'home' }) => {
                             <img className='icon' src='../src/assets/home.svg' />
                             {!isCollapsed && <span>Home</span>}
                         </Link></li>
-                    <li className={activeLink === 'transactions' ? 'active' : ''} >
-                        <Link to="/transactions">
+                    <li className={activeLink === 'monthlyreview' ? 'active' : ''} >
+                        <Link to="/monthly-review">
                             <img className='icon' src='../src/assets/transaction.svg' />
                             {!isCollapsed && <span>Transactions</span>}
                         </Link>
                     </li>
-                    <li className={activeLink === 'cards' ? 'active' : ''}>
-                        <Link to="/cards">
+                    <li className={activeLink === 'accounts' ? 'active' : ''}>
+                        <Link to="/accounts">
                             <img className='icon' src='../src/assets/cards.svg' />
-                            {!isCollapsed && <span>Cards</span>}
+                            {!isCollapsed && <span>Accounts</span>}
                         </Link>
                     </li>
                     <li className={activeLink === 'investments' ? 'active' : ''}>
@@ -52,6 +52,12 @@ const Sidebar = ({ active = 'home' }) => {
                         <Link to="/savings">
                             <img className='icon' src='../src/assets/savings.svg' />
                             {!isCollapsed && <span>Savings</span>}
+                        </Link>
+                    </li>
+                    <li className={activeLink === 'assets' ? 'active' : ''}>
+                        <Link to="/assets">
+                            <img className='icon' src='../src/assets/assets.svg' />
+                            {!isCollapsed && <span>Assets</span>}
                         </Link>
                     </li>
                     <li className={activeLink === 'statements' ? 'active' : ''}>

@@ -20,12 +20,12 @@ router.get("/", (req, res) => {
             return;
         }
 
-        const assets = results.map(asset => ({
-            name: asset.name,
-            boughtFor: asset.boughtFor,
-            currentValue: asset.currentValue,
-            assetType: asset.assetType
-        }));
+        const assets = results.map(asset => new Asset(
+            asset.name,
+            asset.boughtFor,
+            asset.currentValue,
+            asset.assetType
+        ));
 
         res.status(200).json({ assets });
     });
