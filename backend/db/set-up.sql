@@ -57,8 +57,6 @@ CREATE TABLE Recurring_expense (
     id INT PRIMARY KEY AUTO_INCREMENT,
     amount DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255),
-    start_date DATETIME NOT NULL,
-    `interval` VARCHAR(50) NOT NULL,
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
@@ -71,25 +69,11 @@ CREATE TABLE Income_category (
     name VARCHAR(100) NOT NULL
 );
 
--- Create Income Table
-CREATE TABLE Income (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    amount DECIMAL(10, 2) NOT NULL,
-    source VARCHAR(255),
-    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    category_id INT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Income_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
-);
-
 -- Create Recurring Income Table
 CREATE TABLE Recurring_income (
     id INT PRIMARY KEY AUTO_INCREMENT,
     amount DECIMAL(10, 2) NOT NULL,
-    `source` VARCHAR(255),
-    start_date DATETIME NOT NULL,
-    `interval` VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Income_category(id),
@@ -106,7 +90,7 @@ CREATE TABLE Investment_category (
 CREATE TABLE Investment (
     id INT PRIMARY KEY AUTO_INCREMENT,
     amount DECIMAL(10, 2) NOT NULL,
-    type VARCHAR(100) NOT NULL,
+    description VARCHAR(100) NOT NULL,
     date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     category_id INT NOT NULL,
     user_id INT NOT NULL,
@@ -123,7 +107,7 @@ CREATE TABLE Bank_account_category (
 -- Create Bank Account Table
 CREATE TABLE Bank_account (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    account_number VARCHAR(50) NOT NULL,
+    description VARCHAR(50) NOT NULL,
     balance DECIMAL(10, 2) NOT NULL,
     category_id INT NOT NULL,
     user_id INT NOT NULL,
