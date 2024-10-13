@@ -13,6 +13,10 @@ export default function Assets() {
     const [totalCurrentValue, setTotalCurrentValue] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const [triggerRerender, setTriggerRerender] = useState(false);
+    const handleRerender = () => {
+        setTriggerRerender(prev => !prev);
+    };
 
     useEffect(() => {
         fetch(`http://localhost:3001/assets/`)
@@ -34,8 +38,7 @@ export default function Assets() {
             .catch((error) => {
                 console.log("Error: ", error)
             });
-    }, []);
-
+    }, [triggerRerender]);
 
     const handleSave = (asset) => {
         fetch(`http://localhost:3001/assets`, {
@@ -51,9 +54,6 @@ export default function Assets() {
                         pops.simplePop("error", errorData.message || "Network error");
                     });
                 }
-                return response.json().then(successData => {
-                    pops.simplePop("success", successData.message);
-                });
             })
             .catch(error => {
                 pops.simplePop("error", `Error updating asset: ${error}`);
@@ -108,7 +108,7 @@ export default function Assets() {
             </div>
 
             <Modal isOpen={isSidebarOpen} toggleSidebar={newAsset}>
-                <NewAsset></NewAsset>
+                <NewAsset onAssetCreated={handleRerender} />
             </Modal>
 
             <table>
@@ -151,8 +151,8 @@ export default function Assets() {
                                     onBlur={() => handleSave(asset)}
                                 />
                             </td>
-                            <td>
-                                <button onClick={() => handleDelete(asset)}>💾</button> {/* Action button to save */}
+                            <td className="delete-icon">
+                                <button onClick={() => handleDelete(asset)}><img src="../src/assets/delete.svg" /></button> {/* Action button to save */}
                             </td>
                         </tr>
                     ))}

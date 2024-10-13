@@ -33,6 +33,36 @@ router.get("/", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+    const { name, boughtFor, currentValue, type } = req.body;
+    const userId = req.session.userId; // Ensure userId is retrieved correctly
+
+    // Check if the required fields are present
+    if (!name || !boughtFor || !currentValue || !type || !userId) {
+        return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Prepare the SQL query with placeholders
+    const query = `
+        INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    const values = [name, boughtFor, currentValue, type, userId];
+
+    // Execute the query
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error creating the asset: ", err.message); // Log specific error message
+            return res.status(500).json({ message: "Error creating the asset." });
+        }
+        res.status(201).json({ message: "Asset created successfully." });
+    });
+
+});
+
+
+
 router.put("/", (req, res) => {
     const { name, boughtFor, currentValue, userId, id } = req.body;
 

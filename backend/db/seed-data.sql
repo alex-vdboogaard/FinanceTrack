@@ -1,16 +1,22 @@
 -- Insert data into User table
 INSERT INTO `User` (password, first_name, last_name)
 VALUES 
-('password123', 'John', 'Doe'),
-('password456', 'Jane', 'Smith'),
-('password789', 'Bob', 'Johnson');
+('password123', 'John', 'Doe');
 
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
 VALUES 
-('Real Estate'),
-('Stocks'),
-('Vehicles');
+('Property'),
+('Laptop'),
+('Phone'),
+('Vehicle'),
+('Jewelry'),
+('Equipment'),
+('Tech'),
+('Tools'),
+('Appliances'),
+('Furniture'),
+('Other');
 
 -- Insert data into Asset table
 INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id)
@@ -22,69 +28,102 @@ VALUES
 -- Insert data into Expense_category table
 INSERT INTO Expense_category (name)
 VALUES 
-('Food'),
-('Transport'),
-('Utilities');
+("Rent"),
+("Mortgage"),
+("Utilities"),
+("Internet"),
+("Phone bill"),
+("Car insurance"),
+("Health insurance"),
+("Groceries"),
+("Transportation"),
+("Gasoline"),
+("Public transit"),
+("Loan payments"),
+("Credit card payments"),
+("Subscriptions"),
+("Streaming services"),
+("Savings contributions"),
+("Debt repayment");
 
--- Insert data into Expense table
-INSERT INTO Expense (amount, description, date, category_id, user_id)
-VALUES 
-(50.00, 'Groceries at supermarket', NOW(), 1, 1), -- Food
-(30.00, 'Taxi fare', NOW(), 2, 2), -- Transport
-(100.00, 'Electricity bill', NOW(), 3, 3); -- Utilities
 
 -- Insert data into Recurring_expense table
-INSERT INTO Recurring_expense (amount, description, start_date, `interval`, category_id, user_id)
+INSERT INTO Recurring_expense (amount, description, category_id, user_id)
 VALUES 
-(10.00, 'Gym membership', NOW(), 'Monthly', 1, 1), -- Food
-(15.00, 'Spotify subscription', NOW(), 'Monthly', 3, 2), -- Utilities
-(50.00, 'Internet bill', NOW(), 'Monthly', 3, 3); -- Utilities
+(8000, 'Lynwood apartment rent', 1, 1),
+(800, 'Telkom fibre', 4, 1),
+(50.00, 'Meredez cover', 6, 1); 
 
 -- Insert data into Income_category table
 INSERT INTO Income_category (name)
 VALUES 
-('Salary'),
-('Investments'),
-('Freelance');
+("Salary"),
+("Hourly wages"),
+("Commission"),
+("Freelance income"),
+("Rental income"),
+("Business profits"),
+("Investment dividends"),
+("Pension"),
+("Social security"),
+("Government benefits"),
+("Child support"),
+("Alimony"),
+("Interest income"),
+("Royalties");
 
--- Insert data into Income table
-INSERT INTO Income (amount, source, date, category_id, user_id)
-VALUES 
-(5000.00, 'Monthly salary', NOW(), 1, 1), -- Salary
-(200.00, 'Stock dividends', NOW(), 2, 2), -- Investments
-(150.00, 'Freelance project', NOW(), 3, 3); -- Freelance
 
 -- Insert data into Recurring_income table
-INSERT INTO Recurring_income (amount, source, start_date, `interval`, category_id, user_id)
+INSERT INTO Recurring_income (amount, description, category_id, user_id)
 VALUES 
-(5000.00, 'Monthly salary', NOW(), 'Monthly', 1, 1), -- Salary
-(250.00, 'Rental income', NOW(), 'Monthly', 2, 2), -- Investments
-(300.00, 'Contract work', NOW(), 'Quarterly', 3, 3); -- Freelance
+(35000.00, 'Monthly salary',  1, 1), 
+(250.00, 'Rental income',5, 2), 
+(100.00, 'Dividends Coca Cola', 7, 3); 
 
 -- Insert data into Investment_category table
 INSERT INTO Investment_category (name)
 VALUES 
-('Stocks'),
-('Real Estate'),
-('Bonds');
+("Stocks"),
+("Bonds"),
+("Mutual funds"),
+("Real estate"),
+("Index funds"),
+("Exchange-traded funds (ETFs)"),
+("Cryptocurrency"),
+("Commodities"),
+("Precious metals"),
+("Retirement accounts (e.g., 401k, IRA)"),
+("Certificates of deposit (CDs)"),
+("Annuities"),
+("Hedge funds"),
+("Private equity");
+
 
 -- Insert data into Investment table
-INSERT INTO Investment (amount, type, date, category_id, user_id)
+INSERT INTO Investment (amount, description, date, category_id, user_id)
 VALUES 
-(1000.00, 'Apple Stock', NOW(), 1, 1), -- Stocks
-(150000.00, 'Apartment', NOW(), 2, 2), -- Real Estate
-(500.00, 'Government Bonds', NOW(), 3, 3); -- Bonds
+(1000.00, 'Apple Ltd', NOW(), 1, 1), -- Stocks
+(150000.00, 'Coca Cola', NOW(), 1, 2); -- Real Estate
 
 -- Insert data into Bank_account_category table
 INSERT INTO Bank_account_category (name)
 VALUES 
-('Savings'),
-('Checking'),
-('Business');
+("Cheque"),
+("Credit"),
+("Savings"),
+("Money market"),
+("Certificate of deposit (CD)"),
+("Joint"),
+("Business"),
+("Retirement (e.g., IRA, 401k)"),
+("Brokerage"),
+("Custodial"),
+("Health savings (HSA)"),
+("Specialty (e.g., for minors)"),
+("Foreign currency");
 
 -- Insert data into Bank_account table
-INSERT INTO Bank_account (account_number, balance, category_id, user_id)
+INSERT INTO Bank_account (description, balance, category_id, user_id)
 VALUES 
-('123456789', 2000.00, 1, 1), -- Savings
-('987654321', 1500.00, 2, 2), -- Checking
-('456789123', 5000.00, 3, 3); -- Business
+('Investec Youth Account', 2000.00, 3, 1), -- Savings
+('ABSA student account', 1500.00, 2, 2); -- Credit
