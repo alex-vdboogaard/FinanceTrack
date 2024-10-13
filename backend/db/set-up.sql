@@ -16,10 +16,10 @@ CREATE TABLE `User` (
     date_joined DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Asset Type Table
+-- Create Asset_Type Table
 CREATE TABLE Asset_Type (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
+    name VARCHAR(100) NOT NULL
 );
 
 -- Create Asset Table
@@ -28,6 +28,7 @@ CREATE TABLE Asset (
     name VARCHAR(30) NOT NULL,
     boughtFor DECIMAL(10,2) NOT NULL,
     currentValue DECIMAL(10,2) NOT NULL,
+    asset_type_id INT, 
     FOREIGN KEY (asset_type_id) REFERENCES Asset_Type(id)
 );
 
