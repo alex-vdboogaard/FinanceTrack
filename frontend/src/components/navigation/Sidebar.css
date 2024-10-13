@@ -4,8 +4,7 @@
     transition: width 0.3s ease;
     display: flex;
     flex-direction: column;
-    margin: 0px;
-    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .sidebar.collapsed {
@@ -13,17 +12,20 @@
 }
 
 .toggle-btn {
-    background: none;
+    background: white;
     border: none;
-    font-size: 20px;
+    font-size: 25px;
+    border-radius: 2000px;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-top: 200px;
+    padding: 10px 15px;
 }
 
 .nav ul {
     list-style-type: none;
     padding: 0;
     width: auto;
+    margin-top: 42px;
 }
 
 .nav li {
@@ -61,19 +63,4 @@
 
 .nav span {
     transition: opacity 0.3s ease;
-}
-
-.sidebar.collapsed .nav span {
-    display: none;
-}
-
-/* Ensure content starts next to the sidebar */
-.main-content {
-    margin-left: 200px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-}
-
-.sidebar.collapsed+.main-content {
-    margin-left: 60px;
 }

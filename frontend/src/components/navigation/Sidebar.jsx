@@ -20,9 +20,6 @@ const Sidebar = ({ active = 'home' }) => {
 
     return (
         <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-            <button className="toggle-btn" onClick={toggleSidebar}>
-                {isCollapsed ? '>' : '<'}
-            </button>
             <nav className="nav">
                 <ul>
                     <li className={activeLink === 'home' ? 'active' : ''}>
@@ -67,6 +64,9 @@ const Sidebar = ({ active = 'home' }) => {
                         </Link>
                     </li>
                 </ul>
+                <button className="toggle-btn" onClick={toggleSidebar}>
+                    {isCollapsed ? '>' : '<'}
+                </button>
             </nav>
         </div>
     );

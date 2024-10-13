@@ -1,0 +1,50 @@
+input,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+}
+
+select,
+option {
+    cursor: pointer;
+}
+
+/* Optional: Customize focus state for better accessibility */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #0057b300;
+    background-color: none;
+}
+
+td {
+    padding: 0px;
+}
+
+input,
+tfoot td {
+    padding: 20px;
+}
+
+label {
+    font-size: 20px;
+}
+
+.normal-input {
+    margin-top: 8px;
+    border: 1px solid grey;
+    padding: 10px 20px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 400px;
+}

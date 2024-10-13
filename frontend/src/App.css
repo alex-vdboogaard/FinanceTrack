@@ -10,8 +10,13 @@ h1 {
     color: black;
 }
 
+h2 {
+    font-size: 37px;
+}
+
 main {
-    padding: 0px 40px;
+    padding: 20px 40px;
+    width: 100%;
 }
 
 a {
@@ -20,4 +25,42 @@ a {
     margin: 0px;
     padding: 0px;
     display: flex;
+}
+
+ul {
+    list-style: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border-bottom: 1px solid #ddd;
+    padding: 20px 20px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+tfoot {
+    font-weight: bold;
+}
+
+.no-border {
+    border: none;
+    background-color: none;
+}
+
+
+tr:hover {
+    background-color: #f8f8f8;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
 }
