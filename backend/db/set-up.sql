@@ -16,6 +16,21 @@ CREATE TABLE `User` (
     date_joined DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create Asset Type Table
+CREATE TABLE Asset_Type (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+);
+
+-- Create Asset Table
+CREATE TABLE Asset (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    boughtFor DECIMAL(10,2) NOT NULL,
+    currentValue DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (asset_type_id) REFERENCES Asset_Type(id)
+);
+
 -- Create Expense Category Table
 CREATE TABLE Expense_category (
     id INT PRIMARY KEY AUTO_INCREMENT,
