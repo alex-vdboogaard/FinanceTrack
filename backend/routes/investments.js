@@ -35,10 +35,10 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     let { description, invested, currentValue, type } = req.body;
-    description = name.replace(/'/g, '"');
+    description = description.replace(/'/g, '"');
     const userId = req.session.userId;
 
-    if (!name || !amountInvested || !currentValue || !type || !userId) {
+    if (!description || !invested || !currentValue || !type || !userId) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -60,16 +60,16 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    let { description, invested, currentValue, userId, id } = req.body;
-    description = name.replace(/'/g, '"');
+    let { description, invested, currentValue, user_id, id } = req.body;
+    description = description.replace(/'/g, '"');
 
-    if (req.userId !== userId) {
+    if (req.userId !== user_id) {
         res.status(403).json({ message: "You may not update this investment" });
     }
 
     const query = `
         UPDATE Investment
-        SET name = '${description}', invested = ${invested}, currentValue = ${currentValue}
+        SET description = '${description}', invested = ${invested}, currentValue = ${currentValue}
         WHERE id = ${id}
     `;
 
@@ -114,7 +114,7 @@ router.delete("/", (req, res) => {
 
 router.get("/investment-types", (req, res) => {
     const query = `
-        SELECT id, name FROM Investment_Type
+        SELECT id, name FROM Investment_Category
     `;
 
     connection.query(query, (err, results) => {
