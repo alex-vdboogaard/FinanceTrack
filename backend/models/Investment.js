@@ -1,9 +1,12 @@
 class Investment {
-    constructor(amount, type, date, categoryId, userId) {
-        this.amount = amount;
+    constructor(id, description, invested, currentValue, type, userId) {
+        this.id = id;
+        this.description = description;
+        this.invested = invested;
         this.type = type;
-        this.date = date;
-        this.categoryId = categoryId; // Reference to InvestmentCategory
-        this.userId = userId;         // Reference to User
+        this.currentValue = currentValue;
+        this.userId = userId;
     }
 }
+
+module.exports = Investment;

@@ -100,10 +100,11 @@ VALUES
 
 
 -- Insert data into Investment table
-INSERT INTO Investment (amount, description, date, category_id, user_id)
+INSERT INTO Investment (description, invested, currentValue, category_id, user_id)
 VALUES 
-(1000.00, 'Apple Ltd', NOW(), 1, 1), -- Stocks
-(150000.00, 'Coca Cola', NOW(), 1, 2); -- Real Estate
+('ABSA stocks', 100000, 120000, 1, 1),
+('Apple stocks', 500, 1000, 1, 1),
+('Coca Cola stocks', 1000, 3000, 1, 1);
 
 -- Insert data into Bank_account_category table
 INSERT INTO Bank_account_category (name)

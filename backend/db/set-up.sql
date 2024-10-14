@@ -89,9 +89,9 @@ CREATE TABLE Investment_category (
 -- Create Investment Table
 CREATE TABLE Investment (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    amount DECIMAL(10, 2) NOT NULL,
     description VARCHAR(100) NOT NULL,
-    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    invested DECIMAL(10, 2) NOT NULL,
+    currentValue DECIMAL(10, 2) NOT NULL,
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Investment_category(id),
