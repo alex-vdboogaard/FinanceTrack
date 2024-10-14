@@ -6,7 +6,7 @@ const Modal = ({ isOpen, toggleSidebar, children }) => {
 
         <div className={`modal ${isOpen ? 'open' : ''}`}>
             <button className="modal-toggle" onClick={toggleSidebar}>
-                X
+                <img src="../src/assets/close.svg" alt="close icon" />
             </button>
             {children}
         </div>

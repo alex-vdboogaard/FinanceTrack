@@ -3,23 +3,25 @@
     top: 0;
     right: -100%;
     width: auto;
-    height: 100%;
+    max-height: 90vh;
+    /* Set a max-height relative to the viewport */
     background-color: white;
     transition: right 0.6s ease;
     z-index: 1000;
     padding: 50px;
-    margin-bottom: 100px;
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
-    overflow-y: scroll;
+    overflow-y: auto;
+    /* Allows scrolling only when content overflows */
 }
+
 
 .modal.open {
     right: 0;
 }
 
 .modal-toggle {
-    color: rgb(0, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 0px;
 }

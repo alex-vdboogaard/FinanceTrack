@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import Button from "../../components/button/Button"
 import Modal from "../../components/modal/Modal";
-import NewAsset from "./NewAsset";
-import "./Assets.css"
+import NewBankAccount from "./NewBankAccount";
+import "./BankAccounts.css"
 import "../../../node_modules/pop-message/pop.css"
 import pops from "pop-message"
 
-export default function Assets() {
-    const [assets, setAssets] = useState([]);
+export default function BankAccounts() {
+    const [bankAccounts, setBankAccounts] = useState([]);
     const [count, setCount] = useState(0);
-    const [totalBoughtFor, setTotalBoughtFor] = useState(0);
-    const [totalCurrentValue, setTotalCurrentValue] = useState(0);
+    const [totalBalance, setTotalBalance] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [triggerRerender, setTriggerRerender] = useState(false);
+
     const handleRerender = () => {
         setTriggerRerender(prev => !prev);
     };
 
     useEffect(() => {
-        fetch(`http://localhost:3001/assets/`)
+        fetch(`http://localhost:3001/bank-accounts`)
             .then((response) => {
                 if (!response.ok) {
                     return response.json().then(errorData => {
@@ -29,24 +29,22 @@ export default function Assets() {
                 return response.json();
             })
             .then((data) => {
-                setAssets(data.assets);
-                setCount(data.assets.length);
-                setTotalBoughtFor(data.assets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0));
-                setTotalCurrentValue(data.assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue), 0));
-
+                setBankAccounts(data.bankAccounts);
+                setCount(data.bankAccounts.length);
+                setTotalBalance(data.bankAccounts.reduce((acc, a) => acc + parseFloat(a.balance), 0));
             })
             .catch((error) => {
                 console.log("Error: ", error)
             });
     }, [triggerRerender]);
 
-    const handleSave = (asset) => {
-        fetch(`http://localhost:3001/assets`, {
+    const handleSave = (bankAccount) => {
+        fetch(`http://localhost:3001/bank-accounts`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(asset),
+            body: JSON.stringify(bankAccount),
         })
             .then(response => {
                 if (!response.ok) {
@@ -56,28 +54,30 @@ export default function Assets() {
                 }
             })
             .catch(error => {
-                pops.simplePop("error", `Error updating asset: ${error}`);
+                pops.simplePop("error", `Error updating bank account: ${error}`);
             });
     };
 
     const handleUpdate = (index, field, value) => {
-        const updatedAssets = [...assets];
-        updatedAssets[index][field] = value;
-        setAssets(updatedAssets);
-        setTotalBoughtFor(updatedAssets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0));
+        const updatedBanks = [...bankAccounts];
+        updatedBanks[index][field] = value;
+        setBankAccounts(updatedBanks);
+        if (field === "balance") {
+            setTotalBalance(bankAccounts.reduce((acc, a) => acc + parseFloat(a.balance), 0));
+        }
     };
 
-    const handleDelete = async (asset) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${asset.name}'?`);
+    const handleDelete = async (bankAccount) => {
+        const confirm = await pops.confirmPop(`Are you sure you want to delete '${bankAccount.name}'?`);
         if (confirm) {
-            fetch(`http://localhost:3001/assets`, {
+            fetch(`http://localhost:3001/bank-accounts`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: asset.id,
-                    userId: asset.userId
+                    id: bankAccount.id,
+                    userId: bankAccount.userId
                 }),
             })
                 .then(response => {
@@ -87,29 +87,29 @@ export default function Assets() {
                         });
                     }
                     return response.json().then(successData => {
-                        setAssets(assets.filter(a => a.id !== asset.id));
+                        setBankAccounts(bankAccounts.filter(a => a.id !== bankAccount.id));
                         setCount(prevCount => prevCount - 1);
                         pops.simplePop("success", successData.message);
                     });
                 })
                 .catch(error => {
-                    pops.simplePop("error", `Error deleting asset: ${error}`);
+                    pops.simplePop("error", `Error deleting account: ${error}`);
                 });
         }
     };
 
-    const newAsset = () => {
+    const newBankAccount = () => {
         setIsSidebarOpen(!isSidebarOpen);
     }
     return (
         <main>
             <div style={{ display: "flex", alignItems: "center" }}>
-                <h1 style={{ marginRight: "20px" }}>Physical assets</h1>
-                <Button onClick={newAsset} className="primary-btn">+ New asset</Button>
+                <h1 style={{ marginRight: "20px" }}>Bank Accounts</h1>
+                <Button onClick={newBankAccount} className="primary-btn">+ New bank account</Button>
             </div>
 
-            <Modal isOpen={isSidebarOpen} toggleSidebar={newAsset}>
-                <NewAsset onAssetCreated={handleRerender} />
+            <Modal isOpen={isSidebarOpen} toggleSidebar={newBankAccount}>
+                <NewBankAccount onBankCreated={handleRerender} />
             </Modal>
 
             <table>
@@ -117,43 +117,34 @@ export default function Assets() {
                     <tr className="no-border">
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Bought for (R)</th>
-                        <th>Current value (R)</th>
+                        <th>Balance (R)</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {assets.map((asset, index) => (
+                    {bankAccounts.map((account, index) => (
                         <tr key={index}>
                             <td>
                                 <input
                                     type="text"
-                                    value={asset.name}
-                                    onChange={(e) => handleUpdate(index, 'name', e.target.value, asset)}
-                                    onBlur={(e) => handleSave(asset)}
+                                    value={account.name}
+                                    onChange={(e) => handleUpdate(index, 'name', e.target.value, account)}
+                                    onBlur={() => handleSave(account)}
                                 />
                             </td>
                             <td>
-                                {asset.assetType}
+                                {account.type}
                             </td>
                             <td>
                                 <input
                                     type="number"
-                                    value={asset.boughtFor}
-                                    onChange={(e) => handleUpdate(index, 'boughtFor', parseFloat(e.target.value), asset)}
-                                    onBlur={() => handleSave(asset)}
-                                />
-                            </td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={asset.currentValue}
-                                    onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value), asset)}
-                                    onBlur={() => handleSave(asset)}
+                                    value={account.balance}
+                                    onChange={(e) => handleUpdate(index, 'balance', parseFloat(e.target.value), account)}
+                                    onBlur={() => handleSave(account)}
                                 />
                             </td>
                             <td className="delete-icon">
-                                <button onClick={() => handleDelete(asset)}><img src="../src/assets/delete.svg" /></button> {/* Action button to save */}
+                                <button onClick={() => handleDelete(account)}><img src="../src/assets/delete.svg" /></button>
                             </td>
                         </tr>
                     ))}
@@ -161,8 +152,7 @@ export default function Assets() {
                 <tfoot>
                     <tr>
                         <td colSpan="2">Count: {count}</td>
-                        <td>Total: R{totalBoughtFor}</td>
-                        <td>Total: R{totalCurrentValue}</td>
+                        <td>Total: R{totalBalance}</td>
                         <td></td>
                     </tr>
                 </tfoot>

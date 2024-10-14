@@ -125,5 +125,5 @@ VALUES
 -- Insert data into Bank_account table
 INSERT INTO Bank_account (description, balance, category_id, user_id)
 VALUES 
-('Investec Youth Account', 2000.00, 3, 1), -- Savings
-('ABSA student account', 1500.00, 2, 2); -- Credit
+('Investec Youth Account', 2000.00, 3, 1),
+('ABSA student account', 1500.00, 2, 2); 

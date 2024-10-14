@@ -30,11 +30,11 @@ const Sidebar = ({ active = 'home' }) => {
                     <li className={activeLink === 'monthlyreview' ? 'active' : ''} >
                         <Link to="/monthly-review">
                             <img className='icon' src='../src/assets/transaction.svg' />
-                            {!isCollapsed && <span>Transactions</span>}
+                            {!isCollapsed && <span>Review</span>}
                         </Link>
                     </li>
                     <li className={activeLink === 'accounts' ? 'active' : ''}>
-                        <Link to="/accounts">
+                        <Link to="/bank-accounts">
                             <img className='icon' src='../src/assets/cards.svg' />
                             {!isCollapsed && <span>Accounts</span>}
                         </Link>
