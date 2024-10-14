@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../components/button/Button"
 import Modal from "../../components/modal/Modal";
 import NewAsset from "./NewAsset";
+import AssetGraph from "./AssetGraph";
 import "./Assets.css"
 import "../../../node_modules/pop-message/pop.css"
 import pops from "pop-message"
@@ -167,6 +168,8 @@ export default function Assets() {
                     </tr>
                 </tfoot>
             </table>
+
+            <AssetGraph assets={assets} />
         </main >
     );
 }
