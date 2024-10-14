@@ -30,15 +30,18 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    const { name, balance, type } = req.body;
+    let { name, balance, type } = req.body;
+    name = name.replace(/'/g, '"');
     const userId = req.session.userId;
-
-    if (!name || !boughtFor || !currentValue || !type || !userId) {
+    if (!balance) {
+        balance = 0;
+    }
+    if (!name || !type || !userId) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
     const query = `
-        INSERT INTO bank_account (name, balance, category_id, user_id) 
+        INSERT INTO bank_account (description, balance, category_id, user_id) 
         VALUES (?, ?, ?, ?)
     `;
 
@@ -55,11 +58,12 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    const { id, name, balance, type } = req.body;
+    let { id, name, balance } = req.body;
+    name = name.replace(/'/g, '"');
 
     const query = `
         UPDATE bank_account
-        SET name = '${name}', balance = ${balance}, category_id = ${type}
+        SET description = '${name}', balance = ${balance}
         WHERE id = ${id}
     `;
 
@@ -81,7 +85,7 @@ router.delete("/", (req, res) => {
     }
 
     if (req.userId !== userId) {
-        return res.status(403).json({ message: "You may not delete this banks" });
+        return res.status(403).json({ message: "You may not delete this bank account" });
     }
 
     const query = `
@@ -94,10 +98,10 @@ router.delete("/", (req, res) => {
         }
 
         if (results.affectedRows === 0) {
-            return res.status(404).json({ message: "bank account not found" });
+            return res.status(404).json({ message: "Bank account not found" });
         }
 
-        res.status(200).json({ message: "bank account deleted successfully" });
+        res.status(200).json({ message: "Bank account deleted successfully" });
     });
 });
 
