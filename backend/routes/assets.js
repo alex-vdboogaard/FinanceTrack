@@ -34,7 +34,8 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    const { name, boughtFor, currentValue, type } = req.body;
+    let { name, boughtFor, currentValue, type } = req.body;
+    name = name.replace(/'/g, '"');
     const userId = req.session.userId; // Ensure userId is retrieved correctly
 
     // Check if the required fields are present
@@ -61,11 +62,9 @@ router.post("/", (req, res) => {
 
 });
 
-
-
 router.put("/", (req, res) => {
-    const { name, boughtFor, currentValue, userId, id } = req.body;
-
+    let { name, boughtFor, currentValue, userId, id } = req.body;
+    name = name.replace(/'/g, '"');
     if (req.userId !== userId) {
         res.status(403).json({ message: "You may not update this asset" });
     }
@@ -75,7 +74,6 @@ router.put("/", (req, res) => {
         SET name = '${name}', boughtFor = ${boughtFor}, currentValue = ${currentValue}
         WHERE id = ${id}
     `;
-
 
     connection.query(query, (err, results) => {
         if (err) {
@@ -133,12 +131,8 @@ router.get("/asset-types", (req, res) => {
             name: type.name
         }));
 
-
         res.status(200).json({ types });
     });
 });
-
-
-
 
 module.exports = router;
