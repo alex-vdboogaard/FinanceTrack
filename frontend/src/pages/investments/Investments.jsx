@@ -5,6 +5,9 @@ import NewInvestment from "./NewInvestment";
 import "./Investments.css"
 import "../../../node_modules/pop-message/pop.css"
 import pops from "pop-message"
+import { fetchData } from "../../utility/fetchData";
+import InvestmentPieChart from "./InvestmentPieChart";
+import InvestmentBarChart from "./InvestmentBarChart";
 
 export default function Investments() {
     const [investments, setInvestments] = useState([]);
@@ -12,89 +15,47 @@ export default function Investments() {
     const [totalInvested, setTotalInvested] = useState(0);
     const [totalCurrentValue, setTotalCurrentValue] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
     const [triggerRerender, setTriggerRerender] = useState(false);
+
+    const url = "http://localhost:3001/investments";
+
     const handleRerender = () => {
         setTriggerRerender(prev => !prev);
     };
 
     useEffect(() => {
-        fetch(`http://localhost:3001/investments/`)
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(url)
             .then((data) => {
-                setInvestments(data.investments);
+                setInvestments(data.investments || []);
                 setCount(data.investments.length);
                 setTotalInvested(data.investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0));
                 setTotalCurrentValue(data.investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0));
 
             })
-            .catch((error) => {
-                console.log("Error: ", error)
-            });
     }, [triggerRerender]);
 
     const handleSave = (investment) => {
-        fetch(`http://localhost:3001/investments`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(investment),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-            })
-            .catch(error => {
-                pops.simplePop("error", `Error updating investment: ${error}`);
-            });
+        fetchData(url, "PUT", investment)
     };
 
     const handleUpdate = (index, field, value) => {
         const updatedInvestments = [...investments];
         updatedInvestments[index][field] = value;
         setInvestments(updatedInvestments);
-        setTotalInvested(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0)); // Update to invested
-        setTotalCurrentValue(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0)); // Update to invested
+        setTotalInvested(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0));
+        setTotalCurrentValue(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0));
     };
 
     const handleDelete = async (investment) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${investment.description}'?`); // Update to description
+        const confirm = await pops.confirmPop(`Are you sure you want to delete '${investment.description}'?`);
         if (confirm) {
-            fetch(`http://localhost:3001/investments`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: investment.id,
-                    userId: investment.user_id
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(errorData => {
-                            pops.simplePop("error", errorData.message || "Network error");
-                        });
-                    }
-                    return response.json().then(successData => {
-                        setInvestments(investments.filter(i => i.id !== investment.id));
-                        setCount(prevCount => prevCount - 1);
-                        pops.simplePop("success", successData.message);
-                    });
-                })
-                .catch(error => {
-                    pops.simplePop("error", `Error deleting investment: ${error}`);
+            fetchData(url, "DELETE", investment)
+                .then((successData) => {
+                    setInvestments(investments.filter(a => a.id !== investment.id));
+                    setCount(prevCount => prevCount - 1);
+                    setTotalInvested(investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0)); // Update to invested
+                    setTotalCurrentValue(investment.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0)); // Update to invested
+                    pops.simplePop("success", successData.message);
                 });
         }
     };
@@ -102,6 +63,7 @@ export default function Investments() {
     const newInvestment = () => {
         setIsSidebarOpen(!isSidebarOpen);
     }
+
     return (
         <main>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -168,6 +130,10 @@ export default function Investments() {
                     </tr>
                 </tfoot>
             </table>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+                <InvestmentPieChart investments={investments} />
+                <InvestmentBarChart investments={investments} />
+            </div>
         </main >
     );
 }

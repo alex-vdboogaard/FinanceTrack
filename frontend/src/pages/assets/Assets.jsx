@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import Button from "../../components/button/Button"
 import Modal from "../../components/modal/Modal";
 import NewAsset from "./NewAsset";
+import AssetPieChart from "./AssetPieChart";
 import "./Assets.css"
 import "../../../node_modules/pop-message/pop.css"
 import pops from "pop-message"
+import AssetBarChart from "./AssetBarChart";
+import { fetchData } from "../../utility/fetchData"
 
 export default function Assets() {
     const [assets, setAssets] = useState([]);
@@ -12,95 +15,53 @@ export default function Assets() {
     const [totalBoughtFor, setTotalBoughtFor] = useState(0);
     const [totalCurrentValue, setTotalCurrentValue] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
     const [triggerRerender, setTriggerRerender] = useState(false);
+    const url = "http://localhost:3001/assets";
     const handleRerender = () => {
         setTriggerRerender(prev => !prev);
     };
 
     useEffect(() => {
-        fetch(`http://localhost:3001/assets/`)
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(url)
             .then((data) => {
                 setAssets(data.assets);
                 setCount(data.assets.length);
                 setTotalBoughtFor(data.assets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0));
                 setTotalCurrentValue(data.assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue), 0));
-
             })
             .catch((error) => {
-                console.log("Error: ", error)
+                console.log("Error fetching assets: ", error);
             });
     }, [triggerRerender]);
 
     const handleSave = (asset) => {
-        fetch(`http://localhost:3001/assets`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(asset),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-            })
-            .catch(error => {
-                pops.simplePop("error", `Error updating asset: ${error}`);
-            });
-    };
-
-    const handleUpdate = (index, field, value) => {
-        const updatedAssets = [...assets];
-        updatedAssets[index][field] = value;
-        setAssets(updatedAssets);
-        setTotalBoughtFor(updatedAssets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0));
+        fetchData(url, 'PUT', asset)
     };
 
     const handleDelete = async (asset) => {
         const confirm = await pops.confirmPop(`Are you sure you want to delete '${asset.name}'?`);
         if (confirm) {
-            fetch(`http://localhost:3001/assets`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: asset.id,
-                    userId: asset.userId
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(errorData => {
-                            pops.simplePop("error", errorData.message || "Network error");
-                        });
-                    }
-                    return response.json().then(successData => {
-                        setAssets(assets.filter(a => a.id !== asset.id));
-                        setCount(prevCount => prevCount - 1);
-                        pops.simplePop("success", successData.message);
-                    });
+            fetchData(url, 'DELETE', { id: asset.id, userId: asset.userId })
+                .then(() => {
+                    setAssets(assets.filter(a => a.id !== asset.id));
+                    setCount(prevCount => prevCount - 1);
+                    pops.simplePop("success", "Asset deleted");
                 })
-                .catch(error => {
-                    pops.simplePop("error", `Error deleting asset: ${error}`);
-                });
         }
     };
 
     const newAsset = () => {
         setIsSidebarOpen(!isSidebarOpen);
     }
+
+    const handleUpdate = (index, field, value) => {
+        const updatedAssets = [...assets];
+        updatedAssets[index][field] = value;
+        setAssets(updatedAssets);
+        setTotalCurrentValue(assets.reduce((acc, a) => acc + parseFloat(a.currentValue), 0));
+        setTotalBoughtFor(assets.reduce((acc, a) => acc + parseFloat(a.boughtFor), 0));
+    };
+
     return (
         <main>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -167,6 +128,11 @@ export default function Assets() {
                     </tr>
                 </tfoot>
             </table>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+                <AssetPieChart assets={assets} />
+                <AssetBarChart assets={assets} />
+            </div>
+
         </main >
     );
 }

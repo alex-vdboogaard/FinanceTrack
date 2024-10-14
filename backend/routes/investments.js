@@ -85,13 +85,13 @@ router.put("/", (req, res) => {
 });
 
 router.delete("/", (req, res) => {
-    const { id, userId } = req.body;
+    const { id, user_id } = req.body;
 
     if (!id) {
         return res.status(400).json({ message: "Investment ID is required" });
     }
 
-    if (req.userId !== userId) {
+    if (req.userId !== user_id) {
         return res.status(403).json({ message: "You may not delete this investment" });
     }
 
