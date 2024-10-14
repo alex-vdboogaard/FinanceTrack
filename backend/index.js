@@ -10,6 +10,7 @@ const port = process.env.PORT || 3001;
 //routes
 const assets = require("./routes/assets");
 const bank_accounts = require("./routes/bank-accounts");
+const investments = require("./routes/investments");
 
 const connection = require("./db/db");
 
@@ -25,6 +26,7 @@ app.use(session({
 //routes
 app.use("/assets", assets);
 app.use("/bank-accounts", bank_accounts);
+app.use("/investments", investments);
 
 app.get("/", async (req, res) => {
     req.session.userId = 1;
