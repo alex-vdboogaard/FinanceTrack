@@ -1,6 +1,6 @@
-import getColorShades from "../../assets/colors"
+import getColorShades from "../../utility/colors"
 import PieChart from "../../components/graph/PieChart";
-export default function AssetGraph({ assets }) {
+export default function AssetPieChart({ assets }) {
     const colorShades = getColorShades(assets.length);
     const labels = [];
     const data = [];

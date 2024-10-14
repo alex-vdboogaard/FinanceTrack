@@ -3,12 +3,13 @@ import Button from "../../components/button/Button";
 import "./Assets.css";
 import pops from "pop-message";
 import "../../../node_modules/pop-message/pop.css";
+import { fetchData } from "../../utility/fetchData";
 
 export default function NewAsset({ onAssetCreated }) {
     const [assetTypes, setAssetTypes] = useState([]);
     const [name, setName] = useState("");
     const [boughtFor, setBoughtFor] = useState(0);
-    const [selectedType, setSelectedType] = useState(""); // Change to string for easier handling
+    const [selectedType, setSelectedType] = useState("");
     const [currentValue, setCurrentValue] = useState(0);
 
     useEffect(() => {
@@ -28,6 +29,7 @@ export default function NewAsset({ onAssetCreated }) {
                 pops.simplePop("error", error);
             });
     }, []);
+    const url = "http://localhost:3001/assets";
 
     const handleNewAsset = (e) => {
         e.preventDefault();
@@ -38,31 +40,11 @@ export default function NewAsset({ onAssetCreated }) {
             type: selectedType
         };
 
-        fetch(`http://localhost:3001/assets`, {
-            method: "POST",
-            body: JSON.stringify(newAssetData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        console.error("Error data:", errorData);
-                        pops.simplePop("error", errorData.message || "Network error");
-                        throw new Error(errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(url, "POST", newAssetData)
             .then((successData) => {
                 pops.simplePop("success", successData.message);
                 onAssetCreated();
             })
-            .catch((error) => {
-                console.error("Catch error:", error);
-                pops.simplePop("error", error.message || "An unexpected error occurred");
-            });
     };
 
     return (
@@ -90,7 +72,7 @@ export default function NewAsset({ onAssetCreated }) {
                         name="boughtFor"
                         id="boughtFor"
                         value={boughtFor}
-                        onChange={(e) => setBoughtFor(e.target.value)} // Optionally parse to Number here
+                        onChange={(e) => setBoughtFor(e.target.value)}
                     />
                 </div>
                 <div className="input-wrapper">
@@ -102,7 +84,7 @@ export default function NewAsset({ onAssetCreated }) {
                         name="currentValue"
                         id="currentValue"
                         value={currentValue}
-                        onChange={(e) => setCurrentValue(e.target.value)} // Optionally parse to Number here
+                        onChange={(e) => setCurrentValue(e.target.value)}
                     />
                 </div>
                 <div className="input-wrapper">

@@ -3,6 +3,7 @@ import Button from "../../components/button/Button";
 import "./Investments.css";
 import pops from "pop-message";
 import "../../../node_modules/pop-message/pop.css";
+import { fetchData } from "../../utility/fetchData";
 
 export default function NewInvestment({ onInvestmentCreated }) {
     const [investmentCategories, setInvestmentCategories] = useState([]);
@@ -10,23 +11,12 @@ export default function NewInvestment({ onInvestmentCreated }) {
     const [invested, setInvested] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [currentValue, setCurrentValue] = useState(0);
-
+    const url = "http://localhost:3001/investments/";
     useEffect(() => {
-        fetch(`http://localhost:3001/investments/investment-types`)
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(`${url}investment-types`)
             .then((data) => {
-                setInvestmentCategories(data.types);
+                setInvestmentCategories(data.types || []);
             })
-            .catch((error) => {
-                pops.simplePop("error", error);
-            });
     }, []);
 
     const handleNewInvestment = (e) => {
@@ -38,31 +28,11 @@ export default function NewInvestment({ onInvestmentCreated }) {
             type: selectedCategory
         };
 
-        fetch(`http://localhost:3001/investments`, {
-            method: "POST",
-            body: JSON.stringify(newInvestmentData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        console.error("Error data:", errorData);
-                        pops.simplePop("error", errorData.message || "Network error");
-                        throw new Error(errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(url, "POST", newInvestmentData)
             .then((successData) => {
                 pops.simplePop("success", successData.message);
                 onInvestmentCreated();
             })
-            .catch((error) => {
-                console.error("Catch error:", error);
-                pops.simplePop("error", error.message || "An unexpected error occurred");
-            });
     };
 
     return (
