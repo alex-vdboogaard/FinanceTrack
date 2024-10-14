@@ -6,6 +6,8 @@ import "./Investments.css"
 import "../../../node_modules/pop-message/pop.css"
 import pops from "pop-message"
 import { fetchData } from "../../utility/fetchData";
+import InvestmentPieChart from "./InvestmentPieChart";
+import InvestmentBarChart from "./InvestmentBarChart";
 
 export default function Investments() {
     const [investments, setInvestments] = useState([]);
@@ -128,6 +130,10 @@ export default function Investments() {
                     </tr>
                 </tfoot>
             </table>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+                <InvestmentPieChart investments={investments} />
+                <InvestmentBarChart investments={investments} />
+            </div>
         </main >
     );
 }

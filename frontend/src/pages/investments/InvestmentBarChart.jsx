@@ -1,24 +1,23 @@
-import getColorShades from "../../utility/colors";
 import BarChart from "../../components/graph/BarChart";
 
-export default function AssetBarChart({ assets }) {
+export default function InvestmentBarChart({ investments }) {
     const data = [];
 
-    assets.forEach(a => {
+    investments.forEach(i => {
         const dataItem = {
-            value1: a.boughtFor,
-            value2: a.currentValue,
-            name: a.name
+            value1: i.invested,
+            value2: i.currentValue,
+            name: i.description
         };
         data.push(dataItem);
     });
 
     return (
         <BarChart
-            group1Label={"Bought for (R)"}
+            group1Label={"Invested (R)"}
             group2Label={"Current value (R)"}
             items={data}
-            title={"Asset value when bought vs now"}
+            title={"Total invested vs current value"}
         />
     );
 }

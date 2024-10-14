@@ -1,4 +1,3 @@
-import getColorShades from "../../utility/colors";
 import BarChart from "../../components/graph/BarChart";
 
 export default function AssetBarChart({ assets }) {

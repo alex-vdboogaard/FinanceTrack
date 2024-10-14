@@ -6,9 +6,16 @@ export default function InvestmentPieChart({ investments }) {
     const data = [];
     investments.forEach(i => {
         labels.push(i.description);
-        data.push(a.currentValue);
+        data.push(i.currentValue);
     });
     return (
-        <PieChart backgroundColors={colorShades} labels={labels} data={data} title={"Investments"} />
-    )
+        <>
+            {investments.length > 0 ? (
+                <PieChart backgroundColors={colorShades} labels={labels} data={data} title={"Investments"} />
+            ) : (
+                <></>
+            )}
+        </>
+    );
+
 }
