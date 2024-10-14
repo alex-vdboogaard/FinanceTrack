@@ -2,7 +2,6 @@ import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-// Register required components for Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ labels, data, backgroundColors, title }) => {
