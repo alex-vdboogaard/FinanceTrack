@@ -11,12 +11,28 @@ router.use(ValidateLoggedIn);
 router.get("/", async (req, res) => {
     const data = {};
     try {
+        //get assets
+        let query = `SELECT a.name, a.boughtFor, a.currentValue, c.name AS type FROM asset AS a INNER JOIN asset_type AS c ON a.asset_type_id = c.id`;
+        const [assetResults] = await connection.promise().query(query);
+
+        const assets = assetResults.map(a => new Asset(
+            a.id,
+            a.name,
+            a.boughtFor,
+            a.currentValue,
+            a.type
+        ));
+
+        data.assets = assets;
+
         // Get investments
-        let query = `SELECT i.id, i.description, i.invested, i.currentValue, c.name as type 
-                     FROM investment as i 
-                     INNER JOIN investment_category as c ON i.category_id = c.id 
-                     WHERE i.user_id = ?`;
-        const [investmentsResults] = await connection.promise().query(query, [req.userId]);
+        query = `
+        SELECT Investment.id, Investment.description, Investment.invested, Investment.user_id, Investment.currentValue, Investment_Category.name AS type
+        FROM Investment
+        JOIN Investment_Category ON Investment.category_id = Investment_Category.id
+        WHERE Investment.user_id = ${req.session.userId}
+    `;
+        const [investmentsResults] = await connection.promise().query(query);
 
         const investments = investmentsResults.map(i => new Investment(
             i.id,
@@ -32,8 +48,8 @@ router.get("/", async (req, res) => {
         query = `SELECT b.id, b.description, b.balance, c.name as type 
                  FROM bank_account as b 
                  INNER JOIN bank_account_category as c ON b.category_id = c.id 
-                 WHERE b.user_id = ?`;
-        const [bankAccountsResults] = await connection.promise().query(query, [req.userId]);
+                 WHERE b.user_id = ${req.session.userId}`;
+        const [bankAccountsResults] = await connection.promise().query(query);
 
         const bankAccounts = bankAccountsResults.map(a => new BankAccount(
             a.id,
@@ -45,22 +61,28 @@ router.get("/", async (req, res) => {
         data.bankAccounts = bankAccounts;
 
         // Get net worth (sum of investments currentValue, bankAccounts balance, assets currentValue)
-        query = `SELECT SUM(i.currentValue) AS investments, 
-                        SUM(b.balance) AS bankAccounts, 
-                        SUM(a.currentValue) AS assets 
-                 FROM bank_account AS b 
-                 INNER JOIN investment AS i ON b.user_id = i.user_id 
-                 INNER JOIN asset AS a ON i.user_id = a.user_id 
-                 WHERE b.user_id = ?`;
-        const [netWorthResults] = await connection.promise().query(query, [req.userId]);
+        query = `SELECT 
+                    SUM(i.currentValue) AS investments, 
+                    SUM(b.balance) AS bankAccounts, 
+                    SUM(a.currentValue) AS assets 
+               FROM bank_account AS b 
+               LEFT JOIN investment AS i ON b.user_id = i.user_id 
+               LEFT JOIN asset AS a ON b.user_id = a.user_id 
+               WHERE b.user_id = ${req.session.userId}`;
+        const [netWorthResults] = await connection.promise().query(query);
 
         const netWorth = {
-            total: (netWorthResults[0].assets + netWorthResults[0].investments + netWorthResults[0].bankAccounts)
+            total: (
+                parseInt(netWorthResults[0].assets || 0) +
+                parseInt(netWorthResults[0].investments || 0) +
+                parseInt(netWorthResults[0].bankAccounts || 0)
+            )
         };
+
 
         data.netWorth = netWorth;
 
-        res.status(200).json({ data });
+        res.status(200).json(data);
     } catch (err) {
         res.status(500).json({ message: "Error reading from the database", err });
     }

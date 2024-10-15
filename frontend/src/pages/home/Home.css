@@ -1,0 +1,71 @@
+h2 {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 30px;
+    padding: 0px 20px;
+}
+
+.investment-div {
+    padding: 5px 20px;
+    margin-bottom: 10px;
+    background-color: #EFF0F1;
+    border-radius: 0px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.bank-account-div {
+    padding: 5px 20px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+    border-top: 2px solid #CACACA;
+}
+
+.asset-div {
+    border-right: 2px solid #CACACA;
+    border-top: 2px solid #CACACA;
+    padding: 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.investment-arrow {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.investment-description {
+    margin-bottom: 5px;
+}
+
+.investment-balance {
+    font-size: 19px;
+    color: #4F4F4F;
+    margin-top: 0px;
+}
+
+.bank-account-name {
+    margin-bottom: 5px;
+}
+
+.bank-account-balance {
+    font-size: 19px;
+    color: #4F4F4F;
+    margin-top: 0px;
+}
+
+.asset-name {
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.asset-value {
+    color: #4F4F4F;
+    font-size: 19px;
+    margin-top: 0px;
+}
