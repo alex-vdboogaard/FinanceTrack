@@ -65,3 +65,17 @@ button {
     background: none;
     cursor: pointer;
 }
+
+/* For WebKit browsers (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0B1326;
+    border-radius: 10px;
+}
