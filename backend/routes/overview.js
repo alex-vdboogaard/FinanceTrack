@@ -59,29 +59,6 @@ router.get("/", async (req, res) => {
         ));
 
         data.bankAccounts = bankAccounts;
-
-        // Get net worth (sum of investments currentValue, bankAccounts balance, assets currentValue)
-        query = `SELECT 
-                    SUM(i.currentValue) AS investments, 
-                    SUM(b.balance) AS bankAccounts, 
-                    SUM(a.currentValue) AS assets 
-               FROM bank_account AS b 
-               LEFT JOIN investment AS i ON b.user_id = i.user_id 
-               LEFT JOIN asset AS a ON b.user_id = a.user_id 
-               WHERE b.user_id = ${req.session.userId}`;
-        const [netWorthResults] = await connection.promise().query(query);
-
-        const netWorth = {
-            total: (
-                parseInt(netWorthResults[0].assets || 0) +
-                parseInt(netWorthResults[0].investments || 0) +
-                parseInt(netWorthResults[0].bankAccounts || 0)
-            )
-        };
-
-
-        data.netWorth = netWorth;
-
         res.status(200).json(data);
     } catch (err) {
         res.status(500).json({ message: "Error reading from the database", err });

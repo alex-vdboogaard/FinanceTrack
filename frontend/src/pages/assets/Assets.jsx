@@ -128,7 +128,7 @@ export default function Assets() {
                     </tr>
                 </tfoot>
             </table>
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <div style={{ marginTop: "50px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
                 <AssetPieChart assets={assets} />
                 <AssetBarChart assets={assets} />
             </div>

@@ -6,7 +6,12 @@ export default function AssetDiv({ asset }) {
     return (
         <div onClick={handleClick} className="asset-div">
             <p className="asset-name">{asset.name}</p>
-            <p className="asset-value">R{asset.currentValue}</p>
+            <p
+                className="asset-value"
+                style={{ color: asset.currentValue > 0 ? 'green' : 'red' }}
+            >
+                R{asset.currentValue}
+            </p>
         </div>
     )
 }

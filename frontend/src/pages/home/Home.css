@@ -1,5 +1,6 @@
 h2 {
     margin-top: 20px;
+    margin-bottom: 20px;
     font-weight: 500;
     font-size: 30px;
     padding: 0px 20px;
@@ -62,10 +63,12 @@ h2 {
 .asset-name {
     margin-bottom: 5px;
     margin-top: 0px;
+    width: 200px;
 }
 
 .asset-value {
     color: #4F4F4F;
     font-size: 19px;
     margin-top: 0px;
+    margin-bottom: 0px;
 }

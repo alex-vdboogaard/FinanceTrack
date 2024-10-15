@@ -6,7 +6,12 @@ export default function InvestmentDiv({ investment }) {
     return (
         <div onClick={handleClick} className="investment-div">
             <p className="investment-description">{investment.description}</p>
-            <p className="investment-balance">R{investment.currentValue}</p>
+            <p
+                className="investment-balance"
+                style={{ color: investment.currentValue > 0 ? 'green' : 'red' }}
+            >
+                R{investment.currentValue}
+            </p>
             <img src="../src/assets/arrow-right.svg" alt="arrow icon" className="investment-arrow" />
         </div>
     )

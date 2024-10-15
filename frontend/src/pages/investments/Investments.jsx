@@ -130,7 +130,7 @@ export default function Investments() {
                     </tr>
                 </tfoot>
             </table>
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <div style={{ marginTop: "50px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
                 <InvestmentPieChart investments={investments} />
                 <InvestmentBarChart investments={investments} />
             </div>

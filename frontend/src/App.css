@@ -66,9 +66,9 @@ button {
     cursor: pointer;
 }
 
-/* For WebKit browsers (Chrome, Safari, etc.) */
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -78,4 +78,8 @@ button {
 ::-webkit-scrollbar-thumb {
     background-color: #0B1326;
     border-radius: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 6px;
 }

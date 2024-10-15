@@ -68,7 +68,7 @@ export default function BankAccounts() {
                 <NewBankAccount onBankCreated={handleRerender} />
             </Modal>
 
-            <table>
+            <table style={{ marginBottom: "50px" }}>
                 <thead>
                     <tr className="no-border">
                         <th>Name</th>
