@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = memo(({ labels, data, backgroundColors, title }) => {
+const PieChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700px" }) => {
     const chartData = {
         labels: labels,
         datasets: [
@@ -41,7 +41,7 @@ const PieChart = memo(({ labels, data, backgroundColors, title }) => {
     };
 
     return (
-        <div style={{ maxWidth: "700px", width: "100%" }}>
+        <div style={{ maxWidth: maxWidth, width: "100%" }}>
             <Pie data={chartData} options={options} />
         </div>
     )

@@ -31,8 +31,19 @@ CREATE TABLE Asset (
     asset_type_id INT, 
     user_id INT,
     FOREIGN KEY (asset_type_id) REFERENCES Asset_Type(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
+
+--Create saving goal table
+CREATE TABLE saving_goal (
+    id INT AUTO_INCREMENT PRIMARY KEY,        -- Unique identifier for each saving goal
+    name VARCHAR(255) NOT NULL,               -- Name of the saving goal
+    goal DECIMAL(10, 2) NOT NULL,             -- Target amount for the saving goal
+    balance DECIMAL(10, 2) DEFAULT 0,         -- Current balance towards the goal
+    user_id INT NOT NULL,                      -- ID of the user who owns the saving goal
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE -- Foreign key referencing the users table
+);
+
 
 -- Create Expense Category Table
 CREATE TABLE Expense_category (
@@ -49,7 +60,7 @@ CREATE TABLE Expense (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
 -- Create Recurring Expense Table
@@ -60,7 +71,7 @@ CREATE TABLE Recurring_expense (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
 -- Create Income Category Table
@@ -77,7 +88,7 @@ CREATE TABLE Recurring_income (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Income_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
 -- Create Investment Category Table
@@ -95,7 +106,7 @@ CREATE TABLE Investment (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Investment_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
 -- Create Bank Account Category Table
@@ -112,5 +123,5 @@ CREATE TABLE Bank_account (
     category_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Bank_account_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id)
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
