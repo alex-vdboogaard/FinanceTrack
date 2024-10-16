@@ -29,18 +29,16 @@ router.post("/", (req, res) => {
     let { name, goal, balance = 0 } = req.body;
 
     name = name.replace(/'/g, '"');
-    const userId = req.session.userId;
-
     if (!name || !goal) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
     const query = `
         INSERT INTO saving_goal (name, goal, balance, user_id) 
-        VALUES (${name}, ${goal}, ${balance}, ${req.session.userId})
+        VALUES ('${name}', ${goal}, ${balance}, ${req.session.userId})
     `;
 
-    connection.query(query, values, (err, results) => {
+    connection.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({ message: "Error creating the saving goal." });
         }
