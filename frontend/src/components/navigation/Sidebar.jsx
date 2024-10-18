@@ -28,9 +28,9 @@ const Sidebar = ({ active = 'home' }) => {
                             {!isCollapsed && <span>Home</span>}
                         </Link></li>
                     <li className={activeLink === 'monthlyreview' ? 'active' : ''} >
-                        <Link to="/monthly-review">
-                            <img className='icon' src='../src/assets/transaction.svg' />
-                            {!isCollapsed && <span>Review</span>}
+                        <Link to="/budget">
+                            <img className='icon' src='../src/assets/budget.svg' />
+                            {!isCollapsed && <span>Budget</span>}
                         </Link>
                     </li>
                     <li className={activeLink === 'accounts' ? 'active' : ''}>

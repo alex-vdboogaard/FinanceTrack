@@ -82,6 +82,7 @@ export default function Investments() {
                         <th>Category</th>
                         <th>Invested (R)</th>
                         <th>Current value (R)</th>
+                        <th>Growth (%)</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -114,6 +115,14 @@ export default function Investments() {
                                     onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value), investment)}
                                     onBlur={() => handleSave(investment)}
                                 />
+                            </td>
+                            <td
+                                style={{
+                                    color: ((investment.currentValue - investment.invested) / investment.invested) * 100 > 0 ? 'green' : 'red'
+                                }}
+                            >
+                                {(Math.round(((investment.currentValue - investment.invested) / investment.invested) * 100 * 100) / 100).toFixed(2) + '%'}
+
                             </td>
                             <td className="delete-icon">
                                 <button onClick={() => handleDelete(investment)}><img src="../src/assets/delete.svg" /></button>
