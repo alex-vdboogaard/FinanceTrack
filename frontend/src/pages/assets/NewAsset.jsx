@@ -13,15 +13,7 @@ export default function NewAsset({ onAssetCreated }) {
     const [currentValue, setCurrentValue] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:3001/assets/asset-types`)
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(`http://localhost:3001/assets/asset-types`)
             .then((data) => {
                 setAssetTypes(data.types);
             })

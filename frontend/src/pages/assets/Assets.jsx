@@ -116,7 +116,7 @@ export default function Assets() {
                             </td>
                             <td
                                 style={{
-                                    color: ((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 > 0 ? 'green' : 'red'
+                                    color: ((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 >= 0 ? 'green' : 'red'
                                 }}
 
                             >

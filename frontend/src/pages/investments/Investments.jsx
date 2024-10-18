@@ -118,7 +118,7 @@ export default function Investments() {
                             </td>
                             <td
                                 style={{
-                                    color: ((investment.currentValue - investment.invested) / investment.invested) * 100 > 0 ? 'green' : 'red'
+                                    color: ((investment.currentValue - investment.invested) / investment.invested) * 100 >= 0 ? 'green' : 'red'
                                 }}
                             >
                                 {(Math.round(((investment.currentValue - investment.invested) / investment.invested) * 100 * 100) / 100).toFixed(2) + '%'}
