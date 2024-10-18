@@ -80,6 +80,7 @@ export default function Assets() {
                         <th>Type</th>
                         <th>Bought for (R)</th>
                         <th>Current value (R)</th>
+                        <th>Growth (%)</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -112,6 +113,14 @@ export default function Assets() {
                                     onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value), asset)}
                                     onBlur={() => handleSave(asset)}
                                 />
+                            </td>
+                            <td
+                                style={{
+                                    color: ((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 > 0 ? 'green' : 'red'
+                                }}
+
+                            >
+                                {(Math.round(((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 * 100) / 100).toFixed(2) + '%'}
                             </td>
                             <td className="delete-icon">
                                 <button onClick={() => handleDelete(asset)}><img src="../src/assets/delete.svg" /></button> {/* Action button to save */}

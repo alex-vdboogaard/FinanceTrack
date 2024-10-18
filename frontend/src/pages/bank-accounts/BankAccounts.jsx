@@ -97,6 +97,7 @@ export default function BankAccounts() {
                                     value={account.balance}
                                     onChange={(e) => handleUpdate(index, 'balance', parseFloat(e.target.value), account)}
                                     onBlur={() => handleSave(account)}
+                                    style={{ color: account.balance > 0 ? 'green' : 'red' }}
                                 />
                             </td>
                             <td className="delete-icon">
