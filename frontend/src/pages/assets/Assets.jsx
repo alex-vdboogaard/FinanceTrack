@@ -45,6 +45,8 @@ export default function Assets() {
                 .then(() => {
                     setAssets(assets.filter(a => a.id !== asset.id));
                     setCount(prevCount => prevCount - 1);
+                    setTotalCurrentValue(assets.reduce((acc, a) => acc + parseFloat(a.currentValue), 0));
+                    setTotalBoughtFor(assets.reduce((acc, a) => acc + parseFloat(a.boughtFor), 0));
                     pops.simplePop("success", "Asset deleted");
                 })
         }
@@ -138,9 +140,16 @@ export default function Assets() {
                 </tfoot>
             </table>
             <div style={{ marginTop: "50px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
-                <AssetPieChart assets={assets} />
-                <AssetBarChart assets={assets} />
+                {assets.length > 0 ? (
+                    <>
+                        <AssetPieChart assets={assets} />
+                        <AssetBarChart assets={assets} />
+                    </>
+                ) : (
+                    <></>
+                )}
             </div>
+
 
         </main >
     );

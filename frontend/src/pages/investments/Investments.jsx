@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import Button from "../../components/button/Button"
+import { useEffect, useState, useCallback, useMemo } from "react";
+import Button from "../../components/button/Button";
 import Modal from "../../components/modal/Modal";
 import NewInvestment from "./NewInvestment";
-import "./Investments.css"
-import "../../../node_modules/pop-message/pop.css"
-import pops from "pop-message"
+import "./Investments.css";
+import "../../../node_modules/pop-message/pop.css";
+import pops from "pop-message";
 import { fetchData } from "../../utility/fetchData";
 import InvestmentPieChart from "./InvestmentPieChart";
 import InvestmentBarChart from "./InvestmentBarChart";
@@ -19,51 +19,76 @@ export default function Investments() {
 
     const url = "http://localhost:3001/investments";
 
-    const handleRerender = () => {
+    const handleRerender = useCallback(() => {
         setTriggerRerender(prev => !prev);
-    };
+    }, []);
+
+    const calculateTotals = useCallback((investments) => {
+        const totalInvested = investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0);
+        const totalCurrentValue = investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0);
+        return { totalInvested, totalCurrentValue };
+    }, []);
 
     useEffect(() => {
         fetchData(url)
             .then((data) => {
-                setInvestments(data.investments || []);
-                setCount(data.investments.length);
-                setTotalInvested(data.investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0));
-                setTotalCurrentValue(data.investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0));
-
+                const investmentsData = data.investments || [];
+                setInvestments(investmentsData);
+                setCount(investmentsData.length);
+                const { totalInvested, totalCurrentValue } = calculateTotals(investmentsData);
+                setTotalInvested(totalInvested);
+                setTotalCurrentValue(totalCurrentValue);
             })
-    }, [triggerRerender]);
+            .catch((error) => {
+                pops.simplePop("error", "Failed to fetch investments");
+                console.error("Error fetching investments:", error);
+            });
+    }, [triggerRerender, calculateTotals]);
 
-    const handleSave = (investment) => {
+    const handleSave = useCallback((investment) => {
         fetchData(url, "PUT", investment)
-    };
+            .catch((error) => {
+                pops.simplePop("error", "Failed to save investment");
+                console.error("Error saving investment:", error);
+            });
+    }, [url]);
 
-    const handleUpdate = (index, field, value) => {
+    const handleUpdate = useCallback((index, field, value) => {
         const updatedInvestments = [...investments];
         updatedInvestments[index][field] = value;
         setInvestments(updatedInvestments);
-        setTotalInvested(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0));
-        setTotalCurrentValue(updatedInvestments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0));
-    };
+        const { totalInvested, totalCurrentValue } = calculateTotals(updatedInvestments);
+        setTotalInvested(totalInvested);
+        setTotalCurrentValue(totalCurrentValue);
+    }, [investments, calculateTotals]);
 
-    const handleDelete = async (investment) => {
+    const handleDelete = useCallback(async (investment) => {
         const confirm = await pops.confirmPop(`Are you sure you want to delete '${investment.description}'?`);
         if (confirm) {
             fetchData(url, "DELETE", investment)
                 .then((successData) => {
-                    setInvestments(investments.filter(a => a.id !== investment.id));
+                    const updatedInvestments = investments.filter(a => a.id !== investment.id);
+                    setInvestments(updatedInvestments);
                     setCount(prevCount => prevCount - 1);
-                    setTotalInvested(investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0)); // Update to invested
-                    setTotalCurrentValue(investment.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0)); // Update to invested
+                    const { totalInvested, totalCurrentValue } = calculateTotals(updatedInvestments);
+                    setTotalInvested(totalInvested);
+                    setTotalCurrentValue(totalCurrentValue);
                     pops.simplePop("success", successData.message);
+                })
+                .catch((error) => {
+                    pops.simplePop("error", "Failed to delete investment");
+                    console.error("Error deleting investment:", error);
                 });
         }
-    };
+    }, [investments, url, calculateTotals]);
 
-    const newInvestment = () => {
+    const newInvestment = useCallback(() => {
         setIsSidebarOpen(!isSidebarOpen);
-    }
+    }, [isSidebarOpen]);
 
+    const growthPercentage = useCallback((investment) => {
+        return ((investment.currentValue - investment.invested) / investment.invested) * 100;
+    }, []);
     return (
         <main>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -93,8 +118,8 @@ export default function Investments() {
                                 <input
                                     type="text"
                                     value={investment.description}
-                                    onChange={(e) => handleUpdate(index, 'description', e.target.value, investment)} // Update to description
-                                    onBlur={(e) => handleSave(investment)}
+                                    onChange={(e) => handleUpdate(index, 'description', e.target.value)}
+                                    onBlur={() => handleSave(investment)}
                                 />
                             </td>
                             <td>
@@ -104,7 +129,7 @@ export default function Investments() {
                                 <input
                                     type="number"
                                     value={investment.invested}
-                                    onChange={(e) => handleUpdate(index, 'invested', parseFloat(e.target.value), investment)}
+                                    onChange={(e) => handleUpdate(index, 'invested', parseFloat(e.target.value))}
                                     onBlur={() => handleSave(investment)}
                                 />
                             </td>
@@ -112,20 +137,21 @@ export default function Investments() {
                                 <input
                                     type="number"
                                     value={investment.currentValue}
-                                    onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value), investment)}
+                                    onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value))}
                                     onBlur={() => handleSave(investment)}
                                 />
                             </td>
                             <td
                                 style={{
-                                    color: ((investment.currentValue - investment.invested) / investment.invested) * 100 >= 0 ? 'green' : 'red'
+                                    color: growthPercentage(investment) >= 0 ? 'green' : 'red'
                                 }}
                             >
-                                {(Math.round(((investment.currentValue - investment.invested) / investment.invested) * 100 * 100) / 100).toFixed(2) + '%'}
-
+                                {growthPercentage(investment).toFixed(2) + '%'}
                             </td>
                             <td className="delete-icon">
-                                <button onClick={() => handleDelete(investment)}><img src="../src/assets/delete.svg" /></button>
+                                <button onClick={() => handleDelete(investment)} aria-label="Delete investment">
+                                    <img src="../src/assets/delete.svg" alt="Delete" />
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -140,9 +166,17 @@ export default function Investments() {
                 </tfoot>
             </table>
             <div style={{ marginTop: "50px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
-                <InvestmentPieChart investments={investments} />
-                <InvestmentBarChart investments={investments} />
+                {investments.length > 0 ? (
+                    <>
+                        <InvestmentPieChart investments={investments} />
+                        <InvestmentBarChart investments={investments} />
+                    </>
+                ) : (
+                    <></>
+                )}
             </div>
-        </main >
+
+        </main>
     );
 }
+

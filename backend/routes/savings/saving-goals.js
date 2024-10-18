@@ -6,7 +6,7 @@ router.use(ValidateLoggedIn);
 
 router.get("/", async (req, res) => {
     const query = `
-        SELECT id, name, goal, balance FROM saving_goal WHERE user_id = ${req.session.userId}
+        SELECT id, name, goal, balance, user_id FROM saving_goal WHERE user_id = ${req.session.userId}
     `;
 
     connection.query(query, (err, results) => {
@@ -19,7 +19,8 @@ router.get("/", async (req, res) => {
             id: s.id,
             name: s.name,
             balance: s.balance,
-            goal: s.goal
+            goal: s.goal,
+            userId: s.user_id
         }));
         res.status(200).json({ goals });
     });
@@ -48,24 +49,35 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    let { id, name, goal, balance, userId } = req.body;
-    if (userId !== req.session.userId) {
-        res.status(403).json({ message: "You may not update this goal" })
-    }
-    if (!id || !name || !goal || !userId) {
-        res.status(401).json({ message: "All fields required" })
-    }
-    name = name.replace(/'/g, '"');
-    const query = `
-        UPDATE saving_goal SET name = '${name}', goal=${goal}, balance=${balance} WHERE id = ${id}
-    `;
+    let { id, goal, balance, userId } = req.body;
 
-    connection.query(query, (err, results) => {
+    balance = Math.floor(parseFloat(balance));
+    goal = Math.floor(parseFloat(goal));
+
+    // Check for required fields
+    if (!id || !balance || !goal || !userId) {
+        return res.status(401).json({ message: "All fields required" }); // Return immediately
+    }
+
+    // Check user authorization
+    if (userId !== req.session.userId) {
+        return res.status(403).json({ message: "You may not update this goal" }); // Return immediately
+    }
+
+    // Check if the deposit amount exceeds the remaining goal
+    if (goal < balance) {
+        return res.status(403).json({ message: "Deposit amount can't exceed remaining balance" }); // Return immediately
+    }
+
+    // Proceed with the update query
+    const query = `UPDATE saving_goal SET balance = ? WHERE id = ?`;
+
+    connection.query(query, [balance, id], (err, results) => {
         if (err) {
             return res.status(500).json({ message: `Error updating the saving goal: ${err.message}` });
         }
         if (results.affectedRows === 0) {
-            return res.status(404).json({ message: "saving goal not found" });
+            return res.status(404).json({ message: "Saving goal not found" });
         }
         res.status(200).json({ message: "Saving goal updated" });
     });

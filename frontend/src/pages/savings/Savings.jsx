@@ -33,10 +33,7 @@ export default function Savings() {
     }
     return (
         <main>
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <h1 style={{ marginRight: "20px" }}>Savings</h1>
-                <Button onClick={newGoal} className="primary-btn">+ New savings goal</Button>
-            </div>
+            <h1 style={{ marginRight: "20px" }}>Savings</h1>
 
             <Modal isOpen={isSidebarOpen} toggleSidebar={newGoal}>
                 <NewSavingsGoal onGoalCreated={handleRerender} />
@@ -68,8 +65,11 @@ export default function Savings() {
                     </tr>
                 </tfoot>
             </table>
-            <h2>Saving goals</h2>
-            <SavingGoals triggerRerender={triggerRerender} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
+                <h2 className="h2">Saving goals</h2>
+                <Button onClick={newGoal} className="primary-btn">+ New savings goal</Button>
+            </div>
+            <SavingGoals triggerRerender={handleRerender} />
         </main >
     );
 }

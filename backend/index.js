@@ -39,6 +39,10 @@ app.use("/overview", overview);
 app.use("/savings", savings);
 app.use("/savings/goal", saving_goals);
 
+
+app.get("/userid", (req, res) => {
+    res.status(200).json(req.session.userId);
+})
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const query = "SELECT id, username, password FROM `User` WHERE username = ?";
@@ -53,7 +57,6 @@ app.post("/login", async (req, res) => {
 
         req.session.userId = 1;
         req.session.loggedIn = true;
-        console.log(req.session.userId);
         res.status(200).json({ message: "Logged in" });
     });
 });

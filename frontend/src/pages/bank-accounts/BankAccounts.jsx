@@ -115,7 +115,11 @@ export default function BankAccounts() {
                 </tfoot>
             </table>
 
-            <BankPieChart accounts={bankAccounts} />
+            {bankAccounts.length > 0 ? (
+                <BankPieChart accounts={bankAccounts} />
+            ) : (
+                <></>
+            )}
         </main >
     );
 }

@@ -33,7 +33,6 @@ router.post("/", (req, res) => {
     let { name, balance, type } = req.body;
     name = name.replace(/'/g, '"');
     const userId = req.session.userId;
-    console.log(userId);
     if (!balance) {
         balance = 0;
     }

@@ -10,8 +10,6 @@ router.use(ValidateLoggedIn);
 
 router.get("/", async (req, res) => {
     const data = {};
-    console.log(req.session.userId);
-
     try {
         //get assets
         let query = `SELECT a.name, a.boughtFor, a.currentValue, c.name AS type FROM asset AS a INNER JOIN asset_type AS c ON a.asset_type_id = c.id`;
