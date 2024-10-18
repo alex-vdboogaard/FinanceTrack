@@ -1,7 +1,7 @@
 import React from 'react';
 import './Button.css'; // For styling
 
-const Button = ({ type = 'button', onClick, children, className = '', disabled = false }) => {
+const Button = ({ type = 'button', onClick = () => { }, children, className = '', disabled = false }) => {
     return (
         <button
             type={type}

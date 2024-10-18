@@ -3,6 +3,7 @@ import Button from "../../components/button/Button";
 import "./BankAccounts.css";
 import pops from "pop-message";
 import "../../../node_modules/pop-message/pop.css";
+import { fetchData } from "../../utility/fetchData"
 
 export default function NewBankAccount({ onBankCreated }) {
     const [bankTypes, setBankTypes] = useState([]);
@@ -11,21 +12,10 @@ export default function NewBankAccount({ onBankCreated }) {
     const [selectedType, setSelectedType] = useState("");
 
     useEffect(() => {
-        fetch(`http://localhost:3001/bank-accounts/bank-types`)
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        pops.simplePop("error", errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(`http://localhost:3001/bank-accounts/bank-types`)
             .then((data) => {
                 setBankTypes(data.types);
             })
-            .catch((error) => {
-                pops.simplePop("error", error);
-            });
     }, []);
 
     const handleNewBank = (e) => {
@@ -36,31 +26,11 @@ export default function NewBankAccount({ onBankCreated }) {
             type: selectedType
         };
 
-        fetch(`http://localhost:3001/bank-accounts`, {
-            method: "POST",
-            body: JSON.stringify(newBankAccount),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorData) => {
-                        console.error("Error data:", errorData);
-                        pops.simplePop("error", errorData.message || "Network error");
-                        throw new Error(errorData.message || "Network error");
-                    });
-                }
-                return response.json();
-            })
+        fetchData(`http://localhost:3001/bank-accounts`, "POST", newBankAccount)
             .then((successData) => {
                 pops.simplePop("success", successData.message);
                 onBankCreated();
             })
-            .catch((error) => {
-                console.error("Catch error:", error);
-                pops.simplePop("error", error.message || "An unexpected error occurred");
-            });
     };
 
     return (

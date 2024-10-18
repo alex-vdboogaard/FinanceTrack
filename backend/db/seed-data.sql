@@ -1,7 +1,7 @@
 -- Insert data into User table
-INSERT INTO `User` (password, first_name, last_name)
+INSERT INTO `User` (username, password, first_name, last_name)
 VALUES 
-('password123', 'John', 'Doe');
+('john', 'password123', 'John', 'Doe');
 
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
@@ -77,8 +77,8 @@ VALUES
 INSERT INTO Recurring_income (amount, description, category_id, user_id)
 VALUES 
 (35000.00, 'Monthly salary',  1, 1), 
-(250.00, 'Rental income',5, 2), 
-(100.00, 'Dividends Coca Cola', 7, 3); 
+(250.00, 'Rental income',5, 1), 
+(100.00, 'Dividends Coca Cola', 7, 1); 
 
 -- Insert data into Investment_category table
 INSERT INTO Investment_category (name)
@@ -127,4 +127,4 @@ VALUES
 INSERT INTO Bank_account (description, balance, category_id, user_id)
 VALUES 
 ('Investec Youth Account', 2000.00, 3, 1),
-('ABSA student account', 1500.00, 2, 2); 
+('ABSA student account', 1500.00, 2, 1); 

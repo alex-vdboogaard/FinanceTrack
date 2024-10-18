@@ -1,4 +1,4 @@
-import pops from "pop-message"; 
+import pops from "pop-message";
 
 export const fetchData = async (url, method = 'GET', body = null) => {
     const options = {
@@ -6,6 +6,7 @@ export const fetchData = async (url, method = 'GET', body = null) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     };
 
     if (body) {
@@ -14,13 +15,21 @@ export const fetchData = async (url, method = 'GET', body = null) => {
 
     try {
         const response = await fetch(url, options);
-        const data = await response.json();
+
+        // Check response type before parsing
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson ? await response.json() : {};
 
         if (!response.ok) {
-            pops.simplePop("error", data.message || "Network error");
+            // Handle specific status codes
+            if (response.status === 401) {
+                pops.simplePop("error", "Unauthorized. Please log in.");
+                // Optionally redirect to login
+            } else {
+                pops.simplePop("error", data.message || "Network error");
+            }
             return Promise.reject(data);
         }
-
         return data;
     } catch (error) {
         pops.simplePop("error", `Error: ${error.message || error}`);

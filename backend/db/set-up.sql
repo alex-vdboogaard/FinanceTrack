@@ -10,6 +10,7 @@ USE FinanceTrack;
 -- Create User Table
 CREATE TABLE `User` (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(15) NOT NULL,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) DEFAULT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE Asset (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
---Create saving goal table
+-- Create saving goal table
 CREATE TABLE saving_goal (
     id INT AUTO_INCREMENT PRIMARY KEY,        -- Unique identifier for each saving goal
     name VARCHAR(255) NOT NULL,               -- Name of the saving goal

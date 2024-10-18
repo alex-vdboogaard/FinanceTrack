@@ -33,10 +33,11 @@ router.post("/", (req, res) => {
     let { name, balance, type } = req.body;
     name = name.replace(/'/g, '"');
     const userId = req.session.userId;
+    console.log(userId);
     if (!balance) {
         balance = 0;
     }
-    if (!name || !type || !userId) {
+    if (!name || !type) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -109,11 +110,9 @@ router.get("/bank-types", (req, res) => {
     const query = `
         SELECT id, name FROM bank_account_category
     `;
-
     connection.query(query, (err, results) => {
         if (err) {
-            res.status(500).json({ message: "Error reading from the database" });
-            return;
+            return res.status(500).json({ message: "Error reading from the database" });
         }
 
         const types = results.map(type => ({
@@ -121,9 +120,9 @@ router.get("/bank-types", (req, res) => {
             name: type.name
         }));
 
-
         res.status(200).json({ types });
     });
 });
+
 
 module.exports = router;

@@ -1,0 +1,15 @@
+.login-input {
+    padding: 10px 20px;
+    border: 1px solid grey;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.center-main {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
