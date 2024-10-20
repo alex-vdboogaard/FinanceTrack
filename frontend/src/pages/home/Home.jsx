@@ -69,7 +69,6 @@ export default function Home() {
                     </div>
                 </Widget>
             </div>
-            <Button onClick={() => alert("Hi!")} className='primary-btn'>+ Add new asset</Button>
         </main>
     );
 }
