@@ -15,7 +15,19 @@ export default function Home() {
     const [totalBankAccounts, setTotalBankAccounts] = useState(0);
     const [totalInvestments, setTotalInvestments] = useState(0);
     const [totalAssets, setTotalAssets] = useState(0);
+    const currentHour = new Date().getHours();
+    let greeting;
 
+    switch (true) {
+        case currentHour < 12:
+            greeting = "Good morning";
+            break;
+        case currentHour < 18:
+            greeting = "Good afternoon";
+            break;
+        default:
+            greeting = "Good evening";
+    }
     useEffect(() => {
         fetchData("http://localhost:3001/overview")
             .then((data) => {
@@ -30,7 +42,7 @@ export default function Home() {
 
     return (
         <main>
-            <h1>Good morning, Alex</h1>
+            <h1>{greeting}, Alex</h1>
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
                 <Widget width="500px" maxHeight={"auto"}>
                     <NetWorthPie assets={assets} investments={investments} bankAccounts={bankAccounts} />
