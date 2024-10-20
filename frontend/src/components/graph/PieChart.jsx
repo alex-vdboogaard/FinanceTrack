@@ -9,7 +9,7 @@ const PieChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700p
         labels: labels,
         datasets: [
             {
-                label: title || 'My Pie Chart',
+                label: title,
                 data: data,
                 backgroundColor: backgroundColors || [
                     'rgba(255, 99, 132, 0.2)',

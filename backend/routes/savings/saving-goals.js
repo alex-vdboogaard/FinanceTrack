@@ -48,7 +48,7 @@ router.post("/", (req, res) => {
 
 });
 
-router.put("/", (req, res) => {
+router.post("/deposit", (req, res) => {
     let { id, goal, balance, userId } = req.body;
 
     balance = Math.floor(parseFloat(balance));
@@ -82,6 +82,55 @@ router.put("/", (req, res) => {
         res.status(200).json({ message: "Saving goal updated" });
     });
 });
+
+router.put("/", (req, res) => {
+    let { id, goal, userId } = req.body;
+
+    goal = Math.floor(parseFloat(goal));
+
+    // Check for required fields
+    if (!id || !goal || !userId) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check user authorization
+    if (userId !== req.session.userId) {
+        return res.status(403).json({ message: "You may not update this goal" });
+    }
+
+    // Query to check the current balance
+    const selectQuery = `SELECT balance FROM saving_goal WHERE id = ?`;
+
+    connection.query(selectQuery, [id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: `Error updating the saving goal: ${err.message}` });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: "Saving goal not found" });
+        }
+
+        const balance = results[0].balance;
+
+        // Check if the new goal is greater than the current balance
+        if (goal < balance) {
+            return res.status(403).json({ message: "New goal cannot be less than the current balance" });
+        }
+
+        // Query to update the goal if validation passes
+        const updateQuery = `UPDATE saving_goal SET goal = ? WHERE id = ?`;
+
+        connection.query(updateQuery, [goal, id], (err, updateResults) => {
+            if (err) {
+                return res.status(500).json({ message: `Error updating the saving goal: ${err.message}` });
+            }
+            if (updateResults.affectedRows === 0) {
+                return res.status(404).json({ message: "Saving goal not found" });
+            }
+            return res.status(200).json({ message: "Saving goal updated" });
+        });
+    });
+});
+
 
 router.delete("/", (req, res) => {
     const { id, userId } = req.body;

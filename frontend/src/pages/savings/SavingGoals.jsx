@@ -39,7 +39,7 @@ export default function SavingGoals({ triggerRerender }) {
             depositAmount = Math.floor(depositAmount);
             const newBalance = currentBalance + depositAmount;
 
-            fetchData("http://localhost:3001/savings/goal", "PUT", {
+            fetchData("http://localhost:3001/savings/goal/deposit", "POST", {
                 id: goal.id,
                 goal: goal.goal,
                 balance: newBalance,
@@ -52,8 +52,22 @@ export default function SavingGoals({ triggerRerender }) {
         }
     };
 
+    const handleEdit = async (goal) => {
+        const newGoal = await pops.inputPop(`New goal (R) for "${goal.name}"`);
 
-
+        const newGoalNumber = parseFloat(newGoal);
+        if (!isNaN(newGoalNumber) && newGoal.trim() !== "") {
+            fetchData("http://localhost:3001/savings/goal", "PUT", {
+                id: goal.id,
+                userId: goal.userId,
+                goal: newGoalNumber
+            })
+                .then((successData) => {
+                    pops.simplePop("success", successData.message);
+                    triggerRerender();
+                })
+        }
+    };
 
     return (
         <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -63,18 +77,22 @@ export default function SavingGoals({ triggerRerender }) {
                     let data = [goal.balance, remaining];
                     return (
                         <Widget key={`${goal.id}-${goal.userId}`}>
-                            <div style={{ margin: "10px", display: "flex", flexDirection: "column" }}>
+                            <div style={{ margin: "10px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                <h3>{goal.name} - R{goal.goal}</h3>
                                 <DoughnutChart
                                     backgroundColors={colorShades}
                                     labels={labels}
                                     data={data}
-                                    title={goal.name}
+                                    title={` `}
                                     maxWidth="500px"
                                 />
                                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                     <Button className="primary-btn" onClick={() => handleDeposit(goal)}>
                                         Deposit
                                     </Button>
+                                    <button style={{ marginLeft: "5px" }} onClick={() => handleEdit(goal)} >
+                                        <img style={{ marginTop: "3px" }} src="./src/assets/edit.svg" alt="edit icon" />
+                                    </button>
                                     <button onClick={() => handleDelete(goal)} >
                                         <img src="./src/assets/delete.svg" alt="delete icon" />
                                     </button>

@@ -9,7 +9,7 @@ const DoughnutChart = memo(({ labels, data, backgroundColors, title, maxWidth = 
         labels: labels,
         datasets: [
             {
-                label: title || 'My Doughnut Chart',
+                label: title,
                 data: data,
                 backgroundColor: backgroundColors || [
                     'rgba(255, 99, 132, 0.2)',
