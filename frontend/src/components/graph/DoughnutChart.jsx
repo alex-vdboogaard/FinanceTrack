@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700px" }) => {
+const DoughnutChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700px" }) => {
     const chartData = {
         labels: labels,
         datasets: [
@@ -23,6 +23,7 @@ const PieChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700p
                     'white'
                 ],
                 borderWidth: 1,
+                cutout: '50%',  // Makes the pie chart hollow
             },
         ],
     };
@@ -35,16 +36,16 @@ const PieChart = memo(({ labels, data, backgroundColors, title, maxWidth = "700p
             },
             title: {
                 display: true,
-                text: title || 'Pie Chart',
+                text: title || 'Doughnut Chart',
             },
         },
     };
 
     return (
         <div style={{ maxWidth: maxWidth, width: "100%" }}>
-            <Pie data={chartData} options={options} />
+            <Doughnut data={chartData} options={options} />
         </div>
     )
 });
 
-export default PieChart;
+export default DoughnutChart;

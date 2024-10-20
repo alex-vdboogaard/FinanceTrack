@@ -107,7 +107,7 @@ export default function Investments() {
                         <th>Category</th>
                         <th>Invested (R)</th>
                         <th>Current value (R)</th>
-                        <th>Growth (%)</th>
+                        <th>Growth</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -161,7 +161,11 @@ export default function Investments() {
                         <td colSpan="2">Count: {count}</td>
                         <td>Total: R{totalInvested}</td>
                         <td>Total: R{totalCurrentValue}</td>
-                        <td></td>
+                        {investments.length > 0 ? (
+                            <td colSpan="2">
+                                Total: {((totalCurrentValue - totalInvested) / totalInvested * 100).toFixed(2)}%
+                            </td>
+                        ) : <td colSpan="2">Total: 0</td>}
                     </tr>
                 </tfoot>
             </table>

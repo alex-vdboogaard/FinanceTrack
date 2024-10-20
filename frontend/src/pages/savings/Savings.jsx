@@ -48,11 +48,11 @@ export default function Savings() {
                 </thead>
                 <tbody>
                     {savings.map((account, index) => (
-                        <tr key={index}>
-                            <td>
+                        <tr key={index} >
+                            <td className="savings-row">
                                 <p>{account.name}</p>
                             </td>
-                            <td>
+                            <td className="savings-row">
                                 {account.balance}
                             </td>
                         </tr>

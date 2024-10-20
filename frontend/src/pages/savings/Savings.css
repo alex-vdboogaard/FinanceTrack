@@ -51,3 +51,15 @@ label {
     height: 100%;
     padding: 0px 0px 0px 20px;
 }
+
+.savings-row {
+    padding: 10px 10px;
+}
+
+h3 {
+    margin: 0px;
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: underline;
+}

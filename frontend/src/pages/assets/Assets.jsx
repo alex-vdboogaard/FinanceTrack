@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import Button from "../../components/button/Button"
+import Button from "../../components/button/Button";
 import Modal from "../../components/modal/Modal";
 import NewAsset from "./NewAsset";
 import AssetPieChart from "./AssetPieChart";
-import "./Assets.css"
-import "../../../node_modules/pop-message/pop.css"
-import pops from "pop-message"
+import "./Assets.css";
+import "../../../node_modules/pop-message/pop.css";
+import pops from "pop-message";
 import AssetBarChart from "./AssetBarChart";
-import { fetchData } from "../../utility/fetchData"
+import { fetchData } from "../../utility/fetchData";
 
 export default function Assets() {
     const [assets, setAssets] = useState([]);
@@ -17,6 +17,13 @@ export default function Assets() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [triggerRerender, setTriggerRerender] = useState(false);
     const url = "http://localhost:3001/assets";
+
+    const calculateTotals = (assets) => {
+        const totalBought = assets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0);
+        const totalCurrent = assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue), 0);
+        setTotalBoughtFor(totalBought);
+        setTotalCurrentValue(totalCurrent);
+    };
     const handleRerender = () => {
         setTriggerRerender(prev => !prev);
     };
@@ -26,8 +33,7 @@ export default function Assets() {
             .then((data) => {
                 setAssets(data.assets);
                 setCount(data.assets.length);
-                setTotalBoughtFor(data.assets.reduce((acc, asset) => acc + parseFloat(asset.boughtFor), 0));
-                setTotalCurrentValue(data.assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue), 0));
+                calculateTotals(data.assets);
             })
             .catch((error) => {
                 console.log("Error fetching assets: ", error);
@@ -35,7 +41,7 @@ export default function Assets() {
     }, [triggerRerender]);
 
     const handleSave = (asset) => {
-        fetchData(url, 'PUT', asset)
+        fetchData(url, 'PUT', asset);
     };
 
     const handleDelete = async (asset) => {
@@ -43,25 +49,24 @@ export default function Assets() {
         if (confirm) {
             fetchData(url, 'DELETE', { id: asset.id, userId: asset.userId })
                 .then(() => {
-                    setAssets(assets.filter(a => a.id !== asset.id));
+                    const updatedAssets = assets.filter(a => a.id !== asset.id);
+                    setAssets(updatedAssets);
                     setCount(prevCount => prevCount - 1);
-                    setTotalCurrentValue(assets.reduce((acc, a) => acc + parseFloat(a.currentValue), 0));
-                    setTotalBoughtFor(assets.reduce((acc, a) => acc + parseFloat(a.boughtFor), 0));
+                    calculateTotals(updatedAssets);
                     pops.simplePop("success", "Asset deleted");
-                })
+                });
         }
     };
 
     const newAsset = () => {
         setIsSidebarOpen(!isSidebarOpen);
-    }
+    };
 
     const handleUpdate = (index, field, value) => {
         const updatedAssets = [...assets];
         updatedAssets[index][field] = value;
         setAssets(updatedAssets);
-        setTotalCurrentValue(assets.reduce((acc, a) => acc + parseFloat(a.currentValue), 0));
-        setTotalBoughtFor(assets.reduce((acc, a) => acc + parseFloat(a.boughtFor), 0));
+        calculateTotals(updatedAssets);
     };
 
     return (
@@ -82,7 +87,7 @@ export default function Assets() {
                         <th>Type</th>
                         <th>Bought for (R)</th>
                         <th>Current value (R)</th>
-                        <th>Growth (%)</th>
+                        <th>Growth</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -120,12 +125,11 @@ export default function Assets() {
                                 style={{
                                     color: ((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 >= 0 ? 'green' : 'red'
                                 }}
-
                             >
                                 {(Math.round(((asset.currentValue - asset.boughtFor) / asset.boughtFor) * 100 * 100) / 100).toFixed(2) + '%'}
                             </td>
                             <td className="delete-icon">
-                                <button onClick={() => handleDelete(asset)}><img src="../src/assets/delete.svg" /></button> {/* Action button to save */}
+                                <button onClick={() => handleDelete(asset)}><img src="../src/assets/delete.svg" /></button>
                             </td>
                         </tr>
                     ))}
@@ -135,7 +139,11 @@ export default function Assets() {
                         <td colSpan="2">Count: {count}</td>
                         <td>Total: R{totalBoughtFor}</td>
                         <td>Total: R{totalCurrentValue}</td>
-                        <td></td>
+                        {assets.length > 0 ? (
+                            <td colSpan="2">
+                                Total: {((totalCurrentValue - totalBoughtFor) / totalBoughtFor * 100).toFixed(2)}%
+                            </td>
+                        ) : <td colSpan="2">Total: 0</td>}
                     </tr>
                 </tfoot>
             </table>
@@ -149,8 +157,7 @@ export default function Assets() {
                     <></>
                 )}
             </div>
-
-
-        </main >
+        </main>
     );
 }
+

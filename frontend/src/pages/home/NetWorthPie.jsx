@@ -1,20 +1,41 @@
+import React, { useMemo } from "react";
 import PieChart from "../../components/graph/PieChart";
 import getColorShades from "../../utility/colors";
 
 export default function NetWorthPie({ assets, bankAccounts, investments }) {
     const colors = getColorShades(3);
-    let total1 = assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue || 0), 0);
-    let total2 = bankAccounts.reduce((acc, account) => acc + parseFloat(account.balance || 0), 0);
-    let total3 = investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue || 0), 0);
-    let data = [total1, total2, total3];
+
+    const total1 = useMemo(() =>
+        assets.reduce((acc, asset) => acc + parseFloat(asset.currentValue || 0), 0),
+        [assets]
+    );
+
+    const total2 = useMemo(() =>
+        bankAccounts.reduce((acc, account) => acc + parseFloat(account.balance || 0), 0),
+        [bankAccounts]
+    );
+
+    const total3 = useMemo(() =>
+        investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue || 0), 0),
+        [investments]
+    );
+
+    const data = [total1, total2, total3];
     const labels = ["Assets", "Bank Accounts", "Investments"];
+    const totalNetWorth = total1 + total2 + total3;
 
     return (
-        <PieChart
-            labels={labels}
-            backgroundColors={colors}
-            data={data}
-            title={`Net worth: R${total1 + total2 + total3}`}
-        />
+        <>
+            <h2>Networth: R{totalNetWorth}</h2>
+            {totalNetWorth !== 0 && (
+                <PieChart
+                    labels={labels}
+                    backgroundColors={colors}
+                    data={data}
+                    title={` `}
+                />
+            )}
+        </>
     );
+
 }
