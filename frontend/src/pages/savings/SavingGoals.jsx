@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../../utility/fetchData";
 import pops from "pop-message";
 import Button from "../../components/button/Button";
+import Widget from "../../components/widget/Widget";
 export default function SavingGoals({ triggerRerender }) {
     const colorShades = getColorShades(2);
     const labels = ["Balance", "Remaining"];
@@ -14,9 +15,6 @@ export default function SavingGoals({ triggerRerender }) {
             .then((data) => {
                 setGoals(data.goals);
             })
-            .catch((error) => {
-                console.error("Error fetching goals:", error);
-            });
     }, [triggerRerender]);
 
     const handleDelete = async (goal) => {
@@ -64,24 +62,27 @@ export default function SavingGoals({ triggerRerender }) {
                     let remaining = goal.goal - goal.balance;
                     let data = [goal.balance, remaining];
                     return (
-                        <div key={goal.id} style={{ margin: "10px", display: "flex", flexDirection: "column" }}>
-                            <PieChart
-                                backgroundColors={colorShades}
-                                labels={labels}
-                                data={data}
-                                title={goal.name}
-                                maxWidth="500px"
-                            />
-                            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Button className="primary-btn" onClick={() => handleDeposit(goal)}>
-                                    Deposit
-                                </Button>
-                                <button onClick={() => handleDelete(goal)} >
-                                    <img src="./src/assets/delete.svg" alt="delete icon" />
-                                </button>
-                            </div>
+                        <Widget key={`${goal.id}-${goal.userId}`}>
+                            <div style={{ margin: "10px", display: "flex", flexDirection: "column" }}>
+                                <PieChart
+                                    backgroundColors={colorShades}
+                                    labels={labels}
+                                    data={data}
+                                    title={goal.name}
+                                    maxWidth="500px"
+                                />
+                                <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                                    <Button className="primary-btn" onClick={() => handleDeposit(goal)}>
+                                        Deposit
+                                    </Button>
+                                    <button onClick={() => handleDelete(goal)} >
+                                        <img src="./src/assets/delete.svg" alt="delete icon" />
+                                    </button>
+                                </div>
 
-                        </div>
+                            </div>
+                        </Widget>
+
                     );
                 })
             ) : (
