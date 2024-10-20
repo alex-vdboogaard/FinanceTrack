@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import Button from "../../components/button/Button"
-import { fetchData } from "../../utility/fetchData"
+import { useEffect, useMemo, useState } from "react";
+import Button from "../../components/button/Button";
+import { fetchData } from "../../utility/fetchData";
 import Widget from "../../components/widget/Widget";
-import "./Home.css"
+import "./Home.css";
 import InvestmentDiv from "./InvestmentDiv";
 import BankAccountDiv from "./BankAccountDiv";
 import AssetDiv from "./AssetDiv";
@@ -12,33 +12,34 @@ export default function Home() {
     const [bankAccounts, setBankAccounts] = useState([]);
     const [investments, setInvestments] = useState([]);
     const [assets, setAssets] = useState([]);
-    const [totalBankAccounts, setTotalBankAccounts] = useState(0);
-    const [totalInvestments, setTotalInvestments] = useState(0);
-    const [totalAssets, setTotalAssets] = useState(0);
-    const currentHour = new Date().getHours();
-    let greeting;
 
-    switch (true) {
-        case currentHour < 12:
-            greeting = "Good morning";
-            break;
-        case currentHour < 18:
-            greeting = "Good afternoon";
-            break;
-        default:
-            greeting = "Good evening";
-    }
+    // Calculate totals using useMemo
+    const totalBankAccounts = useMemo(() =>
+        bankAccounts.reduce((acc, a) => acc + parseFloat(a.balance || 0), 0),
+        [bankAccounts]
+    );
+
+    const totalInvestments = useMemo(() =>
+        investments.reduce((acc, i) => acc + parseFloat(i.currentValue || 0), 0),
+        [investments]
+    );
+
+    const totalAssets = useMemo(() =>
+        assets.reduce((acc, a) => acc + parseFloat(a.currentValue || 0), 0),
+        [assets]
+    );
+
+    const currentHour = new Date().getHours();
+    const greeting = currentHour < 12 ? "Good morning" : currentHour < 18 ? "Good afternoon" : "Good evening";
+
     useEffect(() => {
         fetchData("http://localhost:3001/overview")
             .then((data) => {
                 setBankAccounts(data.bankAccounts);
                 setInvestments(data.investments);
                 setAssets(data.assets);
-                setTotalBankAccounts(data.bankAccounts.reduce((acc, a) => acc + parseFloat(a.balance), 0));
-                setTotalInvestments(data.investments.reduce((acc, i) => acc + parseFloat(i.currentValue), 0));
-                setTotalAssets(data.assets.reduce((acc, a) => acc + parseFloat(a.currentValue), 0));
             })
-    }, [bankAccounts, investments, assets])
+    }, []);
 
     return (
         <main>
@@ -70,6 +71,5 @@ export default function Home() {
             </div>
             <Button onClick={() => alert("Hi!")} className='primary-btn'>+ Add new asset</Button>
         </main>
-
-    )
+    );
 }
