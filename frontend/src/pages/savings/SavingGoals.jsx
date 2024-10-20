@@ -1,5 +1,5 @@
 import getColorShades from "../../utility/colors";
-import PieChart from "../../components/graph/PieChart";
+import DoughnutChart from "../../components/graph/DoughnutChart";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../utility/fetchData";
 import pops from "pop-message";
@@ -64,7 +64,7 @@ export default function SavingGoals({ triggerRerender }) {
                     return (
                         <Widget key={`${goal.id}-${goal.userId}`}>
                             <div style={{ margin: "10px", display: "flex", flexDirection: "column" }}>
-                                <PieChart
+                                <DoughnutChart
                                     backgroundColors={colorShades}
                                     labels={labels}
                                     data={data}
