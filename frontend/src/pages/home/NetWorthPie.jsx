@@ -25,11 +25,17 @@ export default function NetWorthPie({ assets, bankAccounts, investments }) {
     const totalNetWorth = total1 + total2 + total3;
 
     return (
-        <PieChart
-            labels={labels}
-            backgroundColors={colors}
-            data={data}
-            title={`Net worth: R${totalNetWorth}`}
-        />
+        <>
+            <h2>Networth: R{totalNetWorth}</h2>
+            {totalNetWorth !== 0 && (
+                <PieChart
+                    labels={labels}
+                    backgroundColors={colors}
+                    data={data}
+                    title={` `}
+                />
+            )}
+        </>
     );
+
 }
