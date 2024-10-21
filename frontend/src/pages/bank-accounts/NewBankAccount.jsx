@@ -7,14 +7,20 @@ import { fetchData } from "../../utility/fetchData"
 
 export default function NewBankAccount({ onBankCreated }) {
     const [bankTypes, setBankTypes] = useState([]);
+    const [banks, setBanks] = useState([]);
     const [name, setName] = useState("");
     const [balance, setBalance] = useState(0);
     const [selectedType, setSelectedType] = useState("");
+    const [selectedBank, setSelectedBank] = useState("");
 
     useEffect(() => {
         fetchData(`http://localhost:3001/bank-accounts/bank-types`)
             .then((data) => {
                 setBankTypes(data.types);
+            })
+        fetchData(`http://localhost:3001/bank-accounts/banks`)
+            .then((data) => {
+                setBanks(data.banks);
             })
     }, []);
 
@@ -23,7 +29,8 @@ export default function NewBankAccount({ onBankCreated }) {
         const newBankAccount = {
             name: name,
             balance: Number(balance),
-            type: selectedType
+            type: selectedType,
+            bank: selectedBank
         };
 
         fetchData(`http://localhost:3001/bank-accounts`, "POST", newBankAccount)
@@ -60,6 +67,24 @@ export default function NewBankAccount({ onBankCreated }) {
                         value={balance}
                         onChange={(e) => setBalance(e.target.value)}
                     />
+                </div>
+                <div className="input-wrapper">
+                    <label htmlFor="bank">Bank</label>
+                    <select
+                        className="normal-input"
+                        name="bank"
+                        required
+                        id="bank"
+                        value={selectedBank}
+                        onChange={(e) => setSelectedBank(e.target.value)}
+                    >
+                        <option value="">Select</option>
+                        {banks.map((bank, index) => (
+                            <option key={index} value={bank.id}>
+                                {bank.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="input-wrapper">
                     <label htmlFor="type">Type</label>

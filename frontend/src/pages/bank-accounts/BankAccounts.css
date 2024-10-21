@@ -47,3 +47,12 @@ label {
     height: 100%;
     padding: 0px 0px 0px 20px;
 }
+
+.bank {
+    display: flex;
+    align-items: center;
+}
+
+.bank>img {
+    margin-right: 10px;
+}

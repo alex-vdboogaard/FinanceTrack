@@ -8,9 +8,13 @@ router.use(ValidateLoggedIn);
 
 router.get("/", (req, res) => {
     const query = `
-        SELECT b.id, b.description, b.balance, t.name AS type FROM bank_account AS b INNER JOIN bank_account_category AS t ON t.id = b.category_id
-        WHERE b.user_id = ${req.session.userId}
+    SELECT b.id, b.description, b.balance, t.name AS type, bb.name AS bank 
+    FROM bank_account AS b 
+    INNER JOIN bank_account_category AS t ON t.id = b.category_id
+    INNER JOIN Bank AS bb ON bb.id = b.bank_id 
+    WHERE b.user_id = ${req.session.userId}
     `;
+
 
     connection.query(query, (err, results) => {
         if (err) {
@@ -22,7 +26,8 @@ router.get("/", (req, res) => {
             bankAccount.id,
             bankAccount.description,
             bankAccount.balance,
-            bankAccount.type
+            bankAccount.type,
+            bankAccount.bank,
         ));
 
         res.status(200).json({ bankAccounts });
@@ -30,22 +35,22 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    let { name, balance, type } = req.body;
+    let { name, balance, type, bank } = req.body;
     name = name.replace(/'/g, '"');
     const userId = req.session.userId;
     if (!balance) {
         balance = 0;
     }
-    if (!name || !type) {
+    if (!name || !type || !bank) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
     const query = `
-        INSERT INTO bank_account (description, balance, category_id, user_id) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO bank_account (description, balance, category_id, bank_id, user_id) 
+        VALUES (?, ?, ?, ?, ?)
     `;
 
-    const values = [name, balance, type, userId];
+    const values = [name, balance, type, bank, userId];
 
     connection.query(query, values, (err, results) => {
         if (err) {
@@ -120,6 +125,24 @@ router.get("/bank-types", (req, res) => {
         }));
 
         res.status(200).json({ types });
+    });
+});
+
+router.get("/banks", (req, res) => {
+    const query = `
+        SELECT id, name FROM bank
+    `;
+    connection.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Error reading from the database" });
+        }
+
+        const banks = results.map(bank => ({
+            id: bank.id,
+            name: bank.name
+        }));
+
+        res.status(200).json({ banks });
     });
 });
 

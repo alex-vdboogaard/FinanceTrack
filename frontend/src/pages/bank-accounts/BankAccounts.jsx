@@ -73,6 +73,7 @@ export default function BankAccounts() {
                     <tr className="no-border">
                         <th>Name</th>
                         <th>Type</th>
+                        <th>Bank</th>
                         <th>Balance (R)</th>
                         <th>Actions</th>
                     </tr>
@@ -91,6 +92,14 @@ export default function BankAccounts() {
                             <td>
                                 {account.type}
                             </td>
+                            <td className="bank">
+                                <img
+                                    src={`../src/assets/logos/${account.bank.toLowerCase().replace(/\s+/g, '')}.svg`}
+                                    alt={account.bank}
+                                />
+                                {account.bank}
+                            </td>
+
                             <td>
                                 <input
                                     type="number"
