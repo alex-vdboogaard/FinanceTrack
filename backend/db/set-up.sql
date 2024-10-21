@@ -37,14 +37,13 @@ CREATE TABLE Asset (
 
 -- Create saving goal table
 CREATE TABLE saving_goal (
-    id INT AUTO_INCREMENT PRIMARY KEY,        -- Unique identifier for each saving goal
-    name VARCHAR(255) NOT NULL,               -- Name of the saving goal
-    goal DECIMAL(10, 2) NOT NULL,             -- Target amount for the saving goal
-    balance DECIMAL(10, 2) DEFAULT 0,         -- Current balance towards the goal
-    user_id INT NOT NULL,                      -- ID of the user who owns the saving goal
-    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE -- Foreign key referencing the users table
+    id INT AUTO_INCREMENT PRIMARY KEY,      
+    name VARCHAR(255) NOT NULL,               
+    goal DECIMAL(10, 2) NOT NULL,            
+    balance DECIMAL(10, 2) DEFAULT 0,       
+    user_id INT NOT NULL,                     
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
-
 
 -- Create Expense Category Table
 CREATE TABLE Expense_category (
@@ -116,6 +115,12 @@ CREATE TABLE Bank_account_category (
     name VARCHAR(100) NOT NULL
 );
 
+-- Create Bank Table
+CREATE TABLE Bank (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL
+);
+
 -- Create Bank Account Table
 CREATE TABLE Bank_account (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -123,6 +128,116 @@ CREATE TABLE Bank_account (
     balance DECIMAL(10, 2) NOT NULL,
     category_id INT NOT NULL,
     user_id INT NOT NULL,
+    bank_id INT NOT NULL,
+    FOREIGN KEY (bank_id) REFERENCES Bank(id), 
     FOREIGN KEY (category_id) REFERENCES Bank_account_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE 
 );
+
+
+-- Insert data into Asset_Type table
+INSERT INTO Asset_Type (name)
+VALUES 
+('Property'),
+('Laptop'),
+('Phone'),
+('Vehicle'),
+('Jewelry'),
+('Equipment'),
+('Tech'),
+('Tools'),
+('Appliances'),
+('Furniture'),
+('Other');
+
+-- Insert data into Expense_category table
+INSERT INTO Expense_category (name)
+VALUES 
+('Rent'),
+('Mortgage'),
+('Utilities'),
+('Internet'),
+('Phone bill'),
+('Car insurance'),
+('Health insurance'),
+('Groceries'),
+('Transportation'),
+('Gasoline'),
+('Public transit'),
+('Loan payments'),
+('Credit card payments'),
+('Subscriptions'),
+('Streaming services'),
+('Savings contributions'),
+('Debt repayment'),
+('Other');
+
+-- Insert data into Income_category table
+INSERT INTO Income_category (name)
+VALUES 
+('Salary'),
+('Hourly wages'),
+('Commission'),
+('Freelance income'),
+('Rental income'),
+('Business profits'),
+('Investment dividends'),
+('Pension'),
+('Social security'),
+('Government benefits'),
+('Child support'),
+('Alimony'),
+('Interest income'),
+('Royalties'),
+('Other');
+
+-- Insert data into Investment_category table
+INSERT INTO Investment_category (name)
+VALUES 
+('Stocks'),
+('Bonds'),
+('Mutual funds'),
+('Real estate'),
+('Index funds'),
+('Exchange-traded funds (ETFs)'),
+('Cryptocurrency'),
+('Commodities'),
+('Precious metals'),
+('Retirement accounts (e.g., 401k, IRA)'),
+('Certificates of deposit (CDs)'),
+('Annuities'),
+('Hedge funds'),
+('Private equity'),
+('Other');
+
+-- Insert data into Bank_account_category table
+INSERT INTO Bank_account_category (name)
+VALUES 
+('Cheque'),
+('Credit'),
+('Savings'),
+('Money market'),
+('Certificate of deposit (CD)'),
+('Joint'),
+('Business'),
+('Retirement (e.g., IRA, 401k)'),
+('Brokerage'),
+('Custodial'),
+('Health savings (HSA)'),
+('Specialty (e.g., for minors)'),
+('Foreign currency'),
+('Other');
+
+-- Insert data into Bank table
+INSERT INTO Bank (name)
+ VALUES 
+('Investec'),
+('ABSA'),
+('Standard Bank'),
+('FNB'),
+('Nedbank'),
+('Capitec'),
+('African Bank'),
+('Bidvest'),
+('TymeBank'),
+('Other');
