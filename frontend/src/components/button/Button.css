@@ -19,6 +19,13 @@
 .secondary-btn {
     background-color: none;
     color: #0B1326;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+.secondary-btn:hover {
+    background-color: #F5F5F5;
+    color: #0B1326;
 }
 
 .btn:disabled {

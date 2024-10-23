@@ -1,6 +1,7 @@
 import Button from "../../components/button/Button";
 import "../../../node_modules/pop-message/pop.css";
 import Expenses from "./Expenses";
+import Income from "./Income"
 import BudgetGraphs from "./BudgetGraphs";
 import { useCallback, useState, useEffect } from "react";
 import "./Budget.css"
@@ -8,9 +9,6 @@ import "./Budget.css"
 export default function Budget() {
     const [expenses, setExpenses] = useState([]);
     const [income, setIncome] = useState([]);
-    const handleRerender = useCallback(() => {
-        setTriggerRerender(prev => !prev);
-    }, []);
 
     return (
         <main>
@@ -19,6 +17,7 @@ export default function Budget() {
                 <Button onClick={() => { }} className="primary-btn">+ Monthly review</Button>
             </div>
             <Expenses setExpenses={setExpenses}></Expenses>
+            <Income setIncome={setIncome} />
             <BudgetGraphs expenses={expenses} income={income}></BudgetGraphs>
         </main>
     )

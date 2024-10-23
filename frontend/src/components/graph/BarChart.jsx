@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import getColorShades from "../../utility/colors";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarChart = ({ items, title, group1Label, group2Label }) => {
+const BarChart = ({ items, title, group1Label, group2Label, margin = "50px" }) => {
     const labels = items.map((item) => item.name);
     const group1 = items.map((item) => item.value1);
     const group2 = items.map((item) => item.value2);
@@ -45,7 +45,7 @@ const BarChart = ({ items, title, group1Label, group2Label }) => {
     };
 
     return (
-        <div style={{ marginTop: "50px", maxWidth: "800px", width: "100%" }}>
+        <div style={{ marginTop: margin, maxWidth: "800px", width: "100%" }}>
             <Bar data={data} options={options} />
         </div>
     )

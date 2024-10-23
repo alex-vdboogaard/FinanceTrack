@@ -10,11 +10,18 @@ export default function BudgetGraphs({ expenses, income }) {
     const incomeColours = getColorShades(income.length);
     const incomeLabels = income.map(income => income.name);
     const incomeData = income.map(income => income.amount);
+
+    const incomeTotal = income.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+    const expenseTotal = expenses.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+
+    const barchartItems = [{ value1: incomeTotal, value2: expenseTotal, name: " " }];
+
+
     return (
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "start", marginTop: "50px" }}>
-            {/* Expenses */}
             <PieChart maxWidth={"400px"} title={"Expenses"} backgroundColors={expenseColours} labels={expenseLabels} data={expenseData} />
             <PieChart maxWidth={"400px"} title={"Income"} backgroundColors={incomeColours} labels={incomeLabels} data={incomeData} />
+            <BarChart margin={"0px"} style={{ flexBasis: "100%" }} title="Income vs Expenses" group1Label="Income" group2Label="Expenses" items={barchartItems} />
         </div>
     )
 }

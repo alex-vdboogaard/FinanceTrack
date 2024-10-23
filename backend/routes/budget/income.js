@@ -2,16 +2,11 @@ const express = require('express');
 const connection = require("../../db/db");
 const router = express.Router();
 router.get("/", (req, res) => {
-    const query = `SELECT e.id, e.description, e.amount, t.name AS type FROM Recurring_Income AS e INNER JOIN Income_Category AS t ON t.id = e.category_id WHERE user_id = ?`;
+    const query = `SELECT i.id, i.description, i.amount, t.name AS type FROM Recurring_Income AS i INNER JOIN Income_Category AS t ON t.id = i.category_id WHERE user_id = ?`;
 
     connection.query(query, [req.session.userId], (err, results) => {
         if (err) {
             res.status(500).json({ message: "Error reading from the database" });
-            return;
-        }
-
-        if (results.length === 0) {
-            res.status(404).json({ message: "No income found" });
             return;
         }
 
@@ -32,7 +27,7 @@ router.post("/", (req, res) => {
 
     connection.query(query, [req.session.userId, description, amount, categoryId], (err, results) => {
         if (err) {
-            res.status(500).json({ message: "Error writing to the database" });
+            res.status(500).json({ message: `Error writing to the database: ${err.message}` });
             return;
         }
 
@@ -41,10 +36,10 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    const { id, description, amount } = req.body;
+    const { id, name, amount } = req.body;
     const query = `UPDATE Recurring_Income SET description = ?, amount = ? WHERE id = ? AND user_id = ?`;
 
-    connection.query(query, [description, amount, id, req.session.userId], (err, results) => {
+    connection.query(query, [name, amount, id, req.session.userId], (err, results) => {
         if (err) {
             res.status(500).json({ message: "Error updating the database" });
             return;
@@ -67,5 +62,23 @@ router.delete("/", (req, res) => {
         res.status(200).json({ message: "Income deleted successfully" });
     });
 });
+
+router.get("/income-categories", (req, res) => {
+    const query = `SELECT * FROM Income_Category`;
+
+    connection.query(query, [req.session.userId], (err, results) => {
+        if (err) {
+            res.status(500).json({ message: "Error reading from the database" });
+            return;
+        }
+
+        const types = results.map(type => ({
+            id: type.id,
+            name: type.name
+        }));
+
+        res.status(200).json({ types });
+    });
+})
 
 module.exports = router;

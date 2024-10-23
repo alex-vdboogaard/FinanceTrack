@@ -4,57 +4,53 @@ import "../../../node_modules/pop-message/pop.css";
 import pops from "pop-message";
 import { fetchData } from "../../utility/fetchData";
 import Button from "../../components/button/Button";
-import NewExpense from "./NewExpense";
+import NewIncome from "./NewIncome";
 
-export default function Expenses({ setExpenses }) {
-    // Separate state hooks for each piece of state
-    const [expenses, setExpensesState] = useState([]);
+export default function Income({ setIncome }) {
+    const [income, setIncomeState] = useState([]);
     const [count, setCount] = useState(0);
-    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [totalIncome, setTotalIncome] = useState(0);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [triggerRerender, setTriggerRerender] = useState(false);
 
-    const url = "http://localhost:3001/budget/expenses";
+    const url = "http://localhost:3001/budget/income";
 
-    const calculateTotal = useCallback((expensesList) => {
-        return expensesList.reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
+    const calculateTotal = useCallback((incomeList) => {
+        return incomeList.reduce((acc, i) => acc + parseFloat(i.amount), 0);
     }, []);
 
     useEffect(() => {
         fetchData(url)
             .then((data) => {
-                const expenseData = data.expenses || [];
-                setExpensesState(expenseData);
-                setExpenses(expenseData);
-                setCount(expenseData.length);
-                setTotalExpenses(calculateTotal(expenseData));
+                const incomeData = data.income || [];
+                setIncomeState(incomeData);
+                setIncome(incomeData);
+                setCount(incomeData.length);
+                setTotalIncome(calculateTotal(incomeData));
             })
-            .catch(() => {
-                pops.simplePop("error", "Failed to fetch expenses");
-            });
     }, [triggerRerender, calculateTotal]);
 
     const handleRerender = useCallback(() => {
         setTriggerRerender((prev) => !prev);
     }, []);
 
-    const handleSave = useCallback((expense) => {
-        fetchData(url, "PUT", expense)
+    const handleSave = useCallback((item) => {
+        fetchData(url, "PUT", item)
             .then(() => setTriggerRerender(prev => !prev))
-            .catch(() => pops.simplePop("error", "Failed to save expense"));
+            .catch(() => pops.simplePop("error", "Failed to save income"));
     }, []);
 
     const handleUpdate = useCallback((index, field, value) => {
-        const updatedExpenses = [...expenses];
-        updatedExpenses[index][field] = value;
-        setExpensesState(updatedExpenses);
-        setTotalExpenses(calculateTotal(updatedExpenses));
-    }, [expenses, calculateTotal]);
+        const updatedIncome = [...income];
+        updatedIncome[index][field] = value;
+        setIncomeState(updatedIncome);
+        setTotalIncome(calculateTotal(updatedIncome));
+    }, [income, calculateTotal]);
 
-    const handleDelete = useCallback(async (expense) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${expense.name}'?`);
+    const handleDelete = useCallback(async (item) => {
+        const confirm = await pops.confirmPop(`Are you sure you want to delete '${item.name}'?`);
         if (confirm) {
-            fetchData(url, "DELETE", expense)
+            fetchData(url, "DELETE", item)
                 .then((successData) => {
                     setTriggerRerender(prev => !prev);
                     pops.simplePop("success", successData.message);
@@ -62,18 +58,18 @@ export default function Expenses({ setExpenses }) {
         }
     }, []);
 
-    const newExpense = useCallback(() => {
+    const newIncome = useCallback(() => {
         setSidebarOpen(prev => !prev);
     }, []);
 
     return (
         <>
-            <Modal isOpen={isSidebarOpen} toggleSidebar={newExpense}>
-                <NewExpense onExpenseCreated={handleRerender} />
+            <Modal isOpen={isSidebarOpen} toggleSidebar={newIncome}>
+                <NewIncome onIncomeCreated={handleRerender} />
             </Modal>
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <h2 style={{ marginRight: "10px" }}>Expenses</h2>
-                <Button onClick={newExpense} className="secondary-btn">+</Button>
+            <div style={{ display: "flex", alignItems: "center", marginTop: "40px" }}>
+                <h2 style={{ marginRight: "1px" }}>Income</h2>
+                <Button onClick={newIncome} className="secondary-btn">+</Button>
             </div>
             <table>
                 <thead>
@@ -85,32 +81,32 @@ export default function Expenses({ setExpenses }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {expenses.length === 0 ? (
+                    {income.length === 0 ? (
                         <tr>
-                            <td colSpan="4">No expenses available.</td>
+                            <td colSpan="4">No income available.</td>
                         </tr>
                     ) : (
-                        expenses.map((expense, index) => (
+                        income.map((item, index) => (
                             <tr key={index}>
                                 <td>
                                     <input
                                         type="text"
-                                        value={expense.name}
+                                        value={item.name}
                                         onChange={(e) => handleUpdate(index, 'name', e.target.value)}
-                                        onBlur={() => handleSave(expense)}
+                                        onBlur={() => handleSave(item)}
                                     />
                                 </td>
-                                <td>{expense.type}</td>
+                                <td>{item.type}</td>
                                 <td>
                                     <input
                                         type="number"
-                                        value={expense.amount}
+                                        value={item.amount}
                                         onChange={(e) => handleUpdate(index, 'amount', parseFloat(e.target.value))}
-                                        onBlur={() => handleSave(expense)}
+                                        onBlur={() => handleSave(item)}
                                     />
                                 </td>
                                 <td className="delete-icon">
-                                    <button onClick={() => handleDelete(expense)} aria-label="Delete expense">
+                                    <button onClick={() => handleDelete(item)} aria-label="Delete income">
                                         <img src="../../src/assets/delete.svg" alt="Delete" />
                                     </button>
                                 </td>
@@ -121,10 +117,11 @@ export default function Expenses({ setExpenses }) {
                 <tfoot>
                     <tr>
                         <td colSpan="2">Count: {count}</td>
-                        <td colSpan="2">Total: R{totalExpenses}</td>
+                        <td colSpan="2">Total: R{totalIncome}</td>
                     </tr>
                 </tfoot>
             </table>
         </>
     );
 }
+
