@@ -14,6 +14,8 @@ const investments = require("./routes/investments");
 const overview = require("./routes/overview");
 const savings = require("./routes/savings/savings");
 const saving_goals = require("./routes/savings/saving-goals");
+const budget = require("./routes/budget/budget");
+const monthly_review = require("./routes/budget/review");
 
 const connection = require("./db/db");
 app.use(express.json());
@@ -38,6 +40,7 @@ app.use("/investments", investments);
 app.use("/overview", overview);
 app.use("/savings", savings);
 app.use("/savings/goal", saving_goals);
+app.use("/budget", budget);
 
 
 app.get("/userid", (req, res) => {

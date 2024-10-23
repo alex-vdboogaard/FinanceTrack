@@ -91,10 +91,10 @@ CREATE TABLE Bank_account (
 -- Create Budget page
 CREATE TABLE Budget (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    income: DECIMAL(10, 2) NOT NULL,
-    expenses: DECIMAL(10, 2) NOT NULL,
-    savings: DECIMAL(10, 2) NOT NULL,
-    invest: DECIMAL(10, 2) NOT NULL,
+    income DECIMAL(10, 2) NOT NULL,
+    expenses DECIMAL(10, 2) NOT NULL,
+    savings DECIMAL(10, 2) NOT NULL,
+    invest DECIMAL(10, 2) NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
@@ -102,13 +102,13 @@ CREATE TABLE Budget (
 -- Create Monthly review table
  CREATE TABLE Monthly_review (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    income: DECIMAL(10, 2) NOT NULL,
-    expenses: DECIMAL(10, 2) NOT NULL,
-    savings: DECIMAL(10, 2) NOT NULL,
-    invested: DECIMAL(10, 2) NOT NULL,
-    budget_id: INT NOT NULL,
-    month: VARCHAR(20) NOT NULL,
-    year: INT NOT NULL,
+    income DECIMAL(10, 2) NOT NULL,
+    expenses DECIMAL(10, 2) NOT NULL,
+    savings DECIMAL(10, 2) NOT NULL,
+    invested DECIMAL(10, 2) NOT NULL,
+    budget_id INT NOT NULL,
+    month VARCHAR(20) NOT NULL,
+    year INT NOT NULL,
     FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE
  );
 
