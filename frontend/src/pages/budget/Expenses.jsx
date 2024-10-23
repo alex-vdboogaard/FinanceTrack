@@ -72,7 +72,7 @@ export default function Expenses({ setExpenses }) {
                 <NewExpense onExpenseCreated={handleRerender} />
             </Modal>
             <div style={{ display: "flex", alignItems: "center" }}>
-                <h2 style={{ marginRight: "10px" }}>Expenses</h2>
+                <h2 className="h2" style={{ marginRight: "10px" }}>Expenses</h2>
                 <Button onClick={newExpense} className="secondary-btn">+</Button>
             </div>
             <table>
@@ -86,9 +86,9 @@ export default function Expenses({ setExpenses }) {
                 </thead>
                 <tbody>
                     {expenses.length === 0 ? (
-                        <tr>
-                            <td colSpan="4">No expenses available.</td>
-                        </tr>
+                        <>
+
+                        </>
                     ) : (
                         expenses.map((expense, index) => (
                             <tr key={index}>

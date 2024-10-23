@@ -4,10 +4,12 @@ const connection = require("../../db/db");
 const router = express.Router();
 const expenses = require('./expenses');
 const income = require('./income');
+const review = require('./review');
 
 router.use(ValidateLoggedIn);
 router.use("/expenses", expenses);
 router.use("/income", income);
+router.use("/review", review);
 
 router.get("/", (req, res) => {
     const query = `SELECT * FROM Budget WHERE user_id = ?`;

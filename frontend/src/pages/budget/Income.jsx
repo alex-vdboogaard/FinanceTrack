@@ -68,7 +68,7 @@ export default function Income({ setIncome }) {
                 <NewIncome onIncomeCreated={handleRerender} />
             </Modal>
             <div style={{ display: "flex", alignItems: "center", marginTop: "40px" }}>
-                <h2 style={{ marginRight: "1px" }}>Income</h2>
+                <h2 className="h2" style={{ marginRight: "1px" }}>Income</h2>
                 <Button onClick={newIncome} className="secondary-btn">+</Button>
             </div>
             <table>
@@ -82,9 +82,8 @@ export default function Income({ setIncome }) {
                 </thead>
                 <tbody>
                     {income.length === 0 ? (
-                        <tr>
-                            <td colSpan="4">No income available.</td>
-                        </tr>
+                        <>
+                        </>
                     ) : (
                         income.map((item, index) => (
                             <tr key={index}>

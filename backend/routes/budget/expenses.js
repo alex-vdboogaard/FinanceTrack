@@ -10,11 +10,6 @@ router.get("/", (req, res) => {
             return;
         }
 
-        if (results.length === 0) {
-            res.status(404).json({ message: "No expenses found" });
-            return;
-        }
-
         const expenses = results.map(expense => ({
             id: expense.id,
             name: expense.description,

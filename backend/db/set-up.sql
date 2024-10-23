@@ -106,10 +106,10 @@ CREATE TABLE Budget (
     expenses DECIMAL(10, 2) NOT NULL,
     savings DECIMAL(10, 2) NOT NULL,
     invested DECIMAL(10, 2) NOT NULL,
-    budget_id INT NOT NULL,
-    month VARCHAR(20) NOT NULL,
+    user_id INT NOT NULL,
+    month INT NOT NULL,
     year INT NOT NULL,
-    FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
  );
 
 -- Create Expense Category Table
