@@ -125,9 +125,7 @@ CREATE TABLE Recurring_expense (
     description VARCHAR(255),
     category_id INT NOT NULL,
     user_id INT NOT NULL,
-    budget_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
@@ -144,8 +142,6 @@ CREATE TABLE Recurring_income (
     description VARCHAR(255),
     category_id INT NOT NULL,
     user_id INT NOT NULL,
-    budget_id INT NOT NULL,
-    FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES Income_category(id),
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );

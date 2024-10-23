@@ -1,82 +1,76 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Modal from "../../components/modal/Modal";
 import "../../../node_modules/pop-message/pop.css";
 import pops from "pop-message";
 import { fetchData } from "../../utility/fetchData";
 import Button from "../../components/button/Button";
+import NewExpense from "./NewExpense";
 
-export default function Expenses() {
-    const [state, setState] = useState({
-        expenses: [],
-        count: 0,
-        totalExpenses: 0,
-        isSidebarOpen: false,
-        triggerRerender: false,
-    });
-
-    const { expenses, count, totalExpenses, isSidebarOpen, triggerRerender } = state;
+export default function Expenses({ setExpenses }) {
+    // Separate state hooks for each piece of state
+    const [expenses, setExpensesState] = useState([]);
+    const [count, setCount] = useState(0);
+    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [triggerRerender, setTriggerRerender] = useState(false);
 
     const url = "http://localhost:3001/budget/expenses";
 
     const calculateTotal = useCallback((expensesList) => {
-        const total = expensesList.reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
-        return total;
+        return expensesList.reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
     }, []);
 
     useEffect(() => {
         fetchData(url)
             .then((data) => {
                 const expenseData = data.expenses || [];
-                setState(prev => ({
-                    ...prev,
-                    expenses: expenseData,
-                    count: expenseData.length,
-                    totalExpenses: calculateTotal(expenseData)
-                }));
+                setExpensesState(expenseData);
+                setExpenses(expenseData);
+                setCount(expenseData.length);
+                setTotalExpenses(calculateTotal(expenseData));
             })
             .catch(() => {
                 pops.simplePop("error", "Failed to fetch expenses");
             });
     }, [triggerRerender, calculateTotal]);
 
+    const handleRerender = useCallback(() => {
+        setTriggerRerender((prev) => !prev);
+    }, []);
+
     const handleSave = useCallback((expense) => {
         fetchData(url, "PUT", expense)
-            .then(() => setState(prev => ({ ...prev, triggerRerender: !prev.triggerRerender })))
+            .then(() => setTriggerRerender(prev => !prev))
             .catch(() => pops.simplePop("error", "Failed to save expense"));
     }, []);
 
     const handleUpdate = useCallback((index, field, value) => {
         const updatedExpenses = [...expenses];
         updatedExpenses[index][field] = value;
-        setState(prev => ({
-            ...prev,
-            expenses: updatedExpenses,
-            totalExpenses: calculateTotal(updatedExpenses),
-        }));
+        setExpensesState(updatedExpenses);
+        setTotalExpenses(calculateTotal(updatedExpenses));
     }, [expenses, calculateTotal]);
 
     const handleDelete = useCallback(async (expense) => {
         const confirm = await pops.confirmPop(`Are you sure you want to delete '${expense.name}'?`);
         if (confirm) {
             fetchData(url, "DELETE", expense)
-                .then(() => setState(prev => ({ ...prev, triggerRerender: !prev.triggerRerender })))
-                .catch(() => pops.simplePop("error", "Failed to delete expense"));
+                .then((successData) => {
+                    setTriggerRerender(prev => !prev);
+                    pops.simplePop("success", successData.message);
+                });
         }
     }, []);
 
     const newExpense = useCallback(() => {
-        setState(prev => ({ ...prev, isSidebarOpen: !prev.isSidebarOpen }));
-    }, [isSidebarOpen]);
-
-    const NewExpenseModal = useMemo(() => (
-        <Modal isOpen={isSidebarOpen} toggleSidebar={newExpense}>
-            <h2>New expense</h2>
-        </Modal>
-    ), [isSidebarOpen, newExpense]);
+        setSidebarOpen(prev => !prev);
+    }, []);
 
     return (
         <>
-            {NewExpenseModal}
+            <Modal isOpen={isSidebarOpen} toggleSidebar={newExpense}>
+                <NewExpense onExpenseCreated={handleRerender} />
+            </Modal>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 style={{ marginRight: "10px" }}>Expenses</h2>
                 <Button onClick={newExpense} className="primary-btn">+</Button>

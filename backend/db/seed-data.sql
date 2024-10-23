@@ -16,18 +16,18 @@ VALUES
 ('Car', 25000.00, 18000.00, 3,1);
 
 -- Insert data into Recurring_expense table
-INSERT INTO Recurring_expense (amount, description, category_id, budget_id, user_id)
+INSERT INTO Recurring_expense (amount, description, category_id, user_id)
 VALUES 
-(8000, 'Lynwood apartment rent', 1, 1, 1),
-(800, 'Telkom fibre', 4, 1, 1),
-(50.00, 'Meredez cover', 6, 1, 1); 
+(8000, 'Lynwood apartment rent', 1, 1),
+(800, 'Telkom fibre', 4, 1),
+(50.00, 'Meredez cover', 6, 1); 
 
 -- Insert data into Recurring_income table
-INSERT INTO Recurring_income (amount, description, category_id, budget_id, user_id)
+INSERT INTO Recurring_income (amount, description, category_id, user_id)
 VALUES 
-(35000.00, 'Monthly salary',  1, 1, 1), 
-(250.00, 'Rental income',5, 1, 1), 
-(100.00, 'Dividends Coca Cola', 7, 1, 1); 
+(35000.00, 'Monthly salary',  1, 1), 
+(250.00, 'Rental income',5, 1), 
+(100.00, 'Dividends Coca Cola', 7, 1); 
 
 
 -- Insert data into Investment table

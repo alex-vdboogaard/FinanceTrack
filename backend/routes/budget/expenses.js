@@ -32,19 +32,19 @@ router.post("/", (req, res) => {
 
     connection.query(query, [req.session.userId, description, amount, categoryId], (err, results) => {
         if (err) {
-            res.status(500).json({ message: "Error writing to the database" });
+            res.status(500).json({ message: `Error writing to the database: ${err.message}` });
             return;
         }
 
-        res.status(201).json({ message: "Expense created successfully"});
+        res.status(201).json({ message: "Expense created successfully" });
     });
 });
 
 router.put("/", (req, res) => {
-    const { id, description, amount } = req.body;
+    const { id, name, amount } = req.body;
     const query = `UPDATE Recurring_Expense SET description = ?, amount = ? WHERE id = ? AND user_id = ?`;
 
-    connection.query(query, [description, amount, id, req.session.userId], (err, results) => {
+    connection.query(query, [name, amount, id, req.session.userId], (err, results) => {
         if (err) {
             res.status(500).json({ message: "Error updating the database" });
             return;
@@ -67,5 +67,28 @@ router.delete("/", (req, res) => {
         res.status(200).json({ message: "Expense deleted successfully" });
     });
 });
+
+router.get("/expense-categories", (req, res) => {
+    const query = `SELECT * FROM Expense_Category`;
+
+    connection.query(query, [req.session.userId], (err, results) => {
+        if (err) {
+            res.status(500).json({ message: "Error reading from the database" });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ message: "No expenses found" });
+            return;
+        }
+
+        const types = results.map(type => ({
+            id: type.id,
+            name: type.name
+        }));
+
+        res.status(200).json({ types });
+    });
+})
 
 module.exports = router;
