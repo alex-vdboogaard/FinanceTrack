@@ -3,26 +3,31 @@ INSERT INTO `User` (username, password, first_name, last_name)
 VALUES 
 ('john', 'password123', 'John', 'Doe');
 
+-- Create budget for user
+INSERT INTO Budget(income, expenses, savings, invest, user_id)
+VALUES 
+(100000.00, 50000.00, 5000.00, 5000.00, 1);
+
 -- Insert data into Asset table
 INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id)
 VALUES 
-('House', 300000.00, 320000.00, 1,1), -- Real Estate
-('Tesla Stock', 5000.00, 7000.00, 2,1), -- Stocks
-('Car', 25000.00, 18000.00, 3,1); -- Vehicles
+('House', 300000.00, 320000.00, 1,1), 
+('Tesla Stock', 5000.00, 7000.00, 2,1), 
+('Car', 25000.00, 18000.00, 3,1);
 
 -- Insert data into Recurring_expense table
-INSERT INTO Recurring_expense (amount, description, category_id, user_id)
+INSERT INTO Recurring_expense (amount, description, category_id, budget_id, user_id)
 VALUES 
-(8000, 'Lynwood apartment rent', 1, 1),
-(800, 'Telkom fibre', 4, 1),
-(50.00, 'Meredez cover', 6, 1); 
+(8000, 'Lynwood apartment rent', 1, 1, 1),
+(800, 'Telkom fibre', 4, 1, 1),
+(50.00, 'Meredez cover', 6, 1, 1); 
 
 -- Insert data into Recurring_income table
-INSERT INTO Recurring_income (amount, description, category_id, user_id)
+INSERT INTO Recurring_income (amount, description, category_id, budget_id, user_id)
 VALUES 
-(35000.00, 'Monthly salary',  1, 1), 
-(250.00, 'Rental income',5, 1), 
-(100.00, 'Dividends Coca Cola', 7, 1); 
+(35000.00, 'Monthly salary',  1, 1, 1), 
+(250.00, 'Rental income',5, 1, 1), 
+(100.00, 'Dividends Coca Cola', 7, 1, 1); 
 
 
 -- Insert data into Investment table

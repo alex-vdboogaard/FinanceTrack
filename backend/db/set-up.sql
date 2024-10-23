@@ -45,52 +45,6 @@ CREATE TABLE saving_goal (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
--- Create Expense Category Table
-CREATE TABLE Expense_category (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL
-);
-
--- Create Expense Table
-CREATE TABLE Expense (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    amount DECIMAL(10, 2) NOT NULL,
-    description VARCHAR(255),
-    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    category_id INT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
-);
-
--- Create Recurring Expense Table
-CREATE TABLE Recurring_expense (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    amount DECIMAL(10, 2) NOT NULL,
-    description VARCHAR(255),
-    category_id INT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Expense_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
-);
-
--- Create Income Category Table
-CREATE TABLE Income_category (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL
-);
-
--- Create Recurring Income Table
-CREATE TABLE Recurring_income (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    amount DECIMAL(10, 2) NOT NULL,
-    description VARCHAR(255),
-    category_id INT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Income_category(id),
-    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
-);
-
 -- Create Investment Category Table
 CREATE TABLE Investment_category (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -157,6 +111,44 @@ CREATE TABLE Budget (
     year: INT NOT NULL,
     FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE
  );
+
+-- Create Expense Category Table
+CREATE TABLE Expense_category (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+
+-- Create Recurring Expense Table
+CREATE TABLE Recurring_expense (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    amount DECIMAL(10, 2) NOT NULL,
+    description VARCHAR(255),
+    category_id INT NOT NULL,
+    user_id INT NOT NULL,
+    budget_id INT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES Expense_category(id),
+    FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
+-- Create Income Category Table
+CREATE TABLE Income_category (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+
+-- Create Recurring Income Table
+CREATE TABLE Recurring_income (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    amount DECIMAL(10, 2) NOT NULL,
+    description VARCHAR(255),
+    category_id INT NOT NULL,
+    user_id INT NOT NULL,
+    budget_id INT NOT NULL,
+    FOREIGN KEY (budget_id) REFERENCES Budget(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Income_category(id),
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
 
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
