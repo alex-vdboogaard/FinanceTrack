@@ -6,7 +6,7 @@ const router = express.Router();
 router.use(ValidateLoggedIn);
 
 router.get("/", (req, res) => {
-    const query = `SELECT * FROM Monthly_Review WHERE user_id = ? ORDER BY YEAR ASC, MONTH DESC;`;
+    const query = `SELECT * FROM Monthly_Review WHERE user_id = ? ORDER BY YEAR ASC, MONTH ASC;`;
 
     connection.query(query, [req.session.userId], (err, results) => {
         if (err) {
