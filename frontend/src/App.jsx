@@ -8,13 +8,14 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Sidebar from './components/navigation/sidebar';
 
 // Pages
+import Login from './pages/utility/Login';
 import Home from './pages/home/Home';
-import NotFound from './pages/utility/NotFound';
-import Assets from './pages/assets/Assets';
+import Budget from './pages/budget/Budget';
 import BankAccounts from './pages/bank-accounts/BankAccounts';
+import Assets from './pages/assets/Assets';
 import Investments from './pages/investments/Investments';
 import Savings from './pages/savings/Savings';
-import Login from './pages/utility/Login';
+import NotFound from './pages/utility/NotFound';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/overview" element={<Home />} />
+        <Route path="/budget" element={<Budget />} />
         <Route path="/assets" element={<Assets />} />
         <Route path="/bank-accounts" element={<BankAccounts />} />
         <Route path="/investments" element={<Investments />} />
