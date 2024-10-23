@@ -26,7 +26,7 @@ export default function NetWorthPie({ assets, bankAccounts, investments }) {
 
     return (
         <>
-            <h2>Networth: R{totalNetWorth}</h2>
+            <h2>Net worth: R{totalNetWorth}</h2>
             {totalNetWorth !== 0 && (
                 <PieChart
                     labels={labels}
