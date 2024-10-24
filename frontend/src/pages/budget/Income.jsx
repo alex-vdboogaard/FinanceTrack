@@ -20,14 +20,13 @@ export default function Income({ setIncome }) {
     }, []);
 
     useEffect(() => {
-        fetchData(url)
-            .then((data) => {
-                const incomeData = data.income || [];
-                setIncomeState(incomeData);
-                setIncome(incomeData);
-                setCount(incomeData.length);
-                setTotalIncome(calculateTotal(incomeData));
-            })
+        fetchData(url).then((data) => {
+            const incomeData = data.income || [];
+            setIncomeState(incomeData);
+            setIncome(incomeData);
+            setCount(incomeData.length);
+            setTotalIncome(calculateTotal(incomeData));
+        });
     }, [triggerRerender, calculateTotal]);
 
     const handleRerender = useCallback(() => {
@@ -36,30 +35,34 @@ export default function Income({ setIncome }) {
 
     const handleSave = useCallback((item) => {
         fetchData(url, "PUT", item)
-            .then(() => setTriggerRerender(prev => !prev))
+            .then(() => setTriggerRerender((prev) => !prev))
             .catch(() => pops.simplePop("error", "Failed to save income"));
     }, []);
 
-    const handleUpdate = useCallback((index, field, value) => {
-        const updatedIncome = [...income];
-        updatedIncome[index][field] = value;
-        setIncomeState(updatedIncome);
-        setTotalIncome(calculateTotal(updatedIncome));
-    }, [income, calculateTotal]);
+    const handleUpdate = useCallback(
+        (index, field, value) => {
+            const updatedIncome = [...income];
+            updatedIncome[index][field] = value;
+            setIncomeState(updatedIncome);
+            setTotalIncome(calculateTotal(updatedIncome));
+        },
+        [income, calculateTotal]
+    );
 
     const handleDelete = useCallback(async (item) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${item.name}'?`);
+        const confirm = await pops.confirmPop(
+            `Are you sure you want to delete '${item.name}'?`
+        );
         if (confirm) {
-            fetchData(url, "DELETE", item)
-                .then((successData) => {
-                    setTriggerRerender(prev => !prev);
-                    pops.simplePop("success", successData.message);
-                });
+            fetchData(url, "DELETE", item).then((successData) => {
+                setTriggerRerender((prev) => !prev);
+                pops.simplePop("success", successData.message);
+            });
         }
     }, []);
 
     const newIncome = useCallback(() => {
-        setSidebarOpen(prev => !prev);
+        setSidebarOpen((prev) => !prev);
     }, []);
 
     return (
@@ -67,9 +70,18 @@ export default function Income({ setIncome }) {
             <Modal isOpen={isSidebarOpen} toggleSidebar={newIncome}>
                 <NewIncome onIncomeCreated={handleRerender} />
             </Modal>
-            <div style={{ display: "flex", alignItems: "center", marginTop: "40px" }}>
-                <h2 className="h2" style={{ marginRight: "1px" }}>Income</h2>
-                <Button onClick={newIncome} className="secondary-btn">+</Button>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                }}
+            >
+                <h2 className="h2" style={{ marginRight: "1px" }}>
+                    Income
+                </h2>
+                <Button onClick={newIncome} className="secondary-btn">
+                    +
+                </Button>
             </div>
             <table>
                 <thead>
@@ -82,8 +94,7 @@ export default function Income({ setIncome }) {
                 </thead>
                 <tbody>
                     {income.length === 0 ? (
-                        <>
-                        </>
+                        <></>
                     ) : (
                         income.map((item, index) => (
                             <tr key={index}>
@@ -91,7 +102,13 @@ export default function Income({ setIncome }) {
                                     <input
                                         type="text"
                                         value={item.name}
-                                        onChange={(e) => handleUpdate(index, 'name', e.target.value)}
+                                        onChange={(e) =>
+                                            handleUpdate(
+                                                index,
+                                                "name",
+                                                e.target.value
+                                            )
+                                        }
                                         onBlur={() => handleSave(item)}
                                     />
                                 </td>
@@ -100,13 +117,25 @@ export default function Income({ setIncome }) {
                                     <input
                                         type="number"
                                         value={item.amount}
-                                        onChange={(e) => handleUpdate(index, 'amount', parseFloat(e.target.value))}
+                                        onChange={(e) =>
+                                            handleUpdate(
+                                                index,
+                                                "amount",
+                                                parseFloat(e.target.value)
+                                            )
+                                        }
                                         onBlur={() => handleSave(item)}
                                     />
                                 </td>
                                 <td className="delete-icon">
-                                    <button onClick={() => handleDelete(item)} aria-label="Delete income">
-                                        <img src="../../src/assets/delete.svg" alt="Delete" />
+                                    <button
+                                        onClick={() => handleDelete(item)}
+                                        aria-label="Delete income"
+                                    >
+                                        <img
+                                            src="../../src/assets/delete.svg"
+                                            alt="Delete"
+                                        />
                                     </button>
                                 </td>
                             </tr>
@@ -123,4 +152,3 @@ export default function Income({ setIncome }) {
         </>
     );
 }
-

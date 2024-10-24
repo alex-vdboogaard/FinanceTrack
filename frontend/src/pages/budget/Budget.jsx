@@ -39,8 +39,8 @@ export default function Budget() {
                     + Monthly review
                 </Button>
             </div>
-            <Expenses setExpenses={setExpenses}></Expenses>
             <Income setIncome={setIncome} />
+            <Expenses setExpenses={setExpenses}></Expenses>
             <BudgetGraphs
                 expenses={expenses}
                 income={income}

@@ -17,7 +17,10 @@ export default function Expenses({ setExpenses }) {
     const url = "http://localhost:3001/budget/expenses";
 
     const calculateTotal = useCallback((expensesList) => {
-        return expensesList.reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
+        return expensesList.reduce(
+            (acc, expense) => acc + parseFloat(expense.amount),
+            0
+        );
     }, []);
 
     useEffect(() => {
@@ -40,30 +43,34 @@ export default function Expenses({ setExpenses }) {
 
     const handleSave = useCallback((expense) => {
         fetchData(url, "PUT", expense)
-            .then(() => setTriggerRerender(prev => !prev))
+            .then(() => setTriggerRerender((prev) => !prev))
             .catch(() => pops.simplePop("error", "Failed to save expense"));
     }, []);
 
-    const handleUpdate = useCallback((index, field, value) => {
-        const updatedExpenses = [...expenses];
-        updatedExpenses[index][field] = value;
-        setExpensesState(updatedExpenses);
-        setTotalExpenses(calculateTotal(updatedExpenses));
-    }, [expenses, calculateTotal]);
+    const handleUpdate = useCallback(
+        (index, field, value) => {
+            const updatedExpenses = [...expenses];
+            updatedExpenses[index][field] = value;
+            setExpensesState(updatedExpenses);
+            setTotalExpenses(calculateTotal(updatedExpenses));
+        },
+        [expenses, calculateTotal]
+    );
 
     const handleDelete = useCallback(async (expense) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${expense.name}'?`);
+        const confirm = await pops.confirmPop(
+            `Are you sure you want to delete '${expense.name}'?`
+        );
         if (confirm) {
-            fetchData(url, "DELETE", expense)
-                .then((successData) => {
-                    setTriggerRerender(prev => !prev);
-                    pops.simplePop("success", successData.message);
-                });
+            fetchData(url, "DELETE", expense).then((successData) => {
+                setTriggerRerender((prev) => !prev);
+                pops.simplePop("success", successData.message);
+            });
         }
     }, []);
 
     const newExpense = useCallback(() => {
-        setSidebarOpen(prev => !prev);
+        setSidebarOpen((prev) => !prev);
     }, []);
 
     return (
@@ -71,9 +78,19 @@ export default function Expenses({ setExpenses }) {
             <Modal isOpen={isSidebarOpen} toggleSidebar={newExpense}>
                 <NewExpense onExpenseCreated={handleRerender} />
             </Modal>
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <h2 className="h2" style={{ marginRight: "10px" }}>Expenses</h2>
-                <Button onClick={newExpense} className="secondary-btn">+</Button>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "40px",
+                }}
+            >
+                <h2 className="h2" style={{ marginRight: "10px" }}>
+                    Expenses
+                </h2>
+                <Button onClick={newExpense} className="secondary-btn">
+                    +
+                </Button>
             </div>
             <table>
                 <thead>
@@ -86,9 +103,7 @@ export default function Expenses({ setExpenses }) {
                 </thead>
                 <tbody>
                     {expenses.length === 0 ? (
-                        <>
-
-                        </>
+                        <></>
                     ) : (
                         expenses.map((expense, index) => (
                             <tr key={index}>
@@ -96,7 +111,13 @@ export default function Expenses({ setExpenses }) {
                                     <input
                                         type="text"
                                         value={expense.name}
-                                        onChange={(e) => handleUpdate(index, 'name', e.target.value)}
+                                        onChange={(e) =>
+                                            handleUpdate(
+                                                index,
+                                                "name",
+                                                e.target.value
+                                            )
+                                        }
                                         onBlur={() => handleSave(expense)}
                                     />
                                 </td>
@@ -105,13 +126,25 @@ export default function Expenses({ setExpenses }) {
                                     <input
                                         type="number"
                                         value={expense.amount}
-                                        onChange={(e) => handleUpdate(index, 'amount', parseFloat(e.target.value))}
+                                        onChange={(e) =>
+                                            handleUpdate(
+                                                index,
+                                                "amount",
+                                                parseFloat(e.target.value)
+                                            )
+                                        }
                                         onBlur={() => handleSave(expense)}
                                     />
                                 </td>
                                 <td className="delete-icon">
-                                    <button onClick={() => handleDelete(expense)} aria-label="Delete expense">
-                                        <img src="../../src/assets/delete.svg" alt="Delete" />
+                                    <button
+                                        onClick={() => handleDelete(expense)}
+                                        aria-label="Delete expense"
+                                    >
+                                        <img
+                                            src="../../src/assets/delete.svg"
+                                            alt="Delete"
+                                        />
                                     </button>
                                 </td>
                             </tr>
