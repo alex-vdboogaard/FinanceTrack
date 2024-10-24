@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { fetchData } from "../../utility/fetchData";
 
 export default function Statements() {
     const [pdfFiles, setPdfFiles] = useState([]);
 
     useEffect(() => {
-        fetchData("http://localhost:3001/statements").then((data) =>
-            setPdfFiles(data.statements)
-        );
+        // Fetch the pdfFiles.json file
+        fetch("/pdfFiles.json")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => setPdfFiles(data.files))
+            .catch((error) =>
+                console.error("Error fetching PDF files:", error)
+            );
     }, []);
 
     return (
@@ -15,13 +23,13 @@ export default function Statements() {
             <h1>Statements</h1>
             {!pdfFiles.length && <p>No statements yet.</p>}
             {pdfFiles.map((pdf, index) => (
-                <PdfViewer key={index} pdf={pdf.path} name={pdf.name} />
+                <PdfViewer key={index} pdf={pdf} />
             ))}
         </main>
     );
 }
 
-function PdfViewer({ pdf, name }) {
+function PdfViewer({ pdf }) {
     const [isMinimized, setIsMinimized] = useState(true);
 
     return (
@@ -30,12 +38,12 @@ function PdfViewer({ pdf, name }) {
                 style={{ cursor: "pointer", marginBottom: "20px" }}
                 onClick={() => setIsMinimized(!isMinimized)}
             >
-                {pdf}
+                {pdf} {/* Display the name of the PDF */}
             </h3>
             {!isMinimized && (
                 <iframe
-                    src={`/${pdf}`}
-                    title={name}
+                    src={`/${pdf}`} // This will correctly point to the PDF in the public directory
+                    title={pdf}
                     style={{ width: "100%", height: "80vh", border: "none" }}
                 />
             )}
