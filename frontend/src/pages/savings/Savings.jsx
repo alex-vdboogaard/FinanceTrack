@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Button from "../../components/button/Button"
+import Button from "../../components/button/Button";
 import Modal from "../../components/modal/Modal";
 import NewSavingsGoal from "./NewSavingsGoal";
 import SavingGoals from "./SavingGoals";
-import "./Savings.css"
-import "../../../node_modules/pop-message/pop.css"
+import "./Savings.css";
+import "../../../node_modules/pop-message/pop.css";
 import { fetchData } from "../../utility/fetchData";
 
 export default function Savings() {
@@ -16,21 +16,22 @@ export default function Savings() {
     const [triggerRerender, setTriggerRerender] = useState(false);
 
     const handleRerender = () => {
-        setTriggerRerender(prev => !prev);
+        setTriggerRerender((prev) => !prev);
     };
 
     useEffect(() => {
-        fetchData(url)
-            .then((data) => {
-                setSavings(data.savings);
-                setCount(data.savings.length);
-                setTotalBalance(data.savings.reduce((acc, s) => acc + parseFloat(s.balance), 0));
-            })
+        fetchData(url).then((data) => {
+            setSavings(data.savings);
+            setCount(data.savings.length);
+            setTotalBalance(
+                data.savings.reduce((acc, s) => acc + parseFloat(s.balance), 0)
+            );
+        });
     }, [triggerRerender]);
 
     const newGoal = () => {
         setIsSidebarOpen(!isSidebarOpen);
-    }
+    };
     return (
         <main>
             <h1 style={{ marginRight: "20px" }}>Savings</h1>
@@ -43,33 +44,50 @@ export default function Savings() {
                 <thead>
                     <tr className="no-border">
                         <th>Name</th>
+                        <th>Bank</th>
                         <th>Balance (R)</th>
                     </tr>
                 </thead>
                 <tbody>
                     {savings.map((account, index) => (
-                        <tr key={index} >
+                        <tr key={index}>
                             <td className="savings-row">
                                 <p>{account.name}</p>
                             </td>
-                            <td className="savings-row">
-                                {account.balance}
+                            <td className="bank">
+                                <img
+                                    src={`../src/assets/logos/${account.bank
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "")}.svg`}
+                                    alt={account.bank}
+                                />
+                                <p>{account.bank}</p>
                             </td>
+                            <td className="savings-row">{account.balance}</td>
                         </tr>
                     ))}
                 </tbody>
                 <tfoot>
                     <tr>
                         <td>Count: {count}</td>
+                        <td></td>
                         <td>Total: R{totalBalance}</td>
                     </tr>
                 </tfoot>
             </table>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                }}
+            >
                 <h2 className="h2">Saving goals</h2>
-                <Button onClick={newGoal} className="primary-btn">+ New savings goal</Button>
+                <Button onClick={newGoal} className="primary-btn">
+                    + New savings goal
+                </Button>
             </div>
             <SavingGoals triggerRerender={handleRerender} />
-        </main >
+        </main>
     );
 }
