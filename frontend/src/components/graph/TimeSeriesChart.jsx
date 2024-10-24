@@ -1,21 +1,41 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale } from "chart.js";
-import "chartjs-adapter-date-fns";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale);
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const TimeSeriesChart = ({ items, title, variables }) => {
-    const labels = items.map((item) => item.date);
+    const labels = items.map((item) => item.label);
 
-    const datasets = variables.map((variable) => ({
-        label: variable.label,
-        data: items.map((item) => item[variable.key]),
-        borderColor: variable.color,
-        backgroundColor: `${variable.color}33`,
-        fill: false,
-        tension: 0.1,
-    }));
+    const datasets = variables.map((variable) => {
+        const data = items.map((item) => item[variable.key]);
+
+        return {
+            label: variable.label,
+            data: data,
+            borderColor: variable.color,
+            backgroundColor: `${variable.color}33`,
+            fill: false,
+            tension: 0.1,
+        };
+    });
 
     const data = {
         labels,
@@ -26,7 +46,7 @@ const TimeSeriesChart = ({ items, title, variables }) => {
         responsive: true,
         plugins: {
             legend: {
-                position: 'top',
+                position: "top",
             },
             title: {
                 display: true,
@@ -35,9 +55,9 @@ const TimeSeriesChart = ({ items, title, variables }) => {
         },
         scales: {
             x: {
-                type: 'time',
-                time: {
-                    unit: 'month',
+                beginAtZero: true,
+                ticks: {
+                    autoSkip: false, // Avoid skipping labels if possible
                 },
             },
             y: {
