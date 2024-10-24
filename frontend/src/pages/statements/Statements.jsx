@@ -4,7 +4,6 @@ export default function Statements() {
     const [pdfFiles, setPdfFiles] = useState([]);
 
     useEffect(() => {
-        // Fetch the pdfFiles.json file
         fetch("/pdfFiles.json")
             .then((response) => {
                 if (!response.ok) {
@@ -38,11 +37,11 @@ function PdfViewer({ pdf }) {
                 style={{ cursor: "pointer", marginBottom: "20px" }}
                 onClick={() => setIsMinimized(!isMinimized)}
             >
-                {pdf} {/* Display the name of the PDF */}
+                {pdf}
             </h3>
             {!isMinimized && (
                 <iframe
-                    src={`/${pdf}`} // This will correctly point to the PDF in the public directory
+                    src={`/${pdf}`}
                     title={pdf}
                     style={{ width: "100%", height: "80vh", border: "none" }}
                 />
