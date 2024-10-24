@@ -146,6 +146,15 @@ CREATE TABLE Recurring_income (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
+-- Create Ttatements table
+CREATE TABLE Statement (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+	path TEXT,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
 VALUES 
