@@ -150,7 +150,7 @@ CREATE TABLE Recurring_income (
 CREATE TABLE Statement (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
-	path TEXT,
+	pdf_blob TEXT,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
