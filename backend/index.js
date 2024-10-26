@@ -56,14 +56,18 @@ app.post("/login", async (req, res) => {
         "SELECT id, username, password FROM `User` WHERE username = ?";
 
     connection.query(query, [username], (err, results) => {
-        // if (err) {
-        //     return res.status(500).json({ message: "Error reading from the database" });
-        // }
-        // if (results.length === 0 || results[0].password !== password) {
-        //     return res.status(401).json({ message: "Invalid username or password" });
-        // }
+        if (err) {
+            return res
+                .status(500)
+                .json({ message: "Error reading from the database" });
+        }
+        if (results.length === 0 || results[0].password !== password) {
+            return res
+                .status(401)
+                .json({ message: "Invalid username or password" });
+        }
 
-        req.session.userId = 1;
+        req.session.userId = results[0].id;
         req.session.loggedIn = true;
         res.status(200).json({ message: "Logged in" });
     });
