@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../utility/fetchData";
-import UploadPDF from "./UploadPDF";
 
 export default function Statements() {
     const [pdfFiles, setPdfFiles] = useState([]);
@@ -14,7 +13,6 @@ export default function Statements() {
     return (
         <main>
             <h1>Statements</h1>
-            <UploadPDF></UploadPDF>
             {!pdfFiles.length && <p>No statements yet.</p>}
             {pdfFiles.map((pdf, index) => (
                 <PdfViewer key={index} pdf={pdf} />
