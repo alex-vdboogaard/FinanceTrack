@@ -1,7 +1,6 @@
 const express = require("express");
 const ValidateLoggedIn = require("../../middleware/ValidateLoggedIn");
 const connection = require("../../db/db");
-const BankAccount = require("../../models/BankAccount");
 const router = express.Router();
 router.use(ValidateLoggedIn);
 
