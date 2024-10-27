@@ -1,44 +1,98 @@
-import React, { useState, useEffect } from "react";
-import { fetchData } from "../../utility/fetchData";
+import React, { useState, useRef } from "react";
+import "./Statements.css";
 
-export default function Statements() {
-    const [pdfFiles, setPdfFiles] = useState([]);
+const Statements = () => {
+    const [pdfUrl, setPdfUrl] = useState(null);
+    const [error, setError] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
 
-    useEffect(() => {
-        fetchData("http://localhost:3001/statements").then((data) => {
-            setPdfFiles(data.statements);
-        });
-    }, []);
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        handleFile(file);
+    };
+
+    const handleFile = (file) => {
+        if (file && file.type === "application/pdf") {
+            const url = URL.createObjectURL(file);
+            setPdfUrl(url);
+            setError(null);
+        } else {
+            setPdfUrl(null);
+            setError("Please select a valid PDF file.");
+        }
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        setIsDragging(false);
+
+        const file = event.dataTransfer.files[0];
+        handleFile(file);
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (event) => {
+        event.preventDefault();
+        setIsDragging(false);
+    };
 
     return (
-        <main>
-            <h1>Statements</h1>
-            {!pdfFiles.length && <p>No statements yet.</p>}
-            {pdfFiles.map((pdf, index) => (
-                <PdfViewer key={index} pdf={pdf} />
-            ))}
-        </main>
-    );
-}
-
-function PdfViewer({ pdf }) {
-    const [isMinimized, setIsMinimized] = useState(true);
-
-    return (
-        <div style={{ margin: "10px", width: "80%" }}>
-            <h3
-                style={{ cursor: "pointer", marginBottom: "20px" }}
-                onClick={() => setIsMinimized(!isMinimized)}
+        <div className="pdf-viewer-container">
+            <div
+                className={`dropzone ${isDragging ? "dragging" : ""}`}
+                onClick={() => fileInputRef.current?.click()}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
             >
-                {pdf.filename}
-            </h3>
-            {!isMinimized && (
-                <iframe
-                    src={`data:application/pdf;base64,${pdf.base64Pdf}`}
-                    title={pdf.filename}
-                    style={{ width: "100%", height: "80vh", border: "none" }}
+                <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    ref={fileInputRef}
                 />
+
+                {/* Upload Icon */}
+                <div className="upload-icon">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                        />
+                    </svg>
+                </div>
+
+                <p className="upload-text">
+                    Click to select or drag and drop a PDF file here
+                </p>
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
+
+            {pdfUrl && (
+                <div className="pdf-container">
+                    <iframe
+                        src={pdfUrl}
+                        className="pdf-iframe"
+                        title="PDF Viewer"
+                    />
+                </div>
             )}
         </div>
     );
-}
+};
+
+export default Statements;
