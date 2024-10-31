@@ -43,6 +43,6 @@ MODE="DEVELOPMENT"
 ```
 
 ### Database setup
-Run setup.sql provided in /backend/set-up
+Run setup.sql provided in /backend/db/
 Optionally run the seed-data.sql file for example data
 
