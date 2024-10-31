@@ -33,12 +33,12 @@ MODE="DEVELOPMENT"
 
 ### Clone the repository
 ```bash
-git clone https://github.com/yourusername/financetrack.git](https://github.com/alex-vdboogaard/FinanceTrack.git
-cd FinanceTrack
-cd backend
+git clone https://github.com/yourusername/financetrack.git
+cd FinanceTrack/
+cd backend/
 npm install
 nodemon index.js
-cd ../frontend
+cd ../frontend/
 npm install
 npm run dev
 ```
