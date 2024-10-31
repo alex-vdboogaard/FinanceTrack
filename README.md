@@ -24,6 +24,7 @@ SERVER="YourPC\SQLEXPRESS"  //Your SQL server name
 SECRET="Ron Weasley"   //Used for express sessions
 PORT=3001
 MODE="DEVELOPMENT"
+```
 
 ### Prerequisites
 - Node.js
@@ -40,3 +41,4 @@ nodemon index.js
 cd ../frontend
 npm install
 npm run dev
+```
