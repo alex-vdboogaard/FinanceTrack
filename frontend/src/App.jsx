@@ -22,6 +22,7 @@ import Investments from "./pages/investments/Investments";
 import Savings from "./pages/savings/Savings";
 import NotFound from "./pages/utility/NotFound";
 import Statements from "./pages/statements/Statements";
+import CreateAccount from "./pages/utility/CreateAccount";
 
 function App() {
     return (
@@ -36,10 +37,12 @@ function AppContent() {
 
     return (
         <>
-            {location.pathname !== "/login" && <Sidebar />}
+            {location.pathname !== "/login" &&
+                location.pathname !== "/create-account" && <Sidebar />}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/create-account" element={<CreateAccount />} />
                 <Route path="/overview" element={<Home />} />
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/assets" element={<Assets />} />
