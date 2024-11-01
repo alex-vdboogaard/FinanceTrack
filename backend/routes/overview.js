@@ -12,7 +12,12 @@ router.get("/", async (req, res) => {
     const data = {};
     try {
         //get assets
-        let query = `SELECT a.name, a.boughtFor, a.currentValue, c.name AS type FROM asset AS a INNER JOIN asset_type AS c ON a.asset_type_id = c.id`;
+        let query = `
+        SELECT a.name, a.boughtFor, a.currentValue, c.name AS type
+        FROM asset AS a
+        INNER JOIN asset_type AS c ON a.asset_type_id = c.id
+        WHERE a.user_id = ${req.session.userId}
+    `;
         const [assetResults] = await connection.promise().query(query);
 
         const assets = assetResults.map(

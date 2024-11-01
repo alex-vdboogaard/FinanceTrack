@@ -46,31 +46,42 @@ app.use("/savings", savings);
 app.use("/savings/goal", saving_goals);
 app.use("/budget", budget);
 app.use("/statements", statements);
+const saltRounds = 10;
 
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const query =
         "SELECT id, username, password FROM `User` WHERE username = ?";
 
-    connection.query(query, [username], (err, results) => {
+    connection.query(query, [username], async (err, results) => {
         if (err) {
             return res
                 .status(500)
                 .json({ message: "Error reading from the database" });
         }
-        if (results.length === 0 || results[0].password !== password) {
+        if (results.length === 0) {
             return res
                 .status(401)
                 .json({ message: "Invalid username or password" });
         }
 
-        req.session.userId = results[0].id;
+        const user = results[0];
+
+        // Compare the provided password with the hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res
+                .status(401)
+                .json({ message: "Invalid username or password" });
+        }
+
+        // Password is correct, set session variables
+        req.session.userId = user.id;
         req.session.loggedIn = true;
         res.status(200).json({ message: "Logged in" });
     });
 });
 
-const saltRounds = 10;
 app.post("/create-account", async (req, res) => {
     const { username, password, firstName, lastName } = req.body;
 
@@ -97,7 +108,7 @@ app.post("/create-account", async (req, res) => {
 
             // Insert the new user into the database
             const insertUserQuery = `
-                INSERT INTO 'User' (username, password, first_name, last_name)
+                INSERT INTO \`User\` (username, password, first_name, last_name)
                 VALUES (?, ?, ?, ?)
             `;
             connection.query(
