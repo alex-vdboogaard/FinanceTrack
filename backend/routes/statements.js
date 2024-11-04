@@ -62,7 +62,7 @@ router.post("/", upload, (req, res) => {
             "INSERT INTO Statement (name, pdf_blob, user_id) VALUES (?, ?, ?)";
         connection.query(
             sql,
-            [req.file.filename, data, req.session.userId],
+            [req.file.originalname, data, req.session.userId],
             (err, result) => {
                 fs.unlink(filePath, () => {});
 
