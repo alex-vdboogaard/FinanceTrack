@@ -25,13 +25,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("pdf");
 
-// GET route to retrieve all PDFs for the logged-in user
+// GET route to retrieve all PDFs associated with a user_id
 router.get("/", (req, res) => {
-    const sql = `SELECT name, pdf_blob FROM Statement WHERE user_id = ?`;
+    const sql = `SELECT id, name, pdf_blob FROM Statement WHERE user_id = ?`;
     connection.query(sql, [req.session.userId], (err, results) => {
         if (err) return res.status(500).json({ message: err.message });
 
         const statements = results.map((file) => ({
+            id: file.id,
             filename: file.name,
             base64Pdf: file.pdf_blob.toString("base64"),
         }));
@@ -40,18 +41,13 @@ router.get("/", (req, res) => {
     });
 });
 
+// POST route to upload and save a new PDF
 router.post("/", upload, (req, res) => {
-    console.log(req.file);
-    const filePath = req.file.path; // Path of the uploaded file
+    const filePath = req.file.path;
 
-    // Log the file path to check if it's correct
-    console.log("Uploaded file path:", filePath);
-
-    // Read the uploaded file
     fs.readFile(filePath, (err, data) => {
         if (err) {
-            console.error("Error reading file:", err);
-            fs.unlink(filePath, () => {}); // Clean up the file on error
+            fs.unlink(filePath, () => {});
             return res.status(500).json({ message: "File read error" });
         }
 
@@ -61,10 +57,9 @@ router.post("/", upload, (req, res) => {
             sql,
             [req.file.filename, data, req.session.userId],
             (err, result) => {
-                fs.unlink(filePath, () => {}); // Ensure file is deleted regardless of outcome
+                fs.unlink(filePath, () => {});
 
                 if (err) {
-                    console.error("Database error:", err);
                     return res.status(500).json({ message: err.message });
                 }
 
@@ -74,6 +69,52 @@ router.post("/", upload, (req, res) => {
                 });
             }
         );
+    });
+});
+
+// PUT route to update an existing PDF
+router.put("/", upload, (req, res) => {
+    const { id } = req.body;
+
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+    const filePath = req.file.path;
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            fs.unlink(filePath, () => {});
+            return res.status(500).json({ message: "File read error" });
+        }
+
+        const sql =
+            "UPDATE Statement SET name = ?, pdf_blob = ? WHERE id = ? AND user_id = ?";
+        connection.query(
+            sql,
+            [req.file.filename, data, id, req.session.userId],
+            (err) => {
+                fs.unlink(filePath, () => {});
+
+                if (err) {
+                    return res.status(500).json({ message: err.message });
+                }
+
+                res.status(200).json({ message: "PDF updated successfully" });
+            }
+        );
+    });
+});
+
+// DELETE route to remove a PDF by ID
+router.delete("/", (req, res) => {
+    const { id } = req.body;
+
+    const sql = "DELETE FROM Statement WHERE id = ? AND user_id = ?";
+    connection.query(sql, [id, req.session.userId], (err) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+
+        res.status(200).json({ message: "PDF deleted successfully" });
     });
 });
 
