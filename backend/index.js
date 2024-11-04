@@ -48,6 +48,13 @@ app.use("/budget", budget);
 app.use("/statements", statements);
 const saltRounds = 10;
 
+app.get("/logged-in", (req, res) => {
+    if (req.session.loggedIn) {
+        res.json({ loggedIn: true });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const query =
