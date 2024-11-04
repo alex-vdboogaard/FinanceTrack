@@ -26,6 +26,16 @@ const Statements = () => {
         window.open(url, "_blank");
     };
 
+    const handleDelete = (id) => {
+        fetchData(`http://localhost:3001/statements`, "DELETE", { id }).then(
+            (successData) => {
+                setStatements((prevStatements) =>
+                    prevStatements.filter((statement) => statement.id !== id)
+                );
+            }
+        );
+    };
+
     return (
         <main>
             <form
@@ -53,7 +63,18 @@ const Statements = () => {
                                         handlePreview(statement.base64Pdf)
                                     }
                                 >
-                                    Preview
+                                    <img
+                                        src="../src/assets/view.svg"
+                                        alt="preview"
+                                    />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(statement.id)}
+                                >
+                                    <img
+                                        src="../src/assets/delete.svg"
+                                        alt="delete icon"
+                                    />
                                 </button>
                             </td>
                         </tr>
