@@ -30,7 +30,12 @@ a {
 ul {
     list-style: none;
 }
-
+input {
+    max-width: 100%;
+}
+td {
+    overflow-x: hidden;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -55,7 +60,6 @@ tfoot {
     background-color: none;
 }
 
-
 tr:hover {
     background-color: #f8f8f8;
 }
@@ -76,7 +80,7 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #0B1326;
+    background-color: #0b1326;
     border-radius: 10px;
 }
 
