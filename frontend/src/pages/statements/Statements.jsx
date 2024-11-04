@@ -1,97 +1,66 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Statements.css";
+import { fetchData } from "../../utility/fetchData";
 
 const Statements = () => {
-    const [pdfUrl, setPdfUrl] = useState(null);
-    const [error, setError] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);
+    const [statements, setStatements] = useState([]);
     const fileInputRef = useRef(null);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        handleFile(file);
-    };
+    // Fetch PDF statements on component mount
+    useEffect(() => {
+        fetchData("http://localhost:3001/statements").then((data) =>
+            setStatements(data.statements)
+        );
+    }, []);
 
-    const handleFile = (file) => {
-        if (file && file.type === "application/pdf") {
-            const url = URL.createObjectURL(file);
-            setPdfUrl(url);
-            setError(null);
-        } else {
-            setPdfUrl(null);
-            setError("Please select a valid PDF file.");
-        }
-    };
+    // Handle PDF preview
+    const handlePreview = (base64Pdf) => {
+        // Create a blob from the base64 string and generate a URL
+        const blob = new Blob(
+            [Uint8Array.from(atob(base64Pdf), (c) => c.charCodeAt(0))],
+            { type: "application/pdf" }
+        );
+        const url = URL.createObjectURL(blob);
 
-    const handleDrop = (event) => {
-        event.preventDefault();
-        setIsDragging(false);
-
-        const file = event.dataTransfer.files[0];
-        handleFile(file);
-    };
-
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setIsDragging(false);
+        // Open the PDF in a new tab
+        window.open(url, "_blank");
     };
 
     return (
-        <div className="pdf-viewer-container">
-            <div
-                className={`dropzone ${isDragging ? "dragging" : ""}`}
-                onClick={() => fileInputRef.current?.click()}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
+        <main>
+            <form
+                action="http://localhost:3001/statements"
+                method="POST"
+                encType="multipart/form-data"
             >
-                <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    ref={fileInputRef}
-                />
-
-                {/* Upload Icon */}
-                <div className="upload-icon">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                        />
-                    </svg>
-                </div>
-
-                <p className="upload-text">
-                    Click to select or drag and drop a PDF file here
-                </p>
-            </div>
-
-            {error && <div className="error-message">{error}</div>}
-
-            {pdfUrl && (
-                <div className="pdf-container">
-                    <iframe
-                        src={pdfUrl}
-                        className="pdf-iframe"
-                        title="PDF Viewer"
-                    />
-                </div>
-            )}
-        </div>
+                <input type="file" name="pdf" ref={fileInputRef} />
+                <button type="submit">Upload</button>
+            </form>
+            <table className="statements-table">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {statements.map((statement) => (
+                        <tr key={statement.id}>
+                            <td>{statement.filename}</td>
+                            <td>
+                                <button
+                                    onClick={() =>
+                                        handlePreview(statement.base64Pdf)
+                                    }
+                                >
+                                    Preview
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </main>
     );
 };
 

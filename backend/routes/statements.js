@@ -6,7 +6,7 @@ const ValidateLoggedIn = require("../middleware/ValidateLoggedIn");
 const connection = require("../db/db");
 const router = express.Router();
 
-router.use(ValidateLoggedIn);
+// router.use(ValidateLoggedIn);
 
 const uploadDir = path.join(__dirname, "../uploads");
 
@@ -43,12 +43,19 @@ router.get("/", (req, res) => {
 
 // POST route to upload and save a new PDF
 router.post("/", upload, (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+    }
+
     const filePath = req.file.path;
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
             fs.unlink(filePath, () => {});
-            return res.status(500).json({ message: "File read error" });
+            console.error("Error reading file:", err);
+            return res
+                .status(500)
+                .json({ message: "File read error", error: err.message });
         }
 
         const sql =
@@ -60,45 +67,10 @@ router.post("/", upload, (req, res) => {
                 fs.unlink(filePath, () => {});
 
                 if (err) {
+                    console.error("Database error:", err);
                     return res.status(500).json({ message: err.message });
                 }
-
-                res.status(200).json({
-                    message: "PDF saved successfully",
-                    statementId: result.insertId,
-                });
-            }
-        );
-    });
-});
-
-// PUT route to update an existing PDF
-router.put("/", upload, (req, res) => {
-    const { id } = req.body;
-
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-    const filePath = req.file.path;
-
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            fs.unlink(filePath, () => {});
-            return res.status(500).json({ message: "File read error" });
-        }
-
-        const sql =
-            "UPDATE Statement SET name = ?, pdf_blob = ? WHERE id = ? AND user_id = ?";
-        connection.query(
-            sql,
-            [req.file.filename, data, id, req.session.userId],
-            (err) => {
-                fs.unlink(filePath, () => {});
-
-                if (err) {
-                    return res.status(500).json({ message: err.message });
-                }
-
-                res.status(200).json({ message: "PDF updated successfully" });
+                res.redirect("http://localhost:5173/statements");
             }
         );
     });
