@@ -6,7 +6,7 @@ const ValidateLoggedIn = require("../middleware/ValidateLoggedIn");
 const connection = require("../db/db");
 const router = express.Router();
 
-// router.use(ValidateLoggedIn);
+router.use(ValidateLoggedIn);
 
 const uploadDir = path.join(__dirname, "../uploads");
 
