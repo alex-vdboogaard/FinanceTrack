@@ -31,6 +31,14 @@ const Sidebar = () => {
         });
     });
 
+    const handleLogout = async () => {
+        fetchData("http://localhost:3001/logout", "POST").then(
+            (successData) => {
+                window.location.href = "/login";
+            }
+        );
+    };
+
     return (
         <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
             <nav className="nav">
@@ -104,6 +112,16 @@ const Sidebar = () => {
                             />
                             {!isCollapsed && <span>Statements</span>}
                         </Link>
+                    </li>
+                    <li id="logout" onClick={handleLogout}>
+                        <a>
+                            <img
+                                className="icon"
+                                src="../src/assets/logout.svg"
+                                alt="logout-icon"
+                            />
+                            {!isCollapsed && <span>Log out</span>}
+                        </a>
                     </li>
                 </ul>
                 <button className="toggle-btn" onClick={toggleSidebar}>

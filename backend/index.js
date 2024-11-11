@@ -137,6 +137,19 @@ app.post("/create-account", async (req, res) => {
         }
     });
 });
+app.post("/logout", (req, res) => {
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ message: "Unable to log out" });
+            } else {
+                return res.status(200).json({ message: "Logout successful" });
+            }
+        });
+    } else {
+        return res.status(200).json({ message: "Logout successful" });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server live on port ${port}`);
