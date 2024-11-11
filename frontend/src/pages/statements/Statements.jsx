@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Statements.css";
 import { fetchData } from "../../utility/fetchData";
+import pops from "../../../node_modules/pop-message/index.js";
+import "../../../node_modules/pop-message/pop.css";
 
 const Statements = () => {
     const [statements, setStatements] = useState([]);
@@ -26,14 +28,19 @@ const Statements = () => {
         window.open(url, "_blank");
     };
 
-    const handleDelete = (id) => {
-        fetchData(`http://localhost:3001/statements`, "DELETE", { id }).then(
-            (successData) => {
+    const handleDelete = async (id) => {
+        const confirm = await pops.confirmPop(
+            "Are you sure you want to delete?"
+        );
+        if (confirm) {
+            fetchData(`http://localhost:3001/statements`, "DELETE", {
+                id,
+            }).then((successData) => {
                 setStatements((prevStatements) =>
                     prevStatements.filter((statement) => statement.id !== id)
                 );
-            }
-        );
+            });
+        }
     };
 
     return (
