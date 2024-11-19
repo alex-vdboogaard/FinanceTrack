@@ -5,8 +5,8 @@ import "./Login.css";
 import Button from "../../components/button/Button";
 
 export default function Login() {
-    const [username, setUsername] = useState("Alex");
-    const [password, setPassword] = useState("Emile1234!!");
+    const [username, setUsername] = useState("Test");
+    const [password, setPassword] = useState("Test1234!!");
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
