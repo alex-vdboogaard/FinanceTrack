@@ -1,7 +1,7 @@
 -- Insert data into User table
 INSERT INTO `User` (username, password, first_name, last_name)
 VALUES 
-('john', 'password123', 'John', 'Doe');
+('test', 'test1234!!', 'John', 'Cena');
 
 -- Create budget for user
 INSERT INTO Budget(income, expenses, savings, invest, user_id)
