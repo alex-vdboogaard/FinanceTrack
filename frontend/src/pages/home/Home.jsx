@@ -12,6 +12,7 @@ export default function Home() {
     const [bankAccounts, setBankAccounts] = useState([]);
     const [investments, setInvestments] = useState([]);
     const [assets, setAssets] = useState([]);
+    const [firstName, setFirstName] = useState("firstName");
 
     // Calculate totals using useMemo
     const totalBankAccounts = useMemo(
@@ -51,12 +52,15 @@ export default function Home() {
             setBankAccounts(data.bankAccounts);
             setInvestments(data.investments);
             setAssets(data.assets);
+            setFirstName(data.firstName);
         });
     }, []);
 
     return (
         <main>
-            <h1>{greeting}, Alex</h1>
+            <h1>
+                {greeting}, {firstName}
+            </h1>
             <div
                 style={{
                     display: "flex",

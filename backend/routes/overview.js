@@ -60,6 +60,12 @@ router.get("/", async (req, res) => {
         );
 
         data.bankAccounts = bankAccounts;
+
+        //get user's first name
+        query = `SELECT first_name FROM \`User\` WHERE id = ${req.session.userId}`;
+        const [nameResult] = await connection.promise().query(query);
+        data.firstName = nameResult[0].first_name;
+
         return res.status(200).json(data);
     } catch (err) {
         return res
