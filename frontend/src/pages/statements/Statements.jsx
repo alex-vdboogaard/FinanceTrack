@@ -7,6 +7,7 @@ import UploadStatement from "./uploadStatement.jsx";
 import Button from "../../components/button/Button.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
+import RecentFiles from "./RecentFiles.jsx";
 
 const Statements = () => {
     const exampleFolders = [
@@ -92,16 +93,21 @@ const Statements = () => {
     return (
         <main>
             <h1>Statements</h1>
+
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Folders</h2>
                 <NewFolder></NewFolder>
             </div>
+
             <Folders folders={folders}></Folders>
+
+            <RecentFiles />
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">All files</h2>
                 <UploadStatement />
             </div>
+
             <table className="statements-table">
                 <thead>
                     <tr>
@@ -112,7 +118,13 @@ const Statements = () => {
                 <tbody>
                     {statements.map((statement) => (
                         <tr key={statement.id}>
-                            <td>{statement.filename}</td>
+                            <td className="file-td">
+                                <img
+                                    src="./src/assets/file.svg"
+                                    alt="file icon"
+                                />
+                                {statement.filename}
+                            </td>
                             <td>
                                 <button
                                     onClick={() =>
