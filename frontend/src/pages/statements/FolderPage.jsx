@@ -91,7 +91,7 @@ export default function FolderPage() {
                         <tr key={statement.id}>
                             <td className="file-td">
                                 <img
-                                    src="./src/assets/folder.svg"
+                                    src="../src/assets/folder.svg"
                                     alt="file icon"
                                 />
                                 {statement.filename}
@@ -103,7 +103,7 @@ export default function FolderPage() {
                                     }
                                 >
                                     <img
-                                        src="./src/assets/folder.svg"
+                                        src="../src/assets/folder.svg"
                                         alt="preview"
                                     />
                                 </button>
@@ -111,7 +111,7 @@ export default function FolderPage() {
                                     onClick={() => handleDelete(statement.id)}
                                 >
                                     <img
-                                        src="./src/assets/folder.svg"
+                                        src="../src/assets/folder.svg"
                                         alt="delete icon"
                                     />
                                 </button>

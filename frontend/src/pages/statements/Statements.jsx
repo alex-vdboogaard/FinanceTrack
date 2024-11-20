@@ -4,10 +4,10 @@ import { fetchData } from "../../utility/fetchData";
 import pops from "../../../node_modules/pop-message/index.js";
 import "../../../node_modules/pop-message/pop.css";
 import UploadStatement from "./uploadStatement.jsx";
-import Button from "../../components/button/Button.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
 import RecentFiles from "./RecentFiles.jsx";
+import Pagination from "../../components/pagination/Pagination.jsx";
 
 const Statements = () => {
     const exampleFolders = [
@@ -22,12 +22,6 @@ const Statements = () => {
                     filename: "Statement 1",
                     pdf_blob: "base64encodedPdf1",
                     createdAt: "2022-01-01",
-                },
-                {
-                    id: 2,
-                    filename: "Statement 2",
-                    pdf_blob: "base64encodedPdf2",
-                    createdAt: "2022-01-02",
                 },
             ],
         },
@@ -54,13 +48,18 @@ const Statements = () => {
     ];
     const [folders, setFolders] = useState(exampleFolders);
     const [statements, setStatements] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [numPages, setNumPages] = useState(1);
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
     // Fetch PDF statements on component mount
     useEffect(() => {
-        fetchData("http://localhost:3001/statements").then((data) =>
-            setStatements(data.statements)
+        fetchData(`http://localhost:3001/statements?page=${currentPage}`).then(
+            (data) => setStatements(data.statements)
         );
-    }, []);
+    }, [currentPage]);
 
     // Handle PDF preview
     const handlePreview = (base64Pdf) => {
@@ -152,6 +151,14 @@ const Statements = () => {
                     ))}
                 </tbody>
             </table>
+
+            {numPages > 1 && (
+                <Pagination
+                    numPages={numPages}
+                    handleChange={handlePageChange}
+                    activePage={currentPage}
+                />
+            )}
         </main>
     );
 };
