@@ -23,6 +23,10 @@ export default function UploadStatement() {
                     encType="multipart/form-data"
                 >
                     <input type="file" name="pdf" ref={fileInputRef} />
+                    <div className="input-wrapper">
+                        <label htmlFor="folder">Folder</label>
+                        <select name="folder" id="folder"></select>
+                    </div>
                     <button type="submit">Upload</button>
                     <button type="button" onClick={toggleModal}>
                         Cancel

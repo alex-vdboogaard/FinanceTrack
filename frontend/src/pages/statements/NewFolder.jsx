@@ -11,7 +11,7 @@ export default function NewFolder() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchData("localhost:3001/statements/folder", "POST").then(
+        fetchData("localhost:3001/statements/folder", "POST", name).then(
             (successData) => {
                 toggleModal();
                 pops.simplePop("success", successData);
