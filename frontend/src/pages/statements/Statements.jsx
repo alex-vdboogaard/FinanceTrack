@@ -3,10 +3,56 @@ import "./Statements.css";
 import { fetchData } from "../../utility/fetchData";
 import pops from "../../../node_modules/pop-message/index.js";
 import "../../../node_modules/pop-message/pop.css";
+import UploadStatement from "./uploadStatement.jsx";
+import Button from "../../components/button/Button.jsx";
+import NewFolder from "./NewFolder.jsx";
+import Folders from "./Folders.jsx";
 
 const Statements = () => {
+    const exampleFolders = [
+        {
+            id: 1,
+            name: "Example Folder 1",
+            pdf: "base64encodedPdf1",
+            createdAt: "2022-01-01",
+            statements: [
+                {
+                    id: 1,
+                    filename: "Statement 1",
+                    pdf_blob: "base64encodedPdf1",
+                    createdAt: "2022-01-01",
+                },
+                {
+                    id: 2,
+                    filename: "Statement 2",
+                    pdf_blob: "base64encodedPdf2",
+                    createdAt: "2022-01-02",
+                },
+            ],
+        },
+        {
+            id: 2,
+            name: "Example Folder 2",
+            pdf: "base64encodedPdf3",
+            createdAt: "2022-01-03",
+            statements: [
+                {
+                    id: 3,
+                    filename: "Statement 3",
+                    pdf_blob: "base64encodedPdf3",
+                    createdAt: "2022-01-03",
+                },
+                {
+                    id: 4,
+                    filename: "Statement 4",
+                    pdf_blob: "base64encodedPdf4",
+                    createdAt: "2022-01-04",
+                },
+            ],
+        },
+    ];
+    const [folders, setFolders] = useState(exampleFolders);
     const [statements, setStatements] = useState([]);
-    const fileInputRef = useRef(null);
 
     // Fetch PDF statements on component mount
     useEffect(() => {
@@ -45,14 +91,17 @@ const Statements = () => {
 
     return (
         <main>
-            <form
-                action="http://localhost:3001/statements"
-                method="POST"
-                encType="multipart/form-data"
-            >
-                <input type="file" name="pdf" ref={fileInputRef} />
-                <button type="submit">Upload</button>
-            </form>
+            <h1>Statements</h1>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <h2 className="h2">Folders</h2>
+                <NewFolder></NewFolder>
+            </div>
+            <Folders folders={folders}></Folders>
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <h2 className="h2">All files</h2>
+                <UploadStatement />
+            </div>
             <table className="statements-table">
                 <thead>
                     <tr>
