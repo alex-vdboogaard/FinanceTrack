@@ -118,12 +118,15 @@ const Statements = () => {
                 <tbody>
                     {statements.map((statement) => (
                         <tr key={statement.id}>
-                            <td className="file-td">
-                                <img
-                                    src="./src/assets/file.svg"
-                                    alt="file icon"
-                                />
-                                {statement.filename}
+                            <td>
+                                <div className="file-td">
+                                    <img
+                                        className="file-icon"
+                                        src="./src/assets/file.svg"
+                                        alt="file icon"
+                                    />
+                                    {statement.filename}
+                                </div>
                             </td>
                             <td>
                                 <button

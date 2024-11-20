@@ -23,6 +23,7 @@ import Savings from "./pages/savings/Savings";
 import NotFound from "./pages/utility/NotFound";
 import Statements from "./pages/statements/Statements";
 import CreateAccount from "./pages/utility/CreateAccount";
+import FolderPage from "./pages/statements/FolderPage";
 
 function App() {
     return (
@@ -50,6 +51,7 @@ function AppContent() {
                 <Route path="/investments" element={<Investments />} />
                 <Route path="/savings" element={<Savings />} />
                 <Route path="/statements" element={<Statements />} />
+                <Route path="/statements/folder/:id" element={<FolderPage />} />
                 {/* Catch not existent routes */}
                 <Route path="*" element={<NotFound />} />
             </Routes>

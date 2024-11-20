@@ -5,7 +5,7 @@ export default function Folders({ folders = [] }) {
     const navigate = useNavigate();
 
     const openFolder = (id) => {
-        navigate(`/statements/folders/${id}`);
+        navigate(`/statements/folder/${id}`);
     };
 
     return (
