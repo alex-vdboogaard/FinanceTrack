@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import { fetchData } from "../../utility/fetchData";
 import pops from "pop-message";
 
 export default function NewLoan({ onLoanCreated }) {
+    const [banks, setBanks] = useState([]);
+    const [categories, setCategories] = useState([]);
+
     const [formData, setFormData] = useState({
         name: "",
         bank: "",
@@ -12,6 +15,8 @@ export default function NewLoan({ onLoanCreated }) {
         interestRate: "",
         monthlyRepayment: "",
         firstPayment: "",
+        balance: 0,
+        category: 0,
     });
 
     const handleInputChange = (e) => {
@@ -28,6 +33,15 @@ export default function NewLoan({ onLoanCreated }) {
             }
         );
     };
+
+    useEffect(() => {
+        fetchData("http://localhost:3001/loans/data/loan-categories").then(
+            (data) => {
+                setBanks(data.banks);
+                setCategories(data.categories);
+            }
+        );
+    });
 
     return (
         <>
@@ -50,9 +64,26 @@ export default function NewLoan({ onLoanCreated }) {
                         />
                     </div>
                     <div className="input-wrapper">
+                        <label htmlFor="category">Category</label>
+                        <select
+                            type="text"
+                            className="normal-input"
+                            id="category"
+                            name="category"
+                            required
+                            onChange={handleInputChange}
+                        >
+                            <option value="">Select a category</option>
+                            {categories.map((cat) => {
+                                return (
+                                    <option value={cat.id}>{cat.name}</option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className="input-wrapper">
                         <label htmlFor="bank">Bank</label>
                         <select
-                            value={formData.bank}
                             id="bank"
                             name="bank"
                             className="normal-input"
@@ -60,9 +91,11 @@ export default function NewLoan({ onLoanCreated }) {
                             onChange={handleInputChange}
                         >
                             <option value="">Select a bank</option>
-                            <option value="Bank A">Bank A</option>
-                            <option value="Bank B">Bank B</option>
-                            <option value="Bank C">Bank C</option>
+                            {banks.map((bank) => {
+                                return (
+                                    <option value={bank.id}>{bank.name}</option>
+                                );
+                            })}
                         </select>
                     </div>
                     <div className="input-wrapper">
@@ -79,14 +112,14 @@ export default function NewLoan({ onLoanCreated }) {
                         />
                     </div>
                     <div className="input-wrapper">
-                        <label htmlFor="loanTerm">Loan Term (months)</label>
+                        <label htmlFor="balance">Starting Balance (R)</label>
                         <input
-                            min={1}
-                            value={formData.loanTerm}
+                            min={0}
+                            value={formData.balance}
                             type="number"
                             className="normal-input"
-                            id="loanTerm"
-                            name="loanTerm"
+                            id="balance"
+                            name="balance"
                             required
                             onChange={handleInputChange}
                         />
@@ -131,6 +164,19 @@ export default function NewLoan({ onLoanCreated }) {
                             className="normal-input"
                             id="firstPayment"
                             name="firstPayment"
+                            required
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="input-wrapper">
+                        <label htmlFor="loanTerm">Loan Term (months)</label>
+                        <input
+                            min={1}
+                            value={formData.loanTerm}
+                            type="number"
+                            className="normal-input"
+                            id="loanTerm"
+                            name="loanTerm"
                             required
                             onChange={handleInputChange}
                         />

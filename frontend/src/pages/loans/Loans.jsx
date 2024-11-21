@@ -44,11 +44,7 @@ export default function Loans() {
                     isOpen={newLoanOpen}
                     toggleSidebar={toggleNewLoan}
                 >
-                    <NewLoan
-                        onLoanCreated={() => {
-                            handleRerender;
-                        }}
-                    ></NewLoan>
+                    <NewLoan onLoanCreated={handleRerender}></NewLoan>
                 </Modal>
             </div>
             <LoansList loans={loans}></LoansList>

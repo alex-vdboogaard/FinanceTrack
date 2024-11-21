@@ -50,31 +50,57 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    let { name, balance, type, bank } = req.body;
-    name = name.replace(/'/g, '"');
-    const userId = req.session.userId;
-    if (!balance) {
-        balance = 0;
-    }
-    if (!name || !type || !bank) {
+    const {
+        name,
+        bank,
+        loanAmount,
+        loanTerm,
+        interestRate,
+        monthlyRepayment,
+        firstPayment,
+        category,
+        balance,
+    } = req.body;
+
+    if (
+        !name ||
+        !category ||
+        !bank ||
+        !loanAmount ||
+        !loanTerm ||
+        !interestRate ||
+        !monthlyRepayment ||
+        !firstPayment
+    ) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
     const query = `
-        INSERT INTO loan (name, balance, category_id, bank_id, user_id) 
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO loan (name, balance, term, loan_amount, interest_rate, monthly_repayment, first_payment, category_id, bank_id, user_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const values = [name, balance, type, bank, userId];
+    const values = [
+        name.replace(/'/g, '"'),
+        balance,
+        loanTerm,
+        loanAmount,
+        interestRate,
+        monthlyRepayment,
+        firstPayment,
+        category,
+        bank,
+        req.session.userId,
+    ];
 
     connection.query(query, values, (err, results) => {
         if (err) {
-            console.error("Error creating the bank account: ", err.message);
+            console.error("Error creating the loan: ", err.message);
             return res
                 .status(500)
-                .json({ message: "Error creating the bank." });
+                .json({ message: "Error creating the loan." });
         }
-        res.status(201).json({ message: "Loan created" });
+        res.status(201).json({ message: "Loan added" });
     });
 });
 
@@ -132,23 +158,41 @@ router.delete("/", (req, res) => {
     });
 });
 
-router.get("/loan-categories", (req, res) => {
-    const query = `
+router.get("/data/loan-categories", (req, res) => {
+    const categoriesQuery = `
         SELECT id, name FROM Loan_category
     `;
-    connection.query(query, (err, results) => {
+    const banksQuery = `
+        SELECT id, name FROM Bank
+    `;
+
+    connection.query(categoriesQuery, (err, categoryResults) => {
         if (err) {
             return res
                 .status(500)
                 .json({ message: "Error reading from the database" });
         }
 
-        const categories = results.map((cat) => ({
-            id: cat.id,
-            name: cat.name,
-        }));
+        connection.query(banksQuery, (err, bankResults) => {
+            if (err) {
+                return res
+                    .status(500)
+                    .json({ message: "Error reading from the database" });
+            }
 
-        res.status(200).json({ loans });
+            const data = {
+                categories: categoryResults.map((cat) => ({
+                    id: cat.id,
+                    name: cat.name,
+                })),
+                banks: bankResults.map((bank) => ({
+                    id: bank.id,
+                    name: bank.name,
+                })),
+            };
+
+            res.status(200).json(data);
+        });
     });
 });
 
