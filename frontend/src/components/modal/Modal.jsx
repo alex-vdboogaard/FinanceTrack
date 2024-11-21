@@ -9,7 +9,7 @@ const Modal = ({ isOpen, toggleSidebar, children, type = null }) => {
                 <button className="modal-toggle-right" onClick={toggleSidebar}>
                     <img src={closeIcon} alt="close icon" />
                 </button>
-                {children}
+                <div>{children}</div>
             </div>
         );
     } else {
