@@ -165,6 +165,7 @@ CREATE TABLE Loan_category (
 CREATE TABLE Loan (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
+    loan_amount DECIMAL(10, 2) NOT NULL,
     balance DECIMAL(10, 2) NOT NULL,
     monthly_repayment DECIMAL(10,2) NOT NULL,
     term INT NOT NULL,
