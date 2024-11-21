@@ -21,6 +21,7 @@ export default function UploadStatement() {
                 toggleSidebar={toggleModal}
                 type={"center"}
             >
+                <h2 className="h2">Upload statement</h2>
                 <form
                     action="http://localhost:3001/statements"
                     method="POST"

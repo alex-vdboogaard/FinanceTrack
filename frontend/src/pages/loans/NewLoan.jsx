@@ -20,7 +20,8 @@ export default function NewLoan({ onLoanCreated }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         fetchData("http://localhost:3001/loans", "POST", formData).then(
             (successData) => {
                 pops.simplePop("success", successData.message);
@@ -30,9 +31,12 @@ export default function NewLoan({ onLoanCreated }) {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <>
             <h2 className="h2">New Loan</h2>
-            <div style={{ display: "flex", position: "relative" }}>
+            <form
+                onSubmit={handleSubmit}
+                style={{ display: "flex", position: "relative" }}
+            >
                 <div className="column">
                     <div className="input-wrapper">
                         <label htmlFor="name">Name</label>
@@ -65,6 +69,7 @@ export default function NewLoan({ onLoanCreated }) {
                     <div className="input-wrapper">
                         <label htmlFor="loanAmount">Loan Amount (R)</label>
                         <input
+                            min={0}
                             value={formData.loanAmount}
                             type="number"
                             className="normal-input"
@@ -77,6 +82,7 @@ export default function NewLoan({ onLoanCreated }) {
                     <div className="input-wrapper">
                         <label htmlFor="loanTerm">Loan Term (months)</label>
                         <input
+                            min={1}
                             value={formData.loanTerm}
                             type="number"
                             className="normal-input"
@@ -91,6 +97,7 @@ export default function NewLoan({ onLoanCreated }) {
                     <div className="input-wrapper">
                         <label htmlFor="interestRate">Interest Rate (%)</label>
                         <input
+                            min={0}
                             value={formData.interestRate}
                             type="number"
                             step="0.0001"
@@ -106,6 +113,7 @@ export default function NewLoan({ onLoanCreated }) {
                             Monthly Repayment
                         </label>
                         <input
+                            min={0}
                             value={formData.monthlyRepayment}
                             type="number"
                             step="0.01"
@@ -137,11 +145,11 @@ export default function NewLoan({ onLoanCreated }) {
                         width: "48%",
                     }}
                     className="primary-btn"
-                    onClick={handleSubmit}
+                    type="submit"
                 >
                     Create
                 </Button>
-            </div>
-        </div>
+            </form>
+        </>
     );
 }
