@@ -155,6 +155,28 @@ CREATE TABLE Statement (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
+-- Create Loan Category Table
+CREATE TABLE Loan_category (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+
+-- Create Loan Table
+CREATE TABLE Loan (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    balance DECIMAL(10, 2) NOT NULL,
+    monthly_repayment DECIMAL(10,2) NOT NULL,
+    term INT NOT NULL,
+    interest_rate DECIMAL(10,4) NOT NULL,
+    first_payment DATETIME NOT NULL,
+    category_id INT NOT NULL,
+    user_id INT NOT NULL,
+    bank_id INT NOT NULL,
+    FOREIGN KEY (bank_id) REFERENCES Bank(id), 
+    FOREIGN KEY (category_id) REFERENCES Loan_category(id),
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE 
+);
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
 VALUES 
@@ -261,3 +283,14 @@ INSERT INTO Bank (name)
 ('Bidvest'),
 ('TymeBank'),
 ('Other');
+
+INSERT INTO Loan_category (name) VALUES
+('Personal Loan'),
+('Home Loan'),
+('Auto Loan'),
+('Student Loan'),
+('Business Loan'),
+('Mortgage Loan'),
+('Debt Consolidation Loan'),
+('Other');
+
