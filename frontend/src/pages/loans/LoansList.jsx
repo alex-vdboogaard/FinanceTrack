@@ -7,11 +7,11 @@ export default function LoansList({ loans }) {
     const handleOpen = (id) => {
         navigate(`/loans/${id}`);
     };
-    const calcTotalBalance = () => {
+    const calcTotalBalance = (loans) => {
         return loans.reduce((acc, l) => acc + parseFloat(l.balance), 0);
     };
     const [count, setCount] = useState(loans.length);
-    const [totalBalance, setTotalBalance] = useState(calcTotalBalance);
+    const [totalBalance, setTotalBalance] = useState(calcTotalBalance(loans));
 
     return (
         <table style={{ marginBottom: "50px" }}>
@@ -63,6 +63,7 @@ export default function LoansList({ loans }) {
             <tfoot>
                 <tr>
                     <td colSpan="2">Count: {count}</td>
+                    <td></td>
                     <td></td>
                     <td>Total: R{totalBalance}</td>
                     <td></td>
