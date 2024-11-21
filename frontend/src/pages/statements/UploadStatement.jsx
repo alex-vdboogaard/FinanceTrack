@@ -31,6 +31,7 @@ export default function UploadStatement() {
                         className="normal-input"
                         type="file"
                         name="pdf"
+                        required
                         ref={fileInputRef}
                     />
                     <div
