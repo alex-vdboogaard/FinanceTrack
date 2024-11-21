@@ -15,6 +15,7 @@ export default function LoansList({ loans }) {
                     <th>Name</th>
                     <th>Type</th>
                     <th>Bank</th>
+                    <th>Interest rate (%)</th>
                     <th>Balance (R)</th>
                     <th>Actions</th>
                 </tr>
@@ -23,16 +24,21 @@ export default function LoansList({ loans }) {
                 {loans.map((loan, index) => (
                     <tr key={index}>
                         <td>{loan.name}</td>
+                        <td>{loan.type}</td>
                         <td className="bank">
                             <img
                                 src={`../src/assets/logos/${loan.bank
                                     .toLowerCase()
                                     .replace(/\s+/g, "")}.svg`}
-                                alt={account.bank}
+                                alt={loan.bank}
                             />
                             {loan.bank}
                         </td>
-                        <td>{loan.interest_rate}</td>
+                        <td>
+                            {loan.interest_rate
+                                ? loan.interest_rate.toString()
+                                : "N/A"}
+                        </td>
                         <td>{loan.balance}</td>
                     </tr>
                 ))}

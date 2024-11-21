@@ -7,7 +7,7 @@ router.use(ValidateLoggedIn);
 
 router.get("/", (req, res) => {
     const query = `
-    SELECT l.id, l.name, l.balance, t.name AS type, bb.name AS bank 
+    SELECT l.id, l.name, l.balance, t.name AS type, l.interest_rate, l.term, bb.name AS bank 
     FROM loan AS l 
     INNER JOIN loan_category AS t ON t.id = l.category_id
     INNER JOIN Bank AS bb ON bb.id = l.bank_id 
