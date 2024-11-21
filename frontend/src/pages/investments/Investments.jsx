@@ -20,12 +20,18 @@ export default function Investments() {
     const url = "http://localhost:3001/investments";
 
     const handleRerender = useCallback(() => {
-        setTriggerRerender(prev => !prev);
+        setTriggerRerender((prev) => !prev);
     }, []);
 
     const calculateTotals = useCallback((investments) => {
-        const totalInvested = investments.reduce((acc, investment) => acc + parseFloat(investment.invested), 0);
-        const totalCurrentValue = investments.reduce((acc, investment) => acc + parseFloat(investment.currentValue), 0);
+        const totalInvested = investments.reduce(
+            (acc, investment) => acc + parseFloat(investment.invested),
+            0
+        );
+        const totalCurrentValue = investments.reduce(
+            (acc, investment) => acc + parseFloat(investment.currentValue),
+            0
+        );
         return { totalInvested, totalCurrentValue };
     }, []);
 
@@ -35,7 +41,8 @@ export default function Investments() {
                 const investmentsData = data.investments || [];
                 setInvestments(investmentsData);
                 setCount(investmentsData.length);
-                const { totalInvested, totalCurrentValue } = calculateTotals(investmentsData);
+                const { totalInvested, totalCurrentValue } =
+                    calculateTotals(investmentsData);
                 setTotalInvested(totalInvested);
                 setTotalCurrentValue(totalCurrentValue);
             })
@@ -45,55 +52,75 @@ export default function Investments() {
             });
     }, [triggerRerender, calculateTotals]);
 
-    const handleSave = useCallback((investment) => {
-        fetchData(url, "PUT", investment)
-            .catch((error) => {
+    const handleSave = useCallback(
+        (investment) => {
+            fetchData(url, "PUT", investment).catch((error) => {
                 pops.simplePop("error", "Failed to save investment");
                 console.error("Error saving investment:", error);
             });
-    }, [url]);
+        },
+        [url]
+    );
 
-    const handleUpdate = useCallback((index, field, value) => {
-        const updatedInvestments = [...investments];
-        updatedInvestments[index][field] = value;
-        setInvestments(updatedInvestments);
-        const { totalInvested, totalCurrentValue } = calculateTotals(updatedInvestments);
-        setTotalInvested(totalInvested);
-        setTotalCurrentValue(totalCurrentValue);
-    }, [investments, calculateTotals]);
+    const handleUpdate = useCallback(
+        (index, field, value) => {
+            const updatedInvestments = [...investments];
+            updatedInvestments[index][field] = value;
+            setInvestments(updatedInvestments);
+            const { totalInvested, totalCurrentValue } =
+                calculateTotals(updatedInvestments);
+            setTotalInvested(totalInvested);
+            setTotalCurrentValue(totalCurrentValue);
+        },
+        [investments, calculateTotals]
+    );
 
-    const handleDelete = useCallback(async (investment) => {
-        const confirm = await pops.confirmPop(`Are you sure you want to delete '${investment.description}'?`);
-        if (confirm) {
-            fetchData(url, "DELETE", investment)
-                .then((successData) => {
-                    const updatedInvestments = investments.filter(a => a.id !== investment.id);
-                    setInvestments(updatedInvestments);
-                    setCount(prevCount => prevCount - 1);
-                    const { totalInvested, totalCurrentValue } = calculateTotals(updatedInvestments);
-                    setTotalInvested(totalInvested);
-                    setTotalCurrentValue(totalCurrentValue);
-                    pops.simplePop("success", successData.message);
-                })
-                .catch((error) => {
-                    pops.simplePop("error", "Failed to delete investment");
-                    console.error("Error deleting investment:", error);
-                });
-        }
-    }, [investments, url, calculateTotals]);
+    const handleDelete = useCallback(
+        async (investment) => {
+            const confirm = await pops.confirmPop(
+                `Are you sure you want to delete '${investment.description}'?`
+            );
+            if (confirm) {
+                fetchData(url, "DELETE", investment)
+                    .then((successData) => {
+                        const updatedInvestments = investments.filter(
+                            (a) => a.id !== investment.id
+                        );
+                        setInvestments(updatedInvestments);
+                        setCount((prevCount) => prevCount - 1);
+                        const { totalInvested, totalCurrentValue } =
+                            calculateTotals(updatedInvestments);
+                        setTotalInvested(totalInvested);
+                        setTotalCurrentValue(totalCurrentValue);
+                        pops.simplePop("success", successData.message);
+                    })
+                    .catch((error) => {
+                        pops.simplePop("error", "Failed to delete investment");
+                        console.error("Error deleting investment:", error);
+                    });
+            }
+        },
+        [investments, url, calculateTotals]
+    );
 
     const newInvestment = useCallback(() => {
         setIsSidebarOpen(!isSidebarOpen);
     }, [isSidebarOpen]);
 
     const growthPercentage = useCallback((investment) => {
-        return ((investment.currentValue - investment.invested) / investment.invested) * 100;
+        return (
+            ((investment.currentValue - investment.invested) /
+                investment.invested) *
+            100
+        );
     }, []);
     return (
         <main>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h1 style={{ marginRight: "20px" }}>Investments</h1>
-                <Button onClick={newInvestment} className="primary-btn">+ New Investment</Button>
+                <Button onClick={newInvestment} className="primary-btn">
+                    + New Investment
+                </Button>
             </div>
 
             <Modal isOpen={isSidebarOpen} toggleSidebar={newInvestment}>
@@ -118,18 +145,28 @@ export default function Investments() {
                                 <input
                                     type="text"
                                     value={investment.description}
-                                    onChange={(e) => handleUpdate(index, 'description', e.target.value)}
+                                    onChange={(e) =>
+                                        handleUpdate(
+                                            index,
+                                            "description",
+                                            e.target.value
+                                        )
+                                    }
                                     onBlur={() => handleSave(investment)}
                                 />
                             </td>
-                            <td>
-                                {investment.type}
-                            </td>
+                            <td>{investment.type}</td>
                             <td>
                                 <input
                                     type="number"
                                     value={investment.invested}
-                                    onChange={(e) => handleUpdate(index, 'invested', parseFloat(e.target.value))}
+                                    onChange={(e) =>
+                                        handleUpdate(
+                                            index,
+                                            "invested",
+                                            parseFloat(e.target.value)
+                                        )
+                                    }
                                     onBlur={() => handleSave(investment)}
                                 />
                             </td>
@@ -137,20 +174,35 @@ export default function Investments() {
                                 <input
                                     type="number"
                                     value={investment.currentValue}
-                                    onChange={(e) => handleUpdate(index, 'currentValue', parseFloat(e.target.value))}
+                                    onChange={(e) =>
+                                        handleUpdate(
+                                            index,
+                                            "currentValue",
+                                            parseFloat(e.target.value)
+                                        )
+                                    }
                                     onBlur={() => handleSave(investment)}
                                 />
                             </td>
                             <td
                                 style={{
-                                    color: growthPercentage(investment) >= 0 ? 'green' : 'red'
+                                    color:
+                                        growthPercentage(investment) >= 0
+                                            ? "green"
+                                            : "red",
                                 }}
                             >
-                                {growthPercentage(investment).toFixed(2) + '%'}
+                                {growthPercentage(investment).toFixed(2) + "%"}
                             </td>
                             <td className="delete-icon">
-                                <button onClick={() => handleDelete(investment)} aria-label="Delete investment">
-                                    <img src="../src/assets/delete.svg" alt="Delete" />
+                                <button
+                                    onClick={() => handleDelete(investment)}
+                                    aria-label="Delete investment"
+                                >
+                                    <img
+                                        src="../src/assets/delete.svg"
+                                        alt="Delete"
+                                    />
                                 </button>
                             </td>
                         </tr>
@@ -163,13 +215,29 @@ export default function Investments() {
                         <td>Total: R{totalCurrentValue}</td>
                         {investments.length > 0 ? (
                             <td colSpan="2">
-                                Total: {((totalCurrentValue - totalInvested) / totalInvested * 100).toFixed(2)}%
+                                Total:{" "}
+                                {(
+                                    ((totalCurrentValue - totalInvested) /
+                                        totalInvested) *
+                                    100
+                                ).toFixed(2)}
+                                %
                             </td>
-                        ) : <td colSpan="2">Total: 0</td>}
+                        ) : (
+                            <td colSpan="2">Total: 0</td>
+                        )}
                     </tr>
                 </tfoot>
             </table>
-            <div style={{ marginTop: "50px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <div
+                style={{
+                    marginTop: "50px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                }}
+            >
                 {investments.length > 0 ? (
                     <>
                         <InvestmentPieChart investments={investments} />
@@ -179,8 +247,6 @@ export default function Investments() {
                     <></>
                 )}
             </div>
-
         </main>
     );
 }
-

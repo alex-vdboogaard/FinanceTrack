@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import Button from "../../components/button/Button";
 
-export default function Login() {
-    const [username, setUsername] = useState("Test");
-    const [password, setPassword] = useState("Test1234!!");
+export default function CreateAccount() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
@@ -15,18 +17,22 @@ export default function Login() {
         const formData = {
             username,
             password,
+            firstName,
+            lastName,
         };
 
-        fetchData("http://localhost:3001/login", "POST", formData).then(
-            (successData) => {
-                navigate("/overview");
-            }
-        );
+        fetchData(
+            "http://localhost:3001/create-account",
+            "POST",
+            formData
+        ).then((successData) => {
+            navigate("/login");
+        });
     };
 
     return (
         <main className="center-main">
-            <h1>Welcome back</h1>
+            <h1>Create Account</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username">Username:</label>
@@ -50,8 +56,29 @@ export default function Login() {
                         required
                     />
                 </div>
+                <div>
+                    <label htmlFor="firstName">First Name:</label>
+                    <input
+                        className="login-input"
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input
+                        className="login-input"
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                </div>
                 <Button type="submit" className="primary-btn">
-                    Login
+                    Create Account
                 </Button>
             </form>
         </main>

@@ -22,6 +22,8 @@ import Investments from "./pages/investments/Investments";
 import Savings from "./pages/savings/Savings";
 import NotFound from "./pages/utility/NotFound";
 import Statements from "./pages/statements/Statements";
+import CreateAccount from "./pages/utility/CreateAccount";
+import FolderPage from "./pages/statements/FolderPage";
 
 function App() {
     return (
@@ -36,10 +38,12 @@ function AppContent() {
 
     return (
         <>
-            {location.pathname !== "/login" && <Sidebar />}
+            {location.pathname !== "/login" &&
+                location.pathname !== "/create-account" && <Sidebar />}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/create-account" element={<CreateAccount />} />
                 <Route path="/overview" element={<Home />} />
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/assets" element={<Assets />} />
@@ -47,6 +51,7 @@ function AppContent() {
                 <Route path="/investments" element={<Investments />} />
                 <Route path="/savings" element={<Savings />} />
                 <Route path="/statements" element={<Statements />} />
+                <Route path="/statements/folder/:id" element={<FolderPage />} />
                 {/* Catch not existent routes */}
                 <Route path="*" element={<NotFound />} />
             </Routes>

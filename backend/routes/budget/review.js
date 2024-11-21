@@ -16,11 +16,6 @@ router.get("/", (req, res) => {
             return;
         }
 
-        if (results.length === 0) {
-            res.status(404).json({ message: "No review found" });
-            return;
-        }
-
         const reviews = results.map((review) => ({
             id: review.id,
             income: review.income,

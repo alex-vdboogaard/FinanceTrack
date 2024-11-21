@@ -1,97 +1,165 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Statements.css";
+import { fetchData } from "../../utility/fetchData";
+import pops from "../../../node_modules/pop-message/index.js";
+import "../../../node_modules/pop-message/pop.css";
+import UploadStatement from "./UploadStatement.jsx";
+import NewFolder from "./NewFolder.jsx";
+import Folders from "./Folders.jsx";
+import RecentFiles from "./RecentFiles.jsx";
+import Pagination from "../../components/pagination/Pagination.jsx";
 
 const Statements = () => {
-    const [pdfUrl, setPdfUrl] = useState(null);
-    const [error, setError] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const fileInputRef = useRef(null);
+    const exampleFolders = [
+        {
+            id: 1,
+            name: "Example Folder 1",
+            pdf: "base64encodedPdf1",
+            createdAt: "2022-01-01",
+            statements: [
+                {
+                    id: 1,
+                    filename: "Statement 1",
+                    pdf_blob: "base64encodedPdf1",
+                    createdAt: "2022-01-01",
+                },
+            ],
+        },
+        {
+            id: 2,
+            name: "Example Folder 2",
+            pdf: "base64encodedPdf3",
+            createdAt: "2022-01-03",
+            statements: [
+                {
+                    id: 3,
+                    filename: "Statement 3",
+                    pdf_blob: "base64encodedPdf3",
+                    createdAt: "2022-01-03",
+                },
+                {
+                    id: 4,
+                    filename: "Statement 4",
+                    pdf_blob: "base64encodedPdf4",
+                    createdAt: "2022-01-04",
+                },
+            ],
+        },
+    ];
+    const [folders, setFolders] = useState(exampleFolders);
+    const [statements, setStatements] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [numPages, setNumPages] = useState(1);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        handleFile(file);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+    // Fetch PDF statements on component mount
+    useEffect(() => {
+        fetchData(`http://localhost:3001/statements?page=${currentPage}`).then(
+            (data) => setStatements(data.statements)
+        );
+    }, [currentPage]);
+
+    // Handle PDF preview
+    const handlePreview = (base64Pdf) => {
+        // Create a blob from the base64 string and generate a URL
+        const blob = new Blob(
+            [Uint8Array.from(atob(base64Pdf), (c) => c.charCodeAt(0))],
+            { type: "application/pdf" }
+        );
+        const url = URL.createObjectURL(blob);
+
+        // Open the PDF in a new tab
+        window.open(url, "_blank");
     };
 
-    const handleFile = (file) => {
-        if (file && file.type === "application/pdf") {
-            const url = URL.createObjectURL(file);
-            setPdfUrl(url);
-            setError(null);
-        } else {
-            setPdfUrl(null);
-            setError("Please select a valid PDF file.");
+    const handleDelete = async (id) => {
+        const confirm = await pops.confirmPop(
+            "Are you sure you want to delete?"
+        );
+        if (confirm) {
+            fetchData(`http://localhost:3001/statements`, "DELETE", {
+                id,
+            }).then((successData) => {
+                setStatements((prevStatements) =>
+                    prevStatements.filter((statement) => statement.id !== id)
+                );
+            });
         }
     };
 
-    const handleDrop = (event) => {
-        event.preventDefault();
-        setIsDragging(false);
-
-        const file = event.dataTransfer.files[0];
-        handleFile(file);
-    };
-
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setIsDragging(false);
-    };
-
     return (
-        <div className="pdf-viewer-container">
-            <div
-                className={`dropzone ${isDragging ? "dragging" : ""}`}
-                onClick={() => fileInputRef.current?.click()}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-            >
-                <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    ref={fileInputRef}
-                />
+        <main>
+            <h1>Statements</h1>
 
-                {/* Upload Icon */}
-                <div className="upload-icon">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                        />
-                    </svg>
-                </div>
-
-                <p className="upload-text">
-                    Click to select or drag and drop a PDF file here
-                </p>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <h2 className="h2">Folders</h2>
+                <NewFolder></NewFolder>
             </div>
 
-            {error && <div className="error-message">{error}</div>}
+            <Folders folders={folders}></Folders>
 
-            {pdfUrl && (
-                <div className="pdf-container">
-                    <iframe
-                        src={pdfUrl}
-                        className="pdf-iframe"
-                        title="PDF Viewer"
-                    />
-                </div>
+            <RecentFiles />
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <h2 className="h2">All files</h2>
+                <UploadStatement />
+            </div>
+
+            <table className="statements-table">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {statements.map((statement) => (
+                        <tr key={statement.id}>
+                            <td>
+                                <div className="file-td">
+                                    <img
+                                        className="file-icon"
+                                        src="./src/assets/file.svg"
+                                        alt="file icon"
+                                    />
+                                    {statement.filename}
+                                </div>
+                            </td>
+                            <td>
+                                <button
+                                    onClick={() =>
+                                        handlePreview(statement.base64Pdf)
+                                    }
+                                >
+                                    <img
+                                        src="../src/assets/view.svg"
+                                        alt="preview"
+                                    />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(statement.id)}
+                                >
+                                    <img
+                                        src="../src/assets/delete.svg"
+                                        alt="delete icon"
+                                    />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            {numPages > 1 && (
+                <Pagination
+                    numPages={numPages}
+                    handleChange={handlePageChange}
+                    activePage={currentPage}
+                />
             )}
-        </div>
+        </main>
     );
 };
 

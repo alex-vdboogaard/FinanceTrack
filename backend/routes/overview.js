@@ -12,7 +12,12 @@ router.get("/", async (req, res) => {
     const data = {};
     try {
         //get assets
-        let query = `SELECT a.name, a.boughtFor, a.currentValue, c.name AS type FROM asset AS a INNER JOIN asset_type AS c ON a.asset_type_id = c.id`;
+        let query = `
+        SELECT a.name, a.boughtFor, a.currentValue, c.name AS type
+        FROM asset AS a
+        INNER JOIN asset_type AS c ON a.asset_type_id = c.id
+        WHERE a.user_id = ${req.session.userId}
+    `;
         const [assetResults] = await connection.promise().query(query);
 
         const assets = assetResults.map(
@@ -55,6 +60,12 @@ router.get("/", async (req, res) => {
         );
 
         data.bankAccounts = bankAccounts;
+
+        //get user's first name
+        query = `SELECT first_name FROM \`User\` WHERE id = ${req.session.userId}`;
+        const [nameResult] = await connection.promise().query(query);
+        data.firstName = nameResult[0].first_name;
+
         return res.status(200).json(data);
     } catch (err) {
         return res
