@@ -25,6 +25,7 @@ import Statements from "./pages/statements/Statements";
 import CreateAccount from "./pages/utility/CreateAccount";
 import FolderPage from "./pages/statements/FolderPage";
 import Loans from "./pages/loans/Loans";
+import LoanPage from "./pages/loans/LoanPage";
 
 function App() {
     return (
@@ -49,6 +50,7 @@ function AppContent() {
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/assets" element={<Assets />} />
                 <Route path="/loans" element={<Loans />} />
+                <Route path="/loans/:id" element={<LoanPage />} />
                 <Route path="/bank-accounts" element={<BankAccounts />} />
                 <Route path="/investments" element={<Investments />} />
                 <Route path="/savings" element={<Savings />} />
