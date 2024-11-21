@@ -26,6 +26,29 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/:id", (req, res) => {
+    const { id } = req.params;
+    const query = `
+    SELECT l.id, l.name, l.balance, t.name AS type, l.interest_rate, l.term, bb.name AS bank 
+    FROM loan AS l 
+    INNER JOIN loan_category AS t ON t.id = l.category_id
+    INNER JOIN Bank AS bb ON bb.id = l.bank_id 
+    WHERE l.user_id = ${req.session.userId} AND l.id = ${id}
+    `;
+
+    connection.query(query, (err, loans) => {
+        if (err) {
+            res.status(500).json({
+                message: "Error reading from the database" + err.message,
+            });
+            return;
+        }
+        const loan = loans[0];
+
+        res.status(200).json({ loan });
+    });
+});
+
 router.post("/", (req, res) => {
     let { name, balance, type, bank } = req.body;
     name = name.replace(/'/g, '"');

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "../../../node_modules/pop-message/pop.css";
-import { useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LoansList({ loans }) {
-    const navigate = useNavigation();
+    const navigate = useNavigate();
     const handleOpen = (id) => {
         navigate(`/loans/${id}`);
     };

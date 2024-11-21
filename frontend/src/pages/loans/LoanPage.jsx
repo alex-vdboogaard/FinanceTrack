@@ -7,7 +7,7 @@ export default function LoanPage() {
     const [loan, setLoan] = useState({});
 
     useEffect(() => {
-        fetchData(`http://localhost:3000/loans/${id}`).then((data) => {
+        fetchData(`http://localhost:3001/loans/${id}`).then((data) => {
             setLoan(data.loan);
         });
     }, []);
@@ -15,7 +15,6 @@ export default function LoanPage() {
     return (
         <main>
             <h1>{loan.name}</h1>
-            <p>{loan}</p>
         </main>
     );
 }
