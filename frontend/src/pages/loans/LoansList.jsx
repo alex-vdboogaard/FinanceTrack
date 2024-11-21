@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../../node_modules/pop-message/pop.css";
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +11,11 @@ export default function LoansList({ loans }) {
         return loans.reduce((acc, l) => acc + parseFloat(l.balance), 0);
     };
     const [count, setCount] = useState(loans.length);
-    const [totalBalance, setTotalBalance] = useState(calcTotalBalance(loans));
+    const [totalBalance, setTotalBalance] = useState(0);
 
+    useEffect(() => {
+        setTotalBalance(calcTotalBalance(loans));
+    });
     return (
         <table style={{ marginBottom: "50px" }}>
             <thead>
