@@ -24,7 +24,7 @@ export default function NewFolder() {
                 className="secondary-btn"
                 onClick={() => setModalOpen(!modalOpen)}
             >
-                +
+                <strong>+</strong>
             </Button>
             <Modal
                 isOpen={modalOpen}
