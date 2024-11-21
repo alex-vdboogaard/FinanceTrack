@@ -9,6 +9,7 @@ const port = process.env.PORT || 3001;
 
 //routes
 const assets = require("./routes/assets");
+const loans = require("./routes/loans");
 const bank_accounts = require("./routes/bank-accounts");
 const investments = require("./routes/investments");
 const overview = require("./routes/overview");
@@ -39,6 +40,7 @@ app.use(
 
 //routes
 app.use("/assets", assets);
+app.use("/loans", loans);
 app.use("/bank-accounts", bank_accounts);
 app.use("/investments", investments);
 app.use("/overview", overview);
