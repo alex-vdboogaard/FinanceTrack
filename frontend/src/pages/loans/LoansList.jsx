@@ -1,7 +1,12 @@
 import { useState } from "react";
 import "../../../node_modules/pop-message/pop.css";
+import { useNavigation } from "react-router-dom";
 
 export default function LoansList({ loans }) {
+    const navigate = useNavigation();
+    const handleOpen = (id) => {
+        navigate(`/loans/${id}`);
+    };
     const calcTotalBalance = () => {
         return loans.reduce((acc, l) => acc + parseFloat(l.balance), 0);
     };
@@ -40,6 +45,18 @@ export default function LoansList({ loans }) {
                                 : "N/A"}
                         </td>
                         <td>{loan.balance}</td>
+                        <td>
+                            <button
+                                onClick={() => {
+                                    handleOpen(loan.id);
+                                }}
+                            >
+                                <img
+                                    src="../src/assets/open.svg"
+                                    alt="open icon"
+                                />
+                            </button>
+                        </td>
                     </tr>
                 ))}
             </tbody>
