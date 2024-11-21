@@ -7,7 +7,7 @@ router.use(ValidateLoggedIn);
 
 router.get("/", (req, res) => {
     const query = `
-    SELECT l.id, l.name, l.balance, t.name AS type, l.interest_rate, l.term, l.monthly_repayment, bb.name AS bank 
+    SELECT l.id, l.name, l.balance, l.loan_amount, t.name AS type, l.interest_rate, l.term, l.monthly_repayment, bb.name AS bank 
     FROM loan AS l 
     INNER JOIN loan_category AS t ON t.id = l.category_id
     INNER JOIN Bank AS bb ON bb.id = l.bank_id 
@@ -29,7 +29,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     const { id } = req.params;
     const query = `
-    SELECT l.id, l.name, l.balance, t.name AS type, l.interest_rate, l.term, bb.name AS bank 
+        SELECT l.id, l.name, l.balance, l.loan_amount, l.first_payment, t.name AS type, l.interest_rate, l.term, l.monthly_repayment, bb.name AS bank 
     FROM loan AS l 
     INNER JOIN loan_category AS t ON t.id = l.category_id
     INNER JOIN Bank AS bb ON bb.id = l.bank_id 
@@ -79,13 +79,13 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    let { id, name, monthly_repayment } = req.body;
+    let { name, monthly_repayment, interest_rate } = req.body;
     name = name.replace(/'/g, '"');
 
     const query = `
         UPDATE loan
-        SET name = '${name}', monthly_repayment = ${monthly_repayment}
-        WHERE id = ${id} AND user_id = ${req.session.user_id}
+        SET monthly_repayment = ${monthly_repayment}, interest_rate = ${interest_rate}
+        WHERE user_id = ${req.session.userId}
     `;
 
     connection.query(query, (err, results) => {

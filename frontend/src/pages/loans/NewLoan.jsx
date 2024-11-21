@@ -9,7 +9,6 @@ export default function NewLoan({ onLoanCreated }) {
         bank: "",
         loanAmount: "",
         loanTerm: "",
-        interestMethod: "",
         interestRate: "",
         monthlyRepayment: "",
         firstPayment: "",
