@@ -14,8 +14,9 @@ export default function UpcomingPayment({ loan }) {
     return (
         <tr>
             <td>{loan.name}</td>
-            <td>{day}</td>
+            <td>{loan.balance}</td>
             <td>{loan.monthly_repayment}</td>
+            <td>{day}</td>
         </tr>
     );
 }

@@ -52,6 +52,7 @@ export default function Loans() {
                 </Modal>
             </div>
             <LoansList loans={loans}></LoansList>
+
             <h2 className="h2">Upcoming payments</h2>
             <table>
                 <thead>
@@ -59,6 +60,7 @@ export default function Loans() {
                         <th>Name</th>
                         <th>Balance</th>
                         <th>Amount</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
 
