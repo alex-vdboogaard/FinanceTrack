@@ -26,7 +26,11 @@ export default function NewFolder() {
             >
                 +
             </Button>
-            <Modal isOpen={modalOpen} toggleSidebar={toggleModal}>
+            <Modal
+                isOpen={modalOpen}
+                toggleSidebar={toggleModal}
+                key={"folder"}
+            >
                 <h2 className="h2">New folder</h2>
                 <form>
                     <div className="input-wrapper">

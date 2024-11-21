@@ -1,6 +1,6 @@
 import Modal from "../../components/modal/Modal";
-import Button from "../../components/button/Button";
 import { useState, useRef } from "react";
+import Button from "../../components/button/Button";
 
 export default function UploadStatement() {
     const [modalOpen, setModalOpen] = useState(false);
@@ -16,21 +16,48 @@ export default function UploadStatement() {
             >
                 + Upload
             </Button>
-            <Modal isOpen={modalOpen} toggleSidebar={toggleModal}>
+            <Modal
+                isOpen={modalOpen}
+                toggleSidebar={toggleModal}
+                type={"center"}
+            >
                 <form
                     action="http://localhost:3001/statements"
                     method="POST"
                     encType="multipart/form-data"
                 >
-                    <input type="file" name="pdf" ref={fileInputRef} />
-                    <div className="input-wrapper">
+                    <input
+                        className="normal-input"
+                        type="file"
+                        name="pdf"
+                        ref={fileInputRef}
+                    />
+                    <div
+                        style={{ marginTop: "30px" }}
+                        className="input-wrapper"
+                    >
                         <label htmlFor="folder">Folder</label>
-                        <select name="folder" id="folder"></select>
+                        <select
+                            name="folder"
+                            id="folder"
+                            className="normal-input"
+                        >
+                            Folder
+                            <option style={{ padding: "10px" }} value="">
+                                Folder 1
+                            </option>
+                        </select>
                     </div>
-                    <button type="submit">Upload</button>
-                    <button type="button" onClick={toggleModal}>
+                    <Button
+                        className="secondary-btn"
+                        type="button"
+                        onClick={toggleModal}
+                    >
                         Cancel
-                    </button>
+                    </Button>
+                    <Button className="primary-btn" type="submit">
+                        Upload
+                    </Button>
                 </form>
             </Modal>
         </>

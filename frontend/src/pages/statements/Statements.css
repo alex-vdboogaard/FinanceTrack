@@ -70,3 +70,20 @@
     margin-right: 10px;
     margin-bottom: 2px;
 }
+
+input,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+}
+
+select,
+option {
+    cursor: pointer;
+}
