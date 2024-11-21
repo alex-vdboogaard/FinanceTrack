@@ -128,19 +128,13 @@ router.put("/", (req, res) => {
 });
 
 router.delete("/", (req, res) => {
-    const { id, userId } = req.body;
+    const { id } = req.body;
     if (!id) {
         return res.status(400).json({ message: "loan ID is required" });
     }
 
-    if (req.userId !== userId) {
-        return res
-            .status(403)
-            .json({ message: "You may not delete this loan" });
-    }
-
     const query = `
-        DELETE FROM loan WHERE id = ${id}
+        DELETE FROM loan WHERE id = ${id} AND user_id = ${req.session.userId}
     `;
 
     connection.query(query, (err, results) => {

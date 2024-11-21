@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchData } from "../../utility/fetchData";
 import Button from "../../components/button/Button";
 import pops from "pop-message";
 import { formatDate } from "../../utility/dates";
+import deleteIcon from "../../assets/delete.svg";
 
 export default function LoanPage() {
+    const navigate = useNavigate();
     const { id } = useParams("id");
     const [loan, setLoan] = useState({});
 
@@ -33,6 +35,20 @@ export default function LoanPage() {
             }
         );
     };
+
+    const handleDelete = async () => {
+        const confirm = await pops.confirmPop(
+            "Are you sure you want to delete this loan? It will delete all associated data"
+        );
+        if (confirm) {
+            fetchData("http://localhost:3001/loans", "DELETE", { id }).then(
+                (successData) => {
+                    navigate("/loans");
+                }
+            );
+        }
+    };
+
     useEffect(() => {
         fetchData(`http://localhost:3001/loans/${id}`).then((data) => {
             const {
@@ -134,6 +150,9 @@ export default function LoanPage() {
                         disabled
                     />
                 </div>
+                <Button onClick={handleDelete} className="secondary-btn">
+                    <img src={deleteIcon} alt="delete icon" />
+                </Button>
                 <Button className="primary-btn" type="submit">
                     Save changes
                 </Button>
