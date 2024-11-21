@@ -62,5 +62,9 @@ VALUES
 (100000, 50000, 11000, 2999, 1, 11, 2024),
 (100000, 50000, 11000, 2999, 1, 12, 2024);
 
+INSERT INTO Loan (name, balance, monthly_repayment, term, interest_rate, first_payment, category_id, user_id, bank_id) VALUES
+('Car Loan', 150000.00, 3000.00, 60, 7.5000, '2024-01-15 00:00:00', 3, 1, 2),
+('Home Renovation Loan', 50000.00, 2500.00, 24, 6.2000, '2024-02-01 00:00:00', 2, 1, 1);
+
 
 
