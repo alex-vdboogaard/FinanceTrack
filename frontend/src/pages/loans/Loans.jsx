@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Modal from "../../components/modal/Modal";
 import NewLoan from "./NewLoan";
+import LoansList from "./LoansList";
 import { fetchData } from "../../utility/fetchData";
 import "./Loans.css";
 export default function Loans() {
@@ -49,6 +50,7 @@ export default function Loans() {
                     ></NewLoan>
                 </Modal>
             </div>
+            <LoansList loans={loans}></LoansList>
         </main>
     );
 }
