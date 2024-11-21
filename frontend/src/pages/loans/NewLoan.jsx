@@ -74,9 +74,11 @@ export default function NewLoan({ onLoanCreated }) {
                             onChange={handleInputChange}
                         >
                             <option value="">Select a category</option>
-                            {categories.map((cat) => {
+                            {categories.map((cat, idx) => {
                                 return (
-                                    <option value={cat.id}>{cat.name}</option>
+                                    <option key={idx} value={cat.id}>
+                                        {cat.name}
+                                    </option>
                                 );
                             })}
                         </select>
@@ -91,9 +93,11 @@ export default function NewLoan({ onLoanCreated }) {
                             onChange={handleInputChange}
                         >
                             <option value="">Select a bank</option>
-                            {banks.map((bank) => {
+                            {banks.map((bank, idx) => {
                                 return (
-                                    <option value={bank.id}>{bank.name}</option>
+                                    <option key={idx} value={bank.id}>
+                                        {bank.name}
+                                    </option>
                                 );
                             })}
                         </select>
