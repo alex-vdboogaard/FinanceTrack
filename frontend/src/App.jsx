@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 // Components
-import Sidebar from "./components/navigation/sidebar";
+import Sidebar from "./components/navigation/Sidebar";
 
 // Pages
 import Login from "./pages/utility/Login";
@@ -24,6 +24,7 @@ import NotFound from "./pages/utility/NotFound";
 import Statements from "./pages/statements/Statements";
 import CreateAccount from "./pages/utility/CreateAccount";
 import FolderPage from "./pages/statements/FolderPage";
+import Loans from "./pages/loans/Loans";
 
 function App() {
     return (
@@ -47,6 +48,7 @@ function AppContent() {
                 <Route path="/overview" element={<Home />} />
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/assets" element={<Assets />} />
+                <Route path="/loans" element={<Loans />} />
                 <Route path="/bank-accounts" element={<BankAccounts />} />
                 <Route path="/investments" element={<Investments />} />
                 <Route path="/savings" element={<Savings />} />

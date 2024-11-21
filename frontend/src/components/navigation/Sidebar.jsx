@@ -11,6 +11,7 @@ import investmentsIcon from "../../assets/investments.svg";
 import savingsIcon from "../../assets/savings.svg";
 import assetsIcon from "../../assets/assets.svg";
 import statementsIcon from "../../assets/statements.svg";
+import loansIcon from "../../assets/loans.svg";
 import logoutIcon from "../../assets/logout.svg";
 import arrowRightIcon from "../../assets/arrow-right.svg";
 import arrowLeftIcon from "../../assets/arrow-left.svg";
@@ -113,6 +114,16 @@ const Sidebar = () => {
                                 alt="assets-icon"
                             />
                             {!isCollapsed && <span>Assets</span>}
+                        </Link>
+                    </li>
+                    <li className={isActive("/loans") ? "active" : ""}>
+                        <Link to="/loans">
+                            <img
+                                className="icon"
+                                src={loansIcon}
+                                alt="loans-icon"
+                            />
+                            {!isCollapsed && <span>Loans</span>}
                         </Link>
                     </li>
                     <li className={isActive("/statements") ? "active" : ""}>
