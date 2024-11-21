@@ -3,6 +3,18 @@ import { Link, useLocation } from "react-router-dom";
 import { fetchData } from "../../utility/fetchData";
 import "./Sidebar.css";
 
+// Importing icons
+import homeIcon from "../../assets/home.svg";
+import budgetIcon from "../../assets/budget.svg";
+import accountsIcon from "../../assets/cards.svg";
+import investmentsIcon from "../../assets/investments.svg";
+import savingsIcon from "../../assets/savings.svg";
+import assetsIcon from "../../assets/assets.svg";
+import statementsIcon from "../../assets/statements.svg";
+import logoutIcon from "../../assets/logout.svg";
+import arrowRightIcon from "../../assets/arrow-right.svg";
+import arrowLeftIcon from "../../assets/arrow-left.svg";
+
 const Sidebar = () => {
     const location = useLocation();
     const currentPath = location.pathname; // Get current path from router
@@ -47,7 +59,7 @@ const Sidebar = () => {
                         <Link to="/overview">
                             <img
                                 className="icon"
-                                src="../src/assets/home.svg"
+                                src={homeIcon}
                                 alt="home-icon"
                             />
                             {!isCollapsed && <span>Home</span>}
@@ -57,7 +69,7 @@ const Sidebar = () => {
                         <Link to="/budget">
                             <img
                                 className="icon"
-                                src="../src/assets/budget.svg"
+                                src={budgetIcon}
                                 alt="budget-icon"
                             />
                             {!isCollapsed && <span>Budget</span>}
@@ -67,7 +79,7 @@ const Sidebar = () => {
                         <Link to="/bank-accounts">
                             <img
                                 className="icon"
-                                src="../src/assets/cards.svg"
+                                src={accountsIcon}
                                 alt="accounts-icon"
                             />
                             {!isCollapsed && <span>Accounts</span>}
@@ -77,7 +89,7 @@ const Sidebar = () => {
                         <Link to="/investments">
                             <img
                                 className="icon"
-                                src="../src/assets/investments.svg"
+                                src={investmentsIcon}
                                 alt="investments-icon"
                             />
                             {!isCollapsed && <span>Investments</span>}
@@ -87,7 +99,7 @@ const Sidebar = () => {
                         <Link to="/savings">
                             <img
                                 className="icon"
-                                src="../src/assets/savings.svg"
+                                src={savingsIcon}
                                 alt="savings-icon"
                             />
                             {!isCollapsed && <span>Savings</span>}
@@ -97,7 +109,7 @@ const Sidebar = () => {
                         <Link to="/assets">
                             <img
                                 className="icon"
-                                src="../src/assets/assets.svg"
+                                src={assetsIcon}
                                 alt="assets-icon"
                             />
                             {!isCollapsed && <span>Assets</span>}
@@ -107,7 +119,7 @@ const Sidebar = () => {
                         <Link to="/statements">
                             <img
                                 className="icon"
-                                src="../src/assets/statements.svg"
+                                src={statementsIcon}
                                 alt="statements-icon"
                             />
                             {!isCollapsed && <span>Statements</span>}
@@ -117,7 +129,7 @@ const Sidebar = () => {
                         <a>
                             <img
                                 className="icon"
-                                src="../src/assets/logout.svg"
+                                src={logoutIcon}
                                 alt="logout-icon"
                             />
                             {!isCollapsed && <span>Log out</span>}
@@ -126,15 +138,9 @@ const Sidebar = () => {
                 </ul>
                 <button className="toggle-btn" onClick={toggleSidebar}>
                     {isCollapsed ? (
-                        <img
-                            src="../src/assets/arrow-right.svg"
-                            alt="expand-icon"
-                        />
+                        <img src={arrowRightIcon} alt="expand-icon" />
                     ) : (
-                        <img
-                            src="../src/assets/arrow-left.svg"
-                            alt="collapse-icon"
-                        />
+                        <img src={arrowLeftIcon} alt="collapse-icon" />
                     )}
                 </button>
             </nav>

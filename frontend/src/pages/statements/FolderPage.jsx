@@ -5,6 +5,11 @@ import UploadStatement from "./uploadStatement.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
 import { useParams } from "react-router-dom";
+import closeIcon from "../../assets/close.svg";
+import deleteIcon from "../../assets/delete.svg";
+import fileIcon from "../../assets/file.svg";
+import folderIcon from "../../assets/folder.svg";
+import previewIcon from "../../assets/view.svg";
 
 export default function FolderPage() {
     const exampleFolder = {
@@ -89,31 +94,25 @@ export default function FolderPage() {
                 <tbody>
                     {folder.statements.map((statement) => (
                         <tr key={statement.id}>
-                            <td className="file-td">
-                                <img
-                                    src="../src/assets/folder.svg"
-                                    alt="file icon"
-                                />
-                                {statement.filename}
+                            <td>
+                                <div className="file-td">
+                                    <img src={fileIcon} alt="file icon" />
+                                    {statement.filename}
+                                </div>
                             </td>
+
                             <td>
                                 <button
                                     onClick={() =>
                                         handlePreview(statement.base64Pdf)
                                     }
                                 >
-                                    <img
-                                        src="../src/assets/folder.svg"
-                                        alt="preview"
-                                    />
+                                    <img src={previewIcon} alt="preview" />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(statement.id)}
                                 >
-                                    <img
-                                        src="../src/assets/folder.svg"
-                                        alt="delete icon"
-                                    />
+                                    <img src={deleteIcon} alt="delete icon" />
                                 </button>
                             </td>
                         </tr>
