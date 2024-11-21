@@ -32,7 +32,7 @@ export default function NewLoan({ onLoanCreated }) {
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
             <h2 className="h2">New Loan</h2>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", position: "relative" }}>
                 <div className="column">
                     <div className="input-wrapper">
                         <label htmlFor="name">Name</label>
@@ -128,10 +128,19 @@ export default function NewLoan({ onLoanCreated }) {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <Button className="primary-btn" onClick={handleSubmit}>
-                        Create
-                    </Button>
                 </div>
+                <Button
+                    styles={{
+                        position: "absolute",
+                        bottom: "20px",
+                        right: "20px",
+                        width: "48%",
+                    }}
+                    className="primary-btn"
+                    onClick={handleSubmit}
+                >
+                    Create
+                </Button>
             </div>
         </div>
     );

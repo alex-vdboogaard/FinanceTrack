@@ -3,12 +3,14 @@ import Button from "../../components/button/Button";
 import Modal from "../../components/modal/Modal";
 import NewLoan from "./NewLoan";
 import { fetchData } from "../../utility/fetchData";
+import "./Loans.css";
 export default function Loans() {
     const [loans, setLoans] = useState([]);
     const [newLoanOpen, setNewLoanOpen] = useState(false);
     const [rerender, setRerender] = useState(false);
 
     const handleRerender = () => {
+        setNewLoanOpen(false);
         setRerender((prev) => !prev);
     };
 
