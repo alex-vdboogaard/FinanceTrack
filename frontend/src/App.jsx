@@ -11,6 +11,7 @@ import {
 
 // Components
 import Sidebar from "./components/navigation/Sidebar";
+import CornerWidget from "./components/navigation/CornerWidget";
 
 // Pages
 import Login from "./pages/utility/Login";
@@ -59,6 +60,8 @@ function AppContent() {
                 {/* Catch not existent routes */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
+            {location.pathname !== "/login" &&
+                location.pathname !== "/create-account" && <CornerWidget />}
         </>
     );
 }

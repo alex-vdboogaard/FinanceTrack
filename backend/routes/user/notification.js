@@ -25,7 +25,7 @@ router.delete("/:id", (req, res) => {
     connection.query(query, (err, results) => {
         if (err) {
             res.status(500).json({
-                message: "Error deleting notification",
+                message: "Error deleting notification" + err.message,
             });
             return;
         }
