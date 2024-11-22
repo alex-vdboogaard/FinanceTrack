@@ -7,7 +7,7 @@ router.use(ValidateLoggedIn);
 
 // Get all tasks
 router.get("/", (req, res) => {
-    const query = "SELECT * FROM Tasks WHERE user_id = ?";
+    const query = "SELECT * FROM Task WHERE user_id = ?";
     connection.query(query, [req.session.userId], (err, tasks) => {
         if (err) {
             return res
@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
 // Get a specific task by ID
 router.get("/:id", (req, res) => {
-    const query = "SELECT * FROM Tasks WHERE id = ? AND user_id = ?";
+    const query = "SELECT * FROM Task WHERE id = ? AND user_id = ?";
     connection.query(
         query,
         [req.params.id, req.session.userId],
@@ -42,7 +42,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
     const { title, description, link } = req.body;
     const query =
-        "INSERT INTO Tasks (title, description, link, user_id) VALUES (?, ?, ?, ?)";
+        "INSERT INTO Task (title, description, link, user_id) VALUES (?, ?, ?, ?)";
     connection.query(
         query,
         [title, description, link, req.session.userId],
@@ -64,7 +64,7 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
     const { title, description, link } = req.body;
     const query = `
-        UPDATE Tasks 
+        UPDATE Task 
         SET title = ?, description = ?, link = ?
         WHERE id = ? AND user_id = ?`;
     connection.query(
@@ -88,7 +88,7 @@ router.put("/:id", (req, res) => {
 
 // Delete a task by ID
 router.delete("/:id", (req, res) => {
-    const query = "DELETE FROM Tasks WHERE id = ? AND user_id = ?";
+    const query = "DELETE FROM Task WHERE id = ? AND user_id = ?";
     connection.query(
         query,
         [req.params.id, req.session.userId],

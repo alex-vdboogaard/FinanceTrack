@@ -6,10 +6,12 @@ const router = express.Router();
 const notification = require("./notification");
 const credit_score = require("./credit_score");
 const task = require("./task");
+const reminder = require("./reminder");
 
 router.use("/notification", notification);
 router.use("/credit-score", credit_score);
 router.use("/task", task);
+router.use("/reminder", reminder);
 
 router.use(ValidateLoggedIn);
 
