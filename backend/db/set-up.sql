@@ -178,6 +178,49 @@ CREATE TABLE Loan (
     FOREIGN KEY (category_id) REFERENCES Loan_category(id),
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE 
 );
+
+-- Create Credit_Score Table
+CREATE TABLE Credit_Score (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    year INT NOT NULL,
+    month INT NOT NULL,
+    score INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
+-- Create Reminder Table 
+CREATE TABLE Reminder (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reminder_date DATETIME NOT NULL,
+    message TEXT
+);
+
+-- Create Task table
+CREATE TABLE Task (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    link VARCHAR(255),
+    user_id INT NOT NULL,
+    reminder_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE,
+	FOREIGN KEY (reminder_id) REFERENCES `Reminder`(id)
+);
+
+-- Create Notification Table
+CREATE TABLE Notification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    link VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
 VALUES 

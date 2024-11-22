@@ -1,0 +1,58 @@
+.notification-widget {
+    border: 1px solid #e6e7eb;
+    padding: 21px;
+    position: fixed;
+    top: 100px;
+    right: 37px;
+    background-color: white;
+    z-index: 1000;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+.close-icon {
+    position: absolute;
+    right: 15px;
+}
+
+.notifications-title {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 27px;
+    margin-bottom: 20px;
+    margin-right: 100px;
+}
+
+.notification {
+    display: flex;
+    align-items: start;
+    width: 100%;
+    position: relative;
+    border-top: 1px solid #e6e7eb;
+    padding: 30px 0px;
+}
+
+.delete-notification-icon {
+    position: absolute;
+    right: 0px;
+}
+.notification div {
+    padding: 0px 30px;
+}
+.notification-title {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 20px;
+}
+
+.notification-description {
+    color: #8b8b8b;
+    margin-top: 6px;
+    font-size: 19px;
+    max-width: 350px;
+    margin-bottom: 0px;
+}
+
+.blue-dot {
+    margin-top: 5px;
+}

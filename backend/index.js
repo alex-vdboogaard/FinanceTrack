@@ -17,6 +17,7 @@ const savings = require("./routes/savings/savings");
 const saving_goals = require("./routes/savings/saving-goals");
 const budget = require("./routes/budget/budget");
 const statements = require("./routes/statements");
+const user = require("./routes/user/user");
 
 const connection = require("./db/db");
 app.use(express.json());
@@ -48,13 +49,18 @@ app.use("/savings", savings);
 app.use("/savings/goal", saving_goals);
 app.use("/budget", budget);
 app.use("/statements", statements);
+app.use("/user", user);
+
 const saltRounds = 10;
 
 app.get("/logged-in", (req, res) => {
+    if (process.env.MODE === "DEVELOPMENT") {
+        return res.json({ loggedIn: true });
+    }
     if (req.session.loggedIn) {
-        res.json({ loggedIn: true });
+        return res.json({ loggedIn: true });
     } else {
-        res.json({ loggedIn: false });
+        return res.json({ loggedIn: false });
     }
 });
 app.post("/login", async (req, res) => {
