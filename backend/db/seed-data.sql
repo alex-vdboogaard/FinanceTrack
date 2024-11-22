@@ -66,5 +66,24 @@ INSERT INTO Loan (name, loan_amount, balance, monthly_repayment, term, interest_
 ('Car Loan', 150000.00, 100000.00, 3000.00, 60, 7.5000, '2024-01-15 00:00:00', 3, 1, 2),
 ('Home Renovation Loan', 100000.00, 50000.00, 2500.00, 24, 6.2000, '2024-02-01 00:00:00', 2, 1, 1);
 
+INSERT INTO Credit_Score (year, month, score, user_id) 
+VALUES 
+(2024, 1, 750, 1),
+(2024, 2, 770, 1),
+(2024, 3, 760, 1);
+
+INSERT INTO Reminder (reminder_date, message) 
+VALUES 
+('2024-12-01 09:00:00', 'Start preparing the financial report.'),
+('2024-12-05 14:00:00', 'Complete and submit the project assignment.'),
+('2024-12-10 18:00:00', 'Finalize the presentation for the client.');
+
+INSERT INTO Task (title, description, link, user_id, reminder_id) 
+VALUES 
+('Prepare Financial Report', 'Prepare the monthly financial report for submission.', NULL, 1, 1),
+('Submit Project Assignment', 'Submit the project assignment before the deadline.', 'https://submission-link.com', 1, 2),
+('Client Presentation', 'Prepare and deliver the client presentation.', 'https://presentation-link.com', 1, 3);
+
+
 
 
