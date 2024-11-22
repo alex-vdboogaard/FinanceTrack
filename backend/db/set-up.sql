@@ -187,7 +187,14 @@ CREATE TABLE Credit_Score (
     score INT NOT NULL,
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
+-- Create Reminder Table 
+CREATE TABLE Reminder (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reminder_date DATETIME NOT NULL,
+    message TEXT
 );
 
 -- Create Task table
@@ -197,18 +204,13 @@ CREATE TABLE Task (
     description TEXT,
     link VARCHAR(255),
     user_id INT NOT NULL,
+    reminder_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE,
+	FOREIGN KEY (reminder_id) REFERENCES `Reminder`(id)
 );
 
--- Create Reminder Table 
-CREATE TABLE Reminders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    task_id INT NOT NULL,
-    reminder_date DATETIME NOT NULL,
-    message TEXT,
-    FOREIGN KEY (task_id) REFERENCES Task(id) ON DELETE CASCADE
-);
+
 
 
 
