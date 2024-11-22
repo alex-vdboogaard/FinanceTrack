@@ -84,6 +84,12 @@ VALUES
 ('Submit Project Assignment', 'Submit the project assignment before the deadline.', 'https://submission-link.com', 1, 2),
 ('Client Presentation', 'Prepare and deliver the client presentation.', 'https://presentation-link.com', 1, 3);
 
+INSERT INTO Notification (link, title, description, user_id) 
+VALUES 
+('https://example.com/report', 'Monthly Financial Report', 'Your monthly financial report is ready.', 1),
+('https://example.com/assignment', 'Project Assignment Due', 'Reminder to submit your project assignment by the deadline.', 1),
+('https://example.com/presentation', 'Client Presentation Scheduled', 'The client presentation is scheduled for next week.', 1);
+
 
 
 

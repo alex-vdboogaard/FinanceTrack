@@ -210,9 +210,16 @@ CREATE TABLE Task (
 	FOREIGN KEY (reminder_id) REFERENCES `Reminder`(id)
 );
 
-
-
-
+-- Create Notification Table
+CREATE TABLE Notification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    link VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
 
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
