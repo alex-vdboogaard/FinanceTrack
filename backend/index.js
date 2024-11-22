@@ -54,10 +54,13 @@ app.use("/user", user);
 const saltRounds = 10;
 
 app.get("/logged-in", (req, res) => {
+    if (process.env.MODE === "DEVELOPMENT") {
+        return res.json({ loggedIn: true });
+    }
     if (req.session.loggedIn) {
-        res.json({ loggedIn: true });
+        return res.json({ loggedIn: true });
     } else {
-        res.json({ loggedIn: false });
+        return res.json({ loggedIn: false });
     }
 });
 app.post("/login", async (req, res) => {
