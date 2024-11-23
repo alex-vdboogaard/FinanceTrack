@@ -1,6 +1,7 @@
 import closeIcon from "../../../assets/close.svg";
 import Notification from "./Notification";
 import "./Notifications.css";
+import { useEffect } from "react";
 
 export default function NotificationWidget({
     showNotificationWidget,
@@ -11,6 +12,24 @@ export default function NotificationWidget({
     const rerenderNotifications = (id) => {
         rerender();
     };
+
+    useEffect(() => {
+        const handleEscapeKey = (event) => {
+            if (event.key === "Escape") {
+                closeNotificationWidget();
+            }
+        };
+
+        // Add event listener when the component mounts
+        if (showNotificationWidget) {
+            document.addEventListener("keydown", handleEscapeKey);
+        }
+
+        // Cleanup event listener when the component unmounts or widget is hidden
+        return () => {
+            document.removeEventListener("keydown", handleEscapeKey);
+        };
+    }, [showNotificationWidget, closeNotificationWidget]);
 
     return (
         showNotificationWidget && (
