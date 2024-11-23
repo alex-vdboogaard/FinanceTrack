@@ -1,4 +1,3 @@
-import { useState } from "react";
 import closeIcon from "../../../assets/close.svg";
 import Notification from "./Notification";
 import "./Notifications.css";
@@ -26,16 +25,17 @@ export default function NotificationWidget({
                 </button>
                 <h3 className="notifications-title">Notifications</h3>
 
-                {notifications &&
-                    notifications.map((not) => {
-                        return (
-                            <Notification
-                                rerender={rerenderNotifications}
-                                key={not.id}
-                                notification={not}
-                            />
-                        );
-                    })}
+                {notifications && notifications.length > 0 ? (
+                    notifications.map((not) => (
+                        <Notification
+                            rerender={rerenderNotifications}
+                            key={not.id}
+                            notification={not}
+                        />
+                    ))
+                ) : (
+                    <p>No one wants you 🙏🙏</p>
+                )}
             </div>
         )
     );
