@@ -12,6 +12,7 @@ export default function LoanPage() {
     const [loan, setLoan] = useState({});
 
     const [formData, setFormData] = useState({
+        id: 0,
         name: "",
         bank: "",
         loan_amount: 0,
@@ -52,6 +53,7 @@ export default function LoanPage() {
     useEffect(() => {
         fetchData(`http://localhost:3001/loans/${id}`).then((data) => {
             const {
+                id,
                 name,
                 bank,
                 loan_amount,
@@ -62,6 +64,7 @@ export default function LoanPage() {
                 first_payment,
             } = data.loan;
             setFormData({
+                id,
                 name,
                 bank,
                 loan_amount,
@@ -76,7 +79,15 @@ export default function LoanPage() {
 
     return (
         <main>
-            <h1>{formData.name}</h1>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <Button
+                    type="back"
+                    onClick={() => {
+                        navigate("/loans");
+                    }}
+                ></Button>
+                <h1>{formData.name}</h1>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="input-wrapper">
                     <label htmlFor="bank">Bank</label>

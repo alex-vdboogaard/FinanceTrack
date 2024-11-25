@@ -4,14 +4,18 @@ import { useState } from "react";
 import { fetchData } from "../../utility/fetchData";
 import pops from "pop-message";
 
-export default function NewFolder() {
+export default function NewFolder({ parentFolderId }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [name, setName] = useState("");
     const toggleModal = () => setModalOpen((prev) => !prev);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchData("localhost:3001/statements/folder", "POST", name).then(
+        const formData = {
+            name: name,
+            parentFolderId: parentFolderId,
+        };
+        fetchData("localhost:3001/statements/folder", "POST", formData).then(
             (successData) => {
                 toggleModal();
                 pops.simplePop("success", successData);
@@ -45,6 +49,13 @@ export default function NewFolder() {
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
+                    <input
+                        type="text"
+                        hidden
+                        name="parentFolderId"
+                        id="parentFolderId"
+                        value={parentFolderId}
+                    />
                     <Button
                         className="primary-btn"
                         type="submit"

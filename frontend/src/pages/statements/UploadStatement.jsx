@@ -34,22 +34,7 @@ export default function UploadStatement() {
                         required
                         ref={fileInputRef}
                     />
-                    <div
-                        style={{ marginTop: "30px" }}
-                        className="input-wrapper"
-                    >
-                        <label htmlFor="folder">Folder</label>
-                        <select
-                            name="folder"
-                            id="folder"
-                            className="normal-input"
-                        >
-                            Folder
-                            <option style={{ padding: "10px" }} value="">
-                                Folder 1
-                            </option>
-                        </select>
-                    </div>
+
                     <Button
                         className="secondary-btn"
                         type="button"

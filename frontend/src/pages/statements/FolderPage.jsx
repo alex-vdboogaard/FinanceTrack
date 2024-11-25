@@ -5,15 +5,16 @@ import UploadStatement from "./uploadStatement.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
 import { useParams } from "react-router-dom";
-import closeIcon from "../../assets/close.svg";
 import deleteIcon from "../../assets/delete.svg";
 import fileIcon from "../../assets/file.svg";
-import folderIcon from "../../assets/folder.svg";
 import previewIcon from "../../assets/view.svg";
+import Button from "../../components/button/Button.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function FolderPage() {
     const exampleFolder = {
         name: "2024 statements",
+        parentFolderId: null,
         folders: [],
         statements: [
             {
@@ -31,6 +32,7 @@ export default function FolderPage() {
         ],
     };
 
+    const navigate = useNavigate();
     const { id } = useParams();
     const [folder, setFolder] = useState(exampleFolder);
 
@@ -70,11 +72,25 @@ export default function FolderPage() {
 
     return (
         <main>
-            <h1>{folder.name}</h1>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <Button
+                    type="back"
+                    onClick={() => {
+                        if (!exampleFolder.parentFolderId) {
+                            navigate("/statements");
+                        } else {
+                            navigate(
+                                `/statements/folder/${exampleFolder.parentFolderId}`
+                            );
+                        }
+                    }}
+                ></Button>
+                <h1>{folder.name}</h1>
+            </div>
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Folders</h2>
-                <NewFolder></NewFolder>
+                <NewFolder parentFolderId={id}></NewFolder>
             </div>
 
             <Folders folders={folder.folders}></Folders>
