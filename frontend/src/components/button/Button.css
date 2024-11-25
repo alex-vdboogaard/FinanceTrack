@@ -33,3 +33,8 @@
     color: grey;
     cursor: not-allowed;
 }
+
+.back {
+    margin-right: 15px;
+    margin-top: 3px;
+}

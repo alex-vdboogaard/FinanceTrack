@@ -1,5 +1,6 @@
 import React from "react";
 import "./Button.css"; // For styling
+import bubbleArrow from "../../assets/bubble-arrow.svg";
 
 const Button = ({
     type = "button",
@@ -9,7 +10,11 @@ const Button = ({
     disabled = false,
     styles = {},
 }) => {
-    return (
+    return type === "back" ? (
+        <button className="back" onClick={onClick}>
+            <img src={bubbleArrow} alt="back icon" />
+        </button>
+    ) : (
         <button
             type={type}
             onClick={onClick}
