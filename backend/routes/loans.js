@@ -105,13 +105,13 @@ router.post("/", (req, res) => {
 });
 
 router.put("/", (req, res) => {
-    let { name, monthly_repayment, interest_rate } = req.body;
+    let { id, name, monthly_repayment, interest_rate } = req.body;
     name = name.replace(/'/g, '"');
 
     const query = `
         UPDATE loan
         SET monthly_repayment = ${monthly_repayment}, interest_rate = ${interest_rate}
-        WHERE user_id = ${req.session.userId}
+        WHERE user_id = ${req.session.userId} AND id = ${id}
     `;
 
     connection.query(query, (err, results) => {
