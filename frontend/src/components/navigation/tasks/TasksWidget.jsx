@@ -2,6 +2,8 @@ import closeIcon from "../../../assets/close.svg";
 import Task from "./Task";
 import "./Tasks.css";
 import { useEffect } from "react";
+import Button from "../../button/Button";
+import { fetchData } from "../../../utility/fetchData";
 
 export default function TasksWidget({
     showTasksWidget,
@@ -31,6 +33,17 @@ export default function TasksWidget({
         };
     }, [showTasksWidget, closeTasksWidget]);
 
+    const newTask = () => {
+        const newTask = {
+            title: "new task",
+            description: "",
+        };
+        fetchData("http://localhost:3001/user/task", "POST", newTask).then(
+            (successData) => {
+                rerender();
+            }
+        );
+    };
     return (
         showTasksWidget && (
             <div className="task-widget">
@@ -42,7 +55,17 @@ export default function TasksWidget({
                 >
                     <img src={closeIcon} alt="close icon" />
                 </button>
-                <h3 className="tasks-title">Tasks</h3>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <h3 className="tasks-title">Tasks</h3>
+                    <Button
+                        className="secondary-btn"
+                        onClick={() => {
+                            newTask();
+                        }}
+                    >
+                        +
+                    </Button>
+                </div>
 
                 {tasks && tasks.length > 0 ? (
                     tasks.map((task) => (

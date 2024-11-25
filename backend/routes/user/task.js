@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
 // Create a new task
 router.post("/", (req, res) => {
-    const { title, description, link } = req.body;
+    const { title, description, link = "" } = req.body;
     const query =
         "INSERT INTO Task (title, description, link, user_id) VALUES (?, ?, ?, ?)";
     connection.query(
@@ -66,29 +66,23 @@ router.put("/done", (req, res) => {
 });
 
 // Update a task by ID
-router.put("/:id", (req, res) => {
-    const { title, description, link = "" } = req.body;
+router.put("/", (req, res) => {
+    const { id, title } = req.body;
     const query = `
         UPDATE Task 
-        SET title = ?, description = ?, link = ?
+        SET title = ?
         WHERE id = ? AND user_id = ?`;
-    connection.query(
-        query,
-        [title, description, link, req.params.id, req.session.userId],
-        (err, results) => {
-            if (err) {
-                return res
-                    .status(500)
-                    .json({ message: "Error updating the task" });
-            }
-            if (results.affectedRows === 0) {
-                return res
-                    .status(404)
-                    .json({ message: "Task not found or no changes made" });
-            }
-            res.status(200).json({ message: "Task updated" });
+    connection.query(query, [title, id, req.session.userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Error updating the task" });
         }
-    );
+        if (results.affectedRows === 0) {
+            return res
+                .status(404)
+                .json({ message: "Task not found or no changes made" });
+        }
+        res.status(200).json({ message: "Task updated" });
+    });
 });
 
 // Delete a task by ID

@@ -4,7 +4,7 @@ import taskIcon from "../../../assets/task.svg";
 import { useState } from "react";
 export default function Task({ task, rerender }) {
     const [done, setDone] = useState(task.done);
-
+    const [taskText, setTaskText] = useState(task.title);
     const handleDone = () => {
         const updatedDone = Math.abs(done - 1); // Calculate the new value
         setDone(updatedDone); // Update the state
@@ -27,6 +27,22 @@ export default function Task({ task, rerender }) {
         );
     };
 
+    const handleType = (e) => {
+        setTaskText(e);
+    };
+
+    const handleSave = () => {
+        const formData = {
+            id: task.id,
+            title: taskText,
+        };
+        fetchData("http://localhost:3001/user/task", "PUT", formData).then(
+            (successData) => {
+                rerender();
+            }
+        );
+    };
+
     return (
         <div className="task">
             <button
@@ -37,9 +53,17 @@ export default function Task({ task, rerender }) {
             >
                 <img src={taskIcon} alt="complete task icon" />
             </button>
-            <p className={`task-description ${done === 1 ? "done" : ""}`}>
-                {task.title}
-            </p>
+
+            <input
+                value={taskText}
+                onChange={(e) => {
+                    handleType(e.target.value);
+                }}
+                onBlur={() => {
+                    handleSave();
+                }}
+                className={`task-description ${done === 1 ? "done" : ""}`}
+            ></input>
 
             <button
                 className="delete-task-icon"
