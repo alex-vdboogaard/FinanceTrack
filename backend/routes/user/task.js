@@ -18,26 +18,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// Get a specific task by ID
-router.get("/:id", (req, res) => {
-    const query = "SELECT * FROM Task WHERE id = ? AND user_id = ?";
-    connection.query(
-        query,
-        [req.params.id, req.session.userId],
-        (err, task) => {
-            if (err) {
-                return res
-                    .status(500)
-                    .json({ message: "Error reading from the database" });
-            }
-            if (task.length === 0) {
-                return res.status(404).json({ message: "Task not found" });
-            }
-            res.status(200).json({ task: task[0] });
-        }
-    );
-});
-
 // Create a new task
 router.post("/", (req, res) => {
     const { title, description, link } = req.body;
@@ -62,10 +42,10 @@ router.post("/", (req, res) => {
 
 // Update a task by ID
 router.put("/:id", (req, res) => {
-    const { title, description, link } = req.body;
+    const { title, description, link = "", done = false } = req.body;
     const query = `
         UPDATE Task 
-        SET title = ?, description = ?, link = ?
+        SET title = ?, description = ?, link = ?, done = ?
         WHERE id = ? AND user_id = ?`;
     connection.query(
         query,

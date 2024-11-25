@@ -201,6 +201,7 @@ CREATE TABLE Reminder (
 CREATE TABLE Task (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
+    done BOOLEAN DEFAULT FALSE,
     description TEXT,
     link VARCHAR(255),
     user_id INT NOT NULL,
