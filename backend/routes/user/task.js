@@ -41,11 +41,36 @@ router.post("/", (req, res) => {
 });
 
 // Update a task by ID
-router.put("/:id", (req, res) => {
-    const { title, description, link = "", done = false } = req.body;
+router.put("/done", (req, res) => {
+    let { id, done } = req.body;
+    if (done === 0) {
+        done = false;
+    } else {
+        done = true;
+    }
     const query = `
         UPDATE Task 
-        SET title = ?, description = ?, link = ?, done = ?
+        SET done = ?
+        WHERE id = ? AND user_id = ?`;
+    connection.query(query, [done, id, req.session.userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Error updating the task" });
+        }
+        if (results.affectedRows === 0) {
+            return res
+                .status(404)
+                .json({ message: "Task not found or no changes made" });
+        }
+        res.status(200).json({ message: "Task updated" });
+    });
+});
+
+// Update a task by ID
+router.put("/:id", (req, res) => {
+    const { title, description, link = "" } = req.body;
+    const query = `
+        UPDATE Task 
+        SET title = ?, description = ?, link = ?
         WHERE id = ? AND user_id = ?`;
     connection.query(
         query,

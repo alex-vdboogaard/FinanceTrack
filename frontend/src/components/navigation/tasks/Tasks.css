@@ -11,6 +11,10 @@
     width: 400px;
 }
 
+.done {
+    text-decoration: line-through;
+}
+
 .close-icon {
     position: absolute;
     right: 15px;
@@ -23,6 +27,9 @@
     margin-bottom: 20px;
     margin-right: 100px;
     margin-left: 0px;
+    width: 200px;
+    align-self: flex-start;
+    text-align: left;
 }
 
 .task {
@@ -45,11 +52,11 @@
 }
 
 .task-description {
-    color: #8b8b8b;
-    margin-top: 6px;
-    font-size: 19px;
-    max-width: 350px;
-    margin-bottom: 0px;
+    width: 250px;
+    text-align: left;
+    font-size: 20px;
+    justify-self: flex-start;
+    margin-left: -50px;
 }
 
 .task-icon {
