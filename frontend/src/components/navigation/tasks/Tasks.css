@@ -1,4 +1,4 @@
-.notification-widget {
+.task-widget {
     border: 1px solid #e6e7eb;
     padding: 21px;
     position: fixed;
@@ -16,37 +16,35 @@
     right: 15px;
 }
 
-.notifications-title {
+.tasks-title {
     text-decoration: none;
     font-weight: 500;
     font-size: 27px;
     margin-bottom: 20px;
     margin-right: 100px;
+    margin-left: 0px;
 }
 
-.notification {
+.task {
     display: flex;
-    align-items: start;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     position: relative;
     border-top: 1px solid #e6e7eb;
     padding: 30px 0px;
 }
 
-.delete-notification-icon {
-    position: absolute;
-    right: 0px;
-}
-.notification div {
+.task div {
     padding: 0px 30px;
 }
-.notification-title {
+.task-title {
     margin-top: 0px;
     margin-bottom: 0px;
     font-size: 20px;
 }
 
-.notification-description {
+.task-description {
     color: #8b8b8b;
     margin-top: 6px;
     font-size: 19px;
@@ -54,6 +52,6 @@
     margin-bottom: 0px;
 }
 
-.blue-dot {
-    margin-top: 5px;
+.task-icon {
+    margin-right: 0px;
 }
