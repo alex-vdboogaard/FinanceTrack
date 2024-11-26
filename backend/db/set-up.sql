@@ -17,6 +17,17 @@ CREATE TABLE `User` (
     date_joined DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create Credit_Score_History Table
+CREATE TABLE `Credit_Score_History` (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    year YEAR NOT NULL,
+    MONTH INT NOT NULL,
+    score INT NOT NULL,
+    notes VARCHAR(40),
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
 -- Create Asset_Type Table
 CREATE TABLE Asset_Type (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -29,8 +40,8 @@ CREATE TABLE Asset (
     name VARCHAR(30) NOT NULL,
     boughtFor DECIMAL(10,2) NOT NULL,
     currentValue DECIMAL(10,2) NOT NULL,
-    asset_type_id INT, 
-    user_id INT,
+    asset_type_id INT NOT NULL, 
+    user_id INT NOT NULL,
     FOREIGN KEY (asset_type_id) REFERENCES Asset_Type(id),
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );

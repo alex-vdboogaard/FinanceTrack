@@ -86,10 +86,24 @@ VALUES
 
 INSERT INTO Notification (link, title, description, user_id) 
 VALUES 
-('https://example.com/report', 'Monthly Financial Report', 'Your monthly financial report is ready.', 1),
-('https://example.com/assignment', 'Project Assignment Due', 'Reminder to submit your project assignment by the deadline.', 1),
-('https://example.com/presentation', 'Client Presentation Scheduled', 'The client presentation is scheduled for next week.', 1);
+('http://localhost:5173/loan/1', 'Monthly Financial Report', 'Your monthly financial report is ready.', 1),
+('http://localhost:5173/loan/1', 'Project Assignment Due', 'Reminder to submit your project assignment by the deadline.', 1),
+('http://localhost:5173/loan/1', 'Client Presentation Scheduled', 'The client presentation is scheduled for next week.', 1);
 
+INSERT INTO `Credit_Score_History` (`user_id`, `year`, `month`, `score`, `notes`) 
+VALUES
+(1, 2024, 1, 720, 'Credit utilisation over 75%'),
+(1, 2024, 2, 725, 'No missed payments reported this month'),
+(1, 2024, 3, 715, 'Missed credit payment to Woolies'),
+(1, 2024, 4, 730, 'Reduced credit utilisation to 50%'),
+(1, 2024, 5, 735, 'Cleared outstanding personal loan'),
+(1, 2024, 6, 740, 'No hard credit checks this month'),
+(1, 2024, 7, 738, 'Credit utilisation increased to 65%'),
+(1, 2024, 8, 742, 'Consistently paid all bills on time'),
+(1, 2024, 9, 735, 'Missed credit payment to Edgars'),
+(1, 2024, 10, 737, 'Closed an old credit card account'),
+(1, 2024, 11, 740, 'Reduced overall debt by 20%'),
+(1, 2024, 12, 745, 'Excellent payment history maintained');
 
 
 
