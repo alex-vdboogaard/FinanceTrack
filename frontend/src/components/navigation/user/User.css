@@ -1,0 +1,21 @@
+.user-widget {
+    border: 1px solid #e6e7eb;
+    padding: 21px;
+    position: fixed;
+    top: 100px;
+    right: 37px;
+    background-color: white;
+    z-index: 1000;
+    border-radius: 10px;
+    overflow-y: auto;
+    width: 400px;
+}
+
+.close-icon {
+    position: absolute;
+    right: 15px;
+}
+
+.user-icon {
+    margin-right: 0px;
+}

@@ -8,13 +8,19 @@ import { fetchData } from "../../utility/fetchData";
 import pops from "pop-message";
 import NotificationWidget from "./notifications/NotificationsWidget";
 import TasksWidget from "./tasks/TasksWidget";
+import UserWidget from "./user/UserWidget";
 
 export default function CornerWidget() {
     const [bellIcon, setBellIcon] = useState(false);
+
     const [notifications, setNotifications] = useState([]);
     const [tasks, setTasks] = useState([]);
+    const [userData, setUserData] = useState({});
+
     const [showNotificationWidget, setShowNotificationWidget] = useState(false);
     const [showTasksWidget, setShowTasksWidget] = useState(false);
+    const [showUserWidget, setShowUserWidget] = useState(false);
+
     const [rerender, setRerender] = useState(false);
 
     const showWidget = (widget) => {
@@ -22,16 +28,23 @@ export default function CornerWidget() {
             case "none":
                 setShowNotificationWidget(false);
                 setShowTasksWidget(false);
+                setShowUserWidget(false);
                 break;
             case "tasks":
                 setShowNotificationWidget(false);
                 setShowTasksWidget(true);
+                setShowUserWidget(false);
                 break;
             case "notifications":
                 setShowNotificationWidget(true);
                 setShowTasksWidget(false);
+                setShowUserWidget(false);
                 break;
-
+            case "user":
+                setShowNotificationWidget(false);
+                setShowTasksWidget(false);
+                setShowUserWidget(true);
+                break;
             default:
                 break;
         }
@@ -53,6 +66,9 @@ export default function CornerWidget() {
         fetchData("http://localhost:3001/user/task").then((data) => {
             setTasks(data.tasks);
         });
+        fetchData("http://localhost:3001/user/credit-score").then((data) => {
+            setUserData(data);
+        });
     }, [rerender]);
     return (
         <div className="corner-widget">
@@ -68,17 +84,15 @@ export default function CornerWidget() {
             >
                 <img
                     src={bellIcon === false ? normalBellIcon : fullBellIcon}
-                    alt="user icon"
+                    alt="notifications icon"
                 />
             </button>
-            <NotificationWidget
-                notifications={notifications}
-                showNotificationWidget={showNotificationWidget}
-                closeNotificationWidget={() => {
-                    showWidget("none");
-                }}
-                rerender={handleRerender}
-            ></NotificationWidget>
+            <button
+                className="corner-widget-button"
+                onClick={() => showWidget("user")}
+            >
+                <img src={userIcon} alt="user icon" />
+            </button>
             <TasksWidget
                 showTasksWidget={showTasksWidget}
                 closeTasksWidget={() => {
@@ -87,13 +101,22 @@ export default function CornerWidget() {
                 tasks={tasks}
                 rerender={handleRerender}
             ></TasksWidget>
-            <button
-                onClick={() => {
-                    pops.simplePop("error", "Coming soon!");
+            <NotificationWidget
+                notifications={notifications}
+                showNotificationWidget={showNotificationWidget}
+                closeNotificationWidget={() => {
+                    showWidget("none");
                 }}
-            >
-                <img src={userIcon} alt="user icon" />
-            </button>
+                rerender={handleRerender}
+            ></NotificationWidget>
+            <UserWidget
+                showUserWidget={showUserWidget}
+                closeUserWidget={() => {
+                    showWidget("none");
+                }}
+                data={userData}
+                rerender={handleRerender}
+            ></UserWidget>
         </div>
     );
 }
