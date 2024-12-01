@@ -1,6 +1,8 @@
-import { sumFileSize } from "../../utility/fileSize";
+import { sumFileSize } from "../../../utility/fileSize";
 import { useNavigate } from "react-router-dom";
-import folderIcon from "../../assets/folder.svg";
+import folderIcon from "../../../assets/folder.svg";
+import ToolTip from "../../../components/tooltip/ToolTip";
+import optionsIcon from "../../../assets/options.svg";
 
 export default function Folders({ folders = [] }) {
     const navigate = useNavigate();
@@ -14,13 +16,17 @@ export default function Folders({ folders = [] }) {
             style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px" }}
         >
             {folders.map((folder) => (
-                <div
-                    className="folder"
-                    key={folder.id}
-                    onClick={() => openFolder(folder.id)}
-                >
+                <div className="folder" key={folder.id}>
+                    <ToolTip icon={optionsIcon}>
+                        <p>Burger!</p>
+                    </ToolTip>
                     <img src={folderIcon} alt="folder icon" />
-                    <h3 className="folder-heading">{folder.name}</h3>
+                    <h3
+                        onClick={() => openFolder(folder.id)}
+                        className="folder-heading"
+                    >
+                        {folder.name}
+                    </h3>
                     <p>
                         {folder.statements?.length || 0} files -{" "}
                         {folder.statements

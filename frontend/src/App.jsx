@@ -24,7 +24,7 @@ import Savings from "./pages/savings/Savings";
 import NotFound from "./pages/utility/NotFound";
 import Statements from "./pages/statements/Statements";
 import CreateAccount from "./pages/utility/CreateAccount";
-import FolderPage from "./pages/statements/FolderPage";
+import FolderPage from "./pages/statements/folders/FolderPage";
 import Loans from "./pages/loans/Loans";
 import LoanPage from "./pages/loans/LoanPage";
 

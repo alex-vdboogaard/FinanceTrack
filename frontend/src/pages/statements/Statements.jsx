@@ -4,8 +4,8 @@ import { fetchData } from "../../utility/fetchData";
 import pops from "../../../node_modules/pop-message/index.js";
 import "../../../node_modules/pop-message/pop.css";
 import UploadStatement from "./UploadStatement.jsx";
-import NewFolder from "./NewFolder.jsx";
-import Folders from "./Folders.jsx";
+import NewFolder from "./folders/NewFolder.jsx";
+import Folders from "./folders/Folders.jsx";
 import RecentFiles from "./RecentFiles.jsx";
 
 // import RecentFiles from "./RecentFiles.jsx";

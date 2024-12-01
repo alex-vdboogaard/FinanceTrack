@@ -10,7 +10,7 @@
     margin-bottom: 18px;
     min-width: 260px;
     max-width: 300px;
-    cursor: pointer;
+    position: relative;
 }
 
 .folder:hover {
@@ -24,6 +24,11 @@
 
 .folder-heading {
     text-decoration: none;
+    cursor: pointer;
+}
+
+.folder-heading:hover {
+    text-decoration: underline;
 }
 
 .recent-file {

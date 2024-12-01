@@ -1,7 +1,7 @@
-import Modal from "../../components/modal/Modal";
-import Button from "../../components/button/Button";
+import Modal from "../../../components/modal/Modal";
+import Button from "../../../components/button/Button";
 import { useState } from "react";
-import { fetchData } from "../../utility/fetchData";
+import { fetchData } from "../../../utility/fetchData";
 import pops from "pop-message";
 
 export default function NewFolder({ parentFolderId = null }) {

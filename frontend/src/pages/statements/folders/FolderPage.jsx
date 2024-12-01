@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "./Statements.css";
-import { fetchData } from "../../utility/fetchData.js";
-import UploadStatement from "./UploadStatement.jsx";
+import "../Statements.css";
+import { fetchData } from "../../../utility/fetchData.js";
+import UploadStatement from "../UploadStatement.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
 import { useParams } from "react-router-dom";
-import deleteIcon from "../../assets/delete.svg";
-import fileIcon from "../../assets/file.svg";
-import previewIcon from "../../assets/view.svg";
-import Button from "../../components/button/Button.jsx";
+import deleteIcon from "../../../assets/delete.svg";
+import fileIcon from "../../../assets/file.svg";
+import previewIcon from "../../../assets/view.svg";
+import Button from "../../../components/button/Button.jsx";
 import { useNavigate } from "react-router-dom";
 
 export default function FolderPage() {
