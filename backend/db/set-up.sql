@@ -176,6 +176,7 @@ CREATE TABLE Statement (
 	pdf_blob LONGBLOB,
     user_id INT NOT NULL,
     folder_id INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (folder_id) REFERENCES Folder(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );

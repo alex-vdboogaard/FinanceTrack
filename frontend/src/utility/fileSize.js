@@ -1,8 +1,20 @@
-export function getFileSizeFromBase64(base64String) {
-    const base64WithoutPrefix = base64String.split(",").pop() || base64String;
-    const padding = (base64WithoutPrefix.match(/=/g) || []).length;
-    const sizeInBytes = (base64WithoutPrefix.length * 3) / 4 - padding;
-    return Math.ceil(sizeInBytes / (1024 * 1024)); // Convert to MB
+export function getFileSizeFromBase64(base64Blob, unit = "MB") {
+    if (!(base64Blob instanceof Buffer)) {
+        throw new Error("Invalid input: base64Blob must be a Buffer");
+    }
+
+    const sizeInBytes = base64Blob.length;
+
+    switch (unit) {
+        case "bytes":
+            return sizeInBytes;
+        case "KB":
+            return sizeInBytes / 1024;
+        case "MB":
+            return sizeInBytes / (1024 * 1024);
+        default:
+            throw new Error('Invalid unit. Use "bytes", "KB", or "MB".');
+    }
 }
 
 export function sumFileSize(files) {

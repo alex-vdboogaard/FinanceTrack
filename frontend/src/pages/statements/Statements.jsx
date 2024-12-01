@@ -6,6 +6,7 @@ import "../../../node_modules/pop-message/pop.css";
 import UploadStatement from "./UploadStatement.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
+import RecentFiles from "./RecentFiles.jsx";
 
 // import RecentFiles from "./RecentFiles.jsx";
 // import Pagination from "../../components/pagination/Pagination.jsx";
@@ -13,6 +14,7 @@ import Folders from "./Folders.jsx";
 const Statements = () => {
     const [folders, setFolders] = useState([]);
     const [statements, setStatements] = useState([]);
+    const [recentFiles, setRecentFiles] = useState([]);
 
     // const [currentPage, setCurrentPage] = useState(1);
     // const [numPages, setNumPages] = useState(1);
@@ -25,25 +27,39 @@ const Statements = () => {
         fetchData(`http://localhost:3001/statements`).then((data) => {
             setStatements(data.statements);
             setFolders(data.folders);
+            setRecentFiles(data.recentFiles);
         });
     }, []);
 
     // Handle PDF preview
-    const handlePreview = (base64Pdf) => {
-        // Create a blob from the base64 string and generate a URL
-        const blob = new Blob(
-            [Uint8Array.from(atob(base64Pdf), (c) => c.charCodeAt(0))],
-            { type: "application/pdf" }
-        );
-        const url = URL.createObjectURL(blob);
+    const handlePreview = (pdfBuffer) => {
+        try {
+            // Convert the buffer array to a Uint8Array
+            const uint8Array = new Uint8Array(pdfBuffer.data);
 
-        // Open the PDF in a new tab
-        window.open(url, "_blank");
+            // Create a Blob from the Uint8Array with MIME type 'application/pdf'
+            const blob = new Blob([uint8Array], { type: "application/pdf" });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Open the PDF in a new tab
+            const newTab = window.open(url, "_blank");
+
+            // Revoke the object URL after the tab is opened
+            if (newTab) {
+                newTab.onload = () => {
+                    URL.revokeObjectURL(url); // Cleanup the URL when the new tab is loaded
+                };
+            }
+        } catch (error) {
+            console.error("Error opening PDF preview:", error);
+        }
     };
 
     const handleDelete = async (id) => {
         const confirm = await pops.confirmPop(
-            "Are you sure you want to delete?"
+            "Are you sure you want to delete this file?"
         );
         if (confirm) {
             fetchData(`http://localhost:3001/statements`, "DELETE", {
@@ -67,7 +83,7 @@ const Statements = () => {
 
             <Folders folders={folders}></Folders>
 
-            {/* <RecentFiles /> */}
+            <RecentFiles preview={handlePreview} statements={recentFiles} />
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">All files</h2>
@@ -98,7 +114,7 @@ const Statements = () => {
                                 <td>
                                     <button
                                         onClick={() =>
-                                            handlePreview(statement.base64Pdf)
+                                            handlePreview(statement.pdf_blob)
                                         }
                                     >
                                         <img

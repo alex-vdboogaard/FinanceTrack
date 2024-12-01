@@ -25,6 +25,40 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("pdf");
 
+// GET route to retrieve all top-level folders, statements and recent files
+router.get("/", (req, res) => {
+    const sqlFolders = `SELECT * FROM Folder WHERE user_id = ? AND parent_folder_id IS NULL`;
+    const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? AND folder_id IS NULL`;
+    const sqlRecentFiles = `SELECT * FROM STATEMENT WHERE user_id = ? ORDER BY created_at DESC LIMIT 6`;
+
+    connection.query(sqlFolders, [req.session.userId], (err, folderResults) => {
+        if (err) return res.status(500).json({ message: err.message });
+        connection.query(
+            sqlStatements,
+            [req.session.userId],
+            (err, statementResults) => {
+                if (err) return res.status(500).json({ message: err.message });
+                connection.query(
+                    sqlRecentFiles,
+                    [req.session.userId],
+                    (err, recentFilesResults) => {
+                        if (err)
+                            return res
+                                .status(500)
+                                .json({ message: err.message });
+                        const data = {};
+                        data.folders = folderResults;
+                        data.statements = statementResults;
+                        data.recentFiles = recentFilesResults;
+
+                        res.status(200).json(data);
+                    }
+                );
+            }
+        );
+    });
+});
+
 // GET route to retrieve all statements and subfolders in a folder
 router.get("/folder/:id", (req, res) => {
     const { id } = req.params;
@@ -112,30 +146,6 @@ router.get("/folder/:id", (req, res) => {
     );
 });
 
-// GET route to retrieve all top-level folders and statements without a folder
-router.get("/", (req, res) => {
-    const sqlFolders = `SELECT * FROM Folder WHERE user_id = ? AND parent_folder_id IS NULL`;
-    const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? AND folder_id IS NULL`;
-
-    // Execute both queries in parallel
-    connection.query(sqlFolders, [req.session.userId], (err, folderResults) => {
-        if (err) return res.status(500).json({ message: err.message });
-
-        connection.query(
-            sqlStatements,
-            [req.session.userId],
-            (err, statementResults) => {
-                if (err) return res.status(500).json({ message: err.message });
-                const data = {};
-                data.folders = folderResults;
-                data.statements = statementResults;
-
-                res.status(200).json(data);
-            }
-        );
-    });
-});
-
 // POST route to upload and save a new PDF
 router.post("/", upload, (req, res) => {
     if (!req.file) {
@@ -172,7 +182,7 @@ router.post("/", upload, (req, res) => {
                     return res.status(500).json({ message: err.message });
                 }
                 if (!parent_folder_id) {
-                    res.redirect(`http://localhost:5173/statments`);
+                    res.redirect(`http://localhost:5173/statements`);
                 } else {
                     res.redirect(
                         `http://localhost:5173/statements/folder/${parent_folder_id}`
