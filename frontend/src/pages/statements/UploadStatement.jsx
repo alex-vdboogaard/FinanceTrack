@@ -38,7 +38,7 @@ export default function UploadStatement({ folderId = null }) {
                         type="text"
                         hidden
                         name="parent_folder_id"
-                        value={folderId}
+                        defaultValue={folderId || ""} // Use defaultValue instead of value
                     />
                     <Button
                         className="secondary-btn"
