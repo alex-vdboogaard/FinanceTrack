@@ -25,27 +25,88 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("pdf");
 
-// GET route to retrieve all statements in a folder
+// GET route to retrieve all statements and subfolders in a folder
 router.get("/folder/:id", (req, res) => {
     const { id } = req.params;
 
-    const sql = `SELECT s.id, s.name, s.pdf_blob, f.name 
-            FROM Statement s INNER JOIN Folder f
-            ON s.folder_id = f.id
-            WHERE s.user_id = ? AND s.folder_id = ?
-            ORDER BY s.name`;
+    // Query to retrieve folder details and statements in the folder
+    const statementSql = `
+        SELECT 
+            s.id AS statement_id, 
+            s.name AS statement_name, 
+            s.pdf_blob, 
+            f.name AS folder_name, 
+            f.parent_folder_id 
+        FROM Folder f
+        LEFT JOIN Statement s ON s.folder_id = f.id
+        WHERE f.user_id = ? AND f.id = ?
+        ORDER BY s.name`;
 
-    connection.query(sql, [req.session.userId, id], (err, results) => {
-        if (err) return res.status(500).json({ message: err.message });
+    // Query to retrieve all subfolders of the current folder
+    const subfoldersSql = `
+        SELECT 
+            id, 
+            name 
+        FROM Folder 
+        WHERE user_id = ? AND parent_folder_id = ? 
+        ORDER BY name`;
 
-        const statements = results.map((file) => ({
-            id: file.id,
-            filename: file.name,
-            base64Pdf: file.pdf_blob.toString("base64"),
-        }));
+    // Execute both queries sequentially
+    connection.query(
+        statementSql,
+        [req.session.userId, id],
+        (err, statementResults) => {
+            if (err) {
+                return res.status(500).json({
+                    message: "An error occurred.",
+                    error: err.message,
+                });
+            }
 
-        res.status(200).json({ statements });
-    });
+            // If no folder is found, return 404
+            if (statementResults.length === 0) {
+                return res.status(404).json({
+                    message: "Folder not found or no statements available.",
+                });
+            }
+
+            const { folder_name, parent_folder_id } = statementResults[0];
+
+            const statements = statementResults
+                .filter((row) => row.statement_id) // Only include rows with valid statements
+                .map((row) => ({
+                    id: row.statement_id,
+                    name: row.statement_name,
+                    base64Pdf: row.pdf_blob
+                        ? row.pdf_blob.toString("base64")
+                        : null,
+                }));
+
+            // Fetch subfolders
+            connection.query(
+                subfoldersSql,
+                [req.session.userId, id],
+                (err, folderResults) => {
+                    if (err) {
+                        return res.status(500).json({
+                            message: "An error occurred.",
+                            error: err.message,
+                        });
+                    }
+
+                    // Build and send the response
+                    const data = {
+                        folder_name,
+                        parent_folder_id: parent_folder_id || null,
+                        statements,
+                        folders: folderResults,
+                    };
+
+                    res.status(200).json(data);
+                }
+            );
+        }
+    );
 });
 
 // GET route to retrieve all top-level folders and statements without a folder
@@ -118,6 +179,31 @@ router.delete("/", (req, res) => {
         }
 
         res.status(200).json({ message: "PDF deleted successfully" });
+    });
+});
+
+// POST ROUTE for new folder
+router.post("/folder", (req, res) => {
+    const { parentFolderId = null, name } = req.body;
+    if (!name) {
+        return res.status(400).json({ message: "Please name your new folder" });
+    }
+
+    const query = `
+            INSERT INTO Folder (name, parent_folder_id, user_id) 
+            VALUES (?, ?, ?)
+        `;
+
+    const values = [name, parentFolderId, req.session.userId];
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error creating the folder: ", err.message);
+            return res
+                .status(500)
+                .json({ message: "Error creating the folder." });
+        }
+        res.status(201).json({ message: "Folder created successfully." });
     });
 });
 

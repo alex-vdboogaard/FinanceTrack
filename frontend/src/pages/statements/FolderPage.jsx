@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Statements.css";
 import { fetchData } from "../../utility/fetchData.js";
-import UploadStatement from "./uploadStatement.jsx";
+import UploadStatement from "./UploadStatement.jsx";
 import NewFolder from "./NewFolder.jsx";
 import Folders from "./Folders.jsx";
 import { useParams } from "react-router-dom";
@@ -12,35 +12,15 @@ import Button from "../../components/button/Button.jsx";
 import { useNavigate } from "react-router-dom";
 
 export default function FolderPage() {
-    const exampleFolder = {
-        name: "2024 statements",
-        parentFolderId: null,
-        folders: [],
-        statements: [
-            {
-                id: 1,
-                filename: "Statement 1",
-                pdf_blob: "base64encodedPdf1",
-                createdAt: "2022-01-01",
-            },
-            {
-                id: 2,
-                filename: "Statement 2",
-                pdf_blob: "base64encodedPdf2",
-                createdAt: "2022-01-02",
-            },
-        ],
-    };
-
     const navigate = useNavigate();
     const { id } = useParams();
-    const [folder, setFolder] = useState(exampleFolder);
+    const [folder, setFolder] = useState({});
 
-    // useEffect(() => {
-    //     fetchData(`http://localhost:3001/statements/folder/${id}`).then(
-    //         (data) => setFolder(data.folder)
-    //     );
-    // }, []);
+    useEffect(() => {
+        fetchData(`http://localhost:3001/statements/folder/${id}`).then(
+            (data) => setFolder(data)
+        );
+    }, [id]);
 
     // Handle PDF preview
     const handlePreview = (base64Pdf) => {
@@ -76,16 +56,16 @@ export default function FolderPage() {
                 <Button
                     type="back"
                     onClick={() => {
-                        if (!exampleFolder.parentFolderId) {
+                        if (!folder.parent_folder_id) {
                             navigate("/statements");
                         } else {
                             navigate(
-                                `/statements/folder/${exampleFolder.parentFolderId}`
+                                `/statements/folder/${folder.parent_folder_id}`
                             );
                         }
                     }}
                 ></Button>
-                <h1>{folder.name}</h1>
+                <h1>{folder.folder_name}</h1>
             </div>
 
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -108,31 +88,37 @@ export default function FolderPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {folder.statements.map((statement) => (
-                        <tr key={statement.id}>
-                            <td>
-                                <div className="file-td">
-                                    <img src={fileIcon} alt="file icon" />
-                                    {statement.filename}
-                                </div>
-                            </td>
+                    {folder.statements &&
+                        folder.statements.map((statement) => (
+                            <tr key={statement.id}>
+                                <td>
+                                    <div className="file-td">
+                                        <img src={fileIcon} alt="file icon" />
+                                        {statement.name}
+                                    </div>
+                                </td>
 
-                            <td>
-                                <button
-                                    onClick={() =>
-                                        handlePreview(statement.base64Pdf)
-                                    }
-                                >
-                                    <img src={previewIcon} alt="preview" />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(statement.id)}
-                                >
-                                    <img src={deleteIcon} alt="delete icon" />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                                <td>
+                                    <button
+                                        onClick={() =>
+                                            handlePreview(statement.base64Pdf)
+                                        }
+                                    >
+                                        <img src={previewIcon} alt="preview" />
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleDelete(statement.id)
+                                        }
+                                    >
+                                        <img
+                                            src={deleteIcon}
+                                            alt="delete icon"
+                                        />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </main>
