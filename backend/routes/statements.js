@@ -28,11 +28,13 @@ const upload = multer({ storage }).single("pdf");
 // GET route to retrieve all statements in a folder
 router.get("/folder/:id", (req, res) => {
     const { id } = req.params;
+
     const sql = `SELECT s.id, s.name, s.pdf_blob, f.name 
-FROM Statement s INNER JOIN Folder f
-ON s.folder_id = f.id
-WHERE s.user_id = ? AND s.folder_id = ?
-ORDER BY f.created_at, f.name, s.name`;
+            FROM Statement s INNER JOIN Folder f
+            ON s.folder_id = f.id
+            WHERE s.user_id = ? AND s.folder_id = ?
+            ORDER BY s.name`;
+
     connection.query(sql, [req.session.userId, id], (err, results) => {
         if (err) return res.status(500).json({ message: err.message });
 
@@ -46,19 +48,27 @@ ORDER BY f.created_at, f.name, s.name`;
     });
 });
 
-// GET route to retrieve all PDFs associated with a user_id
+// GET route to retrieve all top-level folders and statements without a folder
 router.get("/", (req, res) => {
-    const sql = `SELECT id, name, pdf_blob FROM Statement WHERE user_id = ?`;
-    connection.query(sql, [req.session.userId], (err, results) => {
+    const sqlFolders = `SELECT * FROM Folder WHERE user_id = ? AND parent_folder_id IS NULL`;
+    const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? AND folder_id IS NULL`;
+
+    // Execute both queries in parallel
+    connection.query(sqlFolders, [req.session.userId], (err, folderResults) => {
         if (err) return res.status(500).json({ message: err.message });
 
-        const statements = results.map((file) => ({
-            id: file.id,
-            filename: file.name,
-            base64Pdf: file.pdf_blob.toString("base64"),
-        }));
+        connection.query(
+            sqlStatements,
+            [req.session.userId],
+            (err, statementResults) => {
+                if (err) return res.status(500).json({ message: err.message });
+                const data = {};
+                data.folders = folderResults;
+                data.statements = statementResults;
 
-        res.status(200).json({ statements });
+                res.status(200).json(data);
+            }
+        );
     });
 });
 
