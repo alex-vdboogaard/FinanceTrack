@@ -157,12 +157,26 @@ CREATE TABLE Recurring_income (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
--- Create Ttatements table
+-- Create Folder table for statments
+CREATE TABLE Folder (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    parent_folder_id INT,
+    user_id INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_folder_id) REFERENCES Folder(id) ON DELETE CASCADE
+);
+
+
+-- Create Statements table
 CREATE TABLE Statement (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
 	pdf_blob LONGBLOB,
     user_id INT NOT NULL,
+    folder_id INT,
+    FOREIGN KEY (folder_id) REFERENCES Folder(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 

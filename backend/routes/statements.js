@@ -25,6 +25,27 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("pdf");
 
+// GET route to retrieve all statements in a folder
+router.get("/folder/:id", (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT s.id, s.name, s.pdf_blob, f.name 
+FROM Statement s INNER JOIN Folder f
+ON s.folder_id = f.id
+WHERE s.user_id = ? AND s.folder_id = ?
+ORDER BY f.created_at, f.name, s.name`;
+    connection.query(sql, [req.session.userId, id], (err, results) => {
+        if (err) return res.status(500).json({ message: err.message });
+
+        const statements = results.map((file) => ({
+            id: file.id,
+            filename: file.name,
+            base64Pdf: file.pdf_blob.toString("base64"),
+        }));
+
+        res.status(200).json({ statements });
+    });
+});
+
 // GET route to retrieve all PDFs associated with a user_id
 router.get("/", (req, res) => {
     const sql = `SELECT id, name, pdf_blob FROM Statement WHERE user_id = ?`;

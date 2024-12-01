@@ -105,5 +105,18 @@ VALUES
 (1, 2024, 11, 740, 'Reduced overall debt by 20%'),
 (1, 2024, 12, 745, 'Excellent payment history maintained');
 
+INSERT INTO `Folder` (name, parent_folder_id, user_id) 
+VALUES 
+('Tax 2024', null, 1),
+('Tax 2023', null, 1),
+('Tax 2022', null, 1);
+
+INSERT INTO `Statement` (name, pdf_blob, user_id, folder_id)
+VALUES
+('Tax Q1', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, null),
+('Tax Q2', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 1),
+('Tax Q3', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 2);
+
+
 
 
