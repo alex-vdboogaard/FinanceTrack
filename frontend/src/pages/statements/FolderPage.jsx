@@ -77,7 +77,7 @@ export default function FolderPage() {
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Files</h2>
-                <UploadStatement />
+                <UploadStatement folderId={folder.folder_id} />
             </div>
 
             <table className="statements-table">

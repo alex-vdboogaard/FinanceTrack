@@ -35,6 +35,7 @@ router.get("/folder/:id", (req, res) => {
             s.id AS statement_id, 
             s.name AS statement_name, 
             s.pdf_blob, 
+            f.id AS folder_id,
             f.name AS folder_name, 
             f.parent_folder_id 
         FROM Folder f
@@ -70,7 +71,8 @@ router.get("/folder/:id", (req, res) => {
                 });
             }
 
-            const { folder_name, parent_folder_id } = statementResults[0];
+            const { folder_id, folder_name, parent_folder_id } =
+                statementResults[0];
 
             const statements = statementResults
                 .filter((row) => row.statement_id) // Only include rows with valid statements
@@ -96,6 +98,7 @@ router.get("/folder/:id", (req, res) => {
 
                     // Build and send the response
                     const data = {
+                        folder_id,
                         folder_name,
                         parent_folder_id: parent_folder_id || null,
                         statements,
@@ -139,6 +142,12 @@ router.post("/", upload, (req, res) => {
         return res.status(400).json({ message: "No file uploaded" });
     }
 
+    let { parent_folder_id } = req.body;
+    parent_folder_id = isNaN(parseInt(parent_folder_id, 10))
+        ? null
+        : parseInt(parent_folder_id, 10);
+    console.log(parent_folder_id);
+
     const filePath = req.file.path;
 
     fs.readFile(filePath, (err, data) => {
@@ -151,10 +160,10 @@ router.post("/", upload, (req, res) => {
         }
 
         const sql =
-            "INSERT INTO Statement (name, pdf_blob, user_id) VALUES (?, ?, ?)";
+            "INSERT INTO Statement (name, pdf_blob, user_id, folder_id) VALUES (?, ?, ?, ?)";
         connection.query(
             sql,
-            [req.file.originalname, data, req.session.userId],
+            [req.file.originalname, data, req.session.userId, parent_folder_id],
             (err, result) => {
                 fs.unlink(filePath, () => {});
 
@@ -162,7 +171,13 @@ router.post("/", upload, (req, res) => {
                     console.error("Database error:", err);
                     return res.status(500).json({ message: err.message });
                 }
-                res.redirect("http://localhost:5173/statements");
+                if (!parent_folder_id) {
+                    res.redirect(`http://localhost:5173/statments`);
+                } else {
+                    res.redirect(
+                        `http://localhost:5173/statements/folder/${parent_folder_id}`
+                    );
+                }
             }
         );
     });

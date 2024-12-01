@@ -2,7 +2,7 @@ import Modal from "../../components/modal/Modal";
 import { useState, useRef } from "react";
 import Button from "../../components/button/Button";
 
-export default function UploadStatement() {
+export default function UploadStatement({ folderId = null }) {
     const [modalOpen, setModalOpen] = useState(false);
     const fileInputRef = useRef(null);
 
@@ -34,7 +34,12 @@ export default function UploadStatement() {
                         required
                         ref={fileInputRef}
                     />
-
+                    <input
+                        type="text"
+                        hidden
+                        name="parent_folder_id"
+                        value={folderId}
+                    />
                     <Button
                         className="secondary-btn"
                         type="button"

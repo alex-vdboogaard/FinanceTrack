@@ -175,7 +175,7 @@ CREATE TABLE Statement (
     name VARCHAR(255),
 	pdf_blob LONGBLOB,
     user_id INT NOT NULL,
-    folder_id INT,
+    folder_id INT NULL,
     FOREIGN KEY (folder_id) REFERENCES Folder(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
