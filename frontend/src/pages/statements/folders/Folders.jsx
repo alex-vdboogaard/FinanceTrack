@@ -33,7 +33,13 @@ export default function Folders({
                                 rerender={rerender}
                             ></FolderOptions>
                         </ToolTip>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: "10px",
+                            }}
+                        >
                             <img src={folderIcon} alt="folder icon" />
                             <Tag tag={folder.tag}></Tag>
                         </div>
