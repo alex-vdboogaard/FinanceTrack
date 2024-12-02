@@ -14,20 +14,26 @@ router.get("/:id", (req, res) => {
             s.pdf_blob, 
             f.id AS folder_id,
             f.name AS folder_name, 
-            f.parent_folder_id 
+            f.parent_folder_id,
+            t.name AS tag_name,       -- Added tag name
+            t.colour AS tag_colour    -- Added tag colour
         FROM Folder f
         LEFT JOIN Statement s ON s.folder_id = f.id
+        LEFT JOIN Tag t ON f.tag_id = t.id   -- Join Tag table to get tag details for the folder
         WHERE f.user_id = ? AND f.id = ?
         ORDER BY s.name`;
 
     // Query to retrieve all subfolders of the current folder
     const subfoldersSql = `
         SELECT 
-            id, 
-            name 
-        FROM Folder 
-        WHERE user_id = ? AND parent_folder_id = ? 
-        ORDER BY name`;
+            f.id, 
+            f.name,
+            t.name AS tag_name,      -- Added tag name for subfolders
+            t.colour AS tag_colour   -- Added tag colour for subfolders
+        FROM Folder f
+        LEFT JOIN Tag t ON f.tag_id = t.id   -- Join Tag table to get tag details for the folder
+        WHERE f.user_id = ? AND f.parent_folder_id = ? 
+        ORDER BY f.name`;
 
     // Execute both queries sequentially
     connection.query(
@@ -48,8 +54,13 @@ router.get("/:id", (req, res) => {
                 });
             }
 
-            const { folder_id, folder_name, parent_folder_id } =
-                statementResults[0];
+            const {
+                folder_id,
+                folder_name,
+                parent_folder_id,
+                tag_name,
+                tag_colour,
+            } = statementResults[0];
 
             const statements = statementResults
                 .filter((row) => row.statement_id) // Only include rows with valid statements
@@ -78,6 +89,8 @@ router.get("/:id", (req, res) => {
                         folder_id,
                         folder_name,
                         parent_folder_id: parent_folder_id || null,
+                        tag_name,
+                        tag_colour,
                         statements,
                         folders: folderResults,
                     };
@@ -91,17 +104,17 @@ router.get("/:id", (req, res) => {
 
 // POST ROUTE for new folder
 router.post("/", (req, res) => {
-    const { parentFolderId = null, name } = req.body;
+    const { parentFolderId = null, name, tag_id = null } = req.body;
     if (!name) {
         return res.status(400).json({ message: "Please name your new folder" });
     }
 
     const query = `
-            INSERT INTO Folder (name, parent_folder_id, user_id) 
-            VALUES (?, ?, ?)
+            INSERT INTO Folder (name, parent_folder_id, user_id, tag_id) 
+            VALUES (?, ?, ?, ?)
         `;
 
-    const values = [name, parentFolderId, req.session.userId];
+    const values = [name, parentFolderId, req.session.userId, tag_id];
 
     connection.query(query, values, (err, results) => {
         if (err) {
@@ -114,7 +127,7 @@ router.post("/", (req, res) => {
     });
 });
 
-// Delete ROUTE for folders
+// DELETE ROUTE for folders
 router.delete("/", (req, res) => {
     const { id } = req.body;
     const idInt = +id; // Converts id to an integer
