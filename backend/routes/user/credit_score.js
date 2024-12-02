@@ -1,9 +1,6 @@
 const express = require("express");
-const ValidateLoggedIn = require("../../middleware/ValidateLoggedIn");
 const connection = require("../../db/db");
 const router = express.Router();
-
-router.use(ValidateLoggedIn);
 
 router.get("/", async (req, res) => {
     const query = `SELECT * FROM Credit_Score_History WHERE user_id = ${req.session.userId} ORDER BY YEAR DESC, MONTH DESC LIMIT 1`;

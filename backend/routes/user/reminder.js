@@ -1,9 +1,6 @@
 const express = require("express");
-const ValidateLoggedIn = require("../../middleware/ValidateLoggedIn");
 const connection = require("../../db/db");
 const router = express.Router();
-
-router.use(ValidateLoggedIn);
 
 // Get all reminders (with linked tasks, if any)
 router.get("/", (req, res) => {
