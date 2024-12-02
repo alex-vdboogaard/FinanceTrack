@@ -232,4 +232,55 @@ router.post("/folder", (req, res) => {
     });
 });
 
+// Delete ROUTE for folders
+router.delete("/folder/:id", (req, res) => {
+    const { id } = req.params;
+    const { parent_folder_id = null } = req.body;
+    const query = `
+            DELETE FROM Folder WHERE id = ? AND user_id = ?`;
+
+    const values = [id, req.session.userId];
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error deleting the folder: ", err.message);
+            return res
+                .status(500)
+                .json({ message: "Error deleting the folder." });
+        }
+        if (!parent_folder_id) {
+            res.redirect(`http://localhost:5173/statements`);
+        } else {
+            res.redirect(
+                `http://localhost:5173/statements/folder/${parent_folder_id}`
+            );
+        }
+    });
+});
+
+// PUT ROUTE for folders
+router.put("/folder/:id", (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name) {
+        res.status(400).json({ message: "Please give a name for your folder" });
+    }
+
+    const query = `
+            UPDATE Folder SET name = ? WHERE id = ? AND user_id = ?`;
+
+    const values = [name, id, req.session.userId];
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error editing the folder: ", err.message);
+            return res
+                .status(500)
+                .json({ message: "Error editing the folder." });
+        }
+        res.status(201).json({ message: "Folder updated" });
+    });
+});
+
 module.exports = router;
