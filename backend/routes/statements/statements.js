@@ -5,9 +5,13 @@ const multer = require("multer");
 const ValidateLoggedIn = require("../../middleware/ValidateLoggedIn");
 const connection = require("../../db/db");
 const router = express.Router();
+
+//nested routes
 const folder = require("./folders");
+const tag = require("./tags");
 
 router.use("/folder", folder);
+router.use("/tag", tag);
 
 router.use(ValidateLoggedIn);
 
