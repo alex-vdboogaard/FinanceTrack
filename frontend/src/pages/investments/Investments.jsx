@@ -8,6 +8,7 @@ import pops from "pop-message";
 import { fetchData } from "../../utility/fetchData";
 import InvestmentPieChart from "./InvestmentPieChart";
 import InvestmentBarChart from "./InvestmentBarChart";
+import FilteredFolders from "../../components/filtered-folders/FilteredFolders";
 
 export default function Investments() {
     const [investments, setInvestments] = useState([]);
@@ -229,6 +230,7 @@ export default function Investments() {
                     </tr>
                 </tfoot>
             </table>
+            <FilteredFolders name="investments"></FilteredFolders>
             <div
                 style={{
                     marginTop: "50px",

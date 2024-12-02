@@ -39,8 +39,8 @@ router.get("/:name", (req, res) => {
 
         // Format the folders data to include the tag as its own object
         const formattedFolders = folders.map((folder) => ({
-            folder_id: folder.folder_id,
-            folder_name: folder.folder_name,
+            id: folder.folder_id,
+            name: folder.folder_name,
             parent_folder_id: folder.parent_folder_id,
             tag: {
                 id: folder.tag_id,

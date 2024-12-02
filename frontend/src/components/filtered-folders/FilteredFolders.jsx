@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchData from "../../utility/fetchData";
+import { fetchData } from "../../utility/fetchData";
 import Folders from "../../pages/statements/folders/Folders";
 export default function FilteredFolders({ title = "", name }) {
     const [folders, setFolders] = useState([]);
@@ -16,8 +16,12 @@ export default function FilteredFolders({ title = "", name }) {
 
     return (
         <>
-            <h2 className="h2">{title}</h2>
-            <Folders folders={folders} loading={loading}></Folders>;
+            {title && <h2 className="h2">{title}</h2>}
+            <Folders
+                folders={folders}
+                loading={loading}
+                styles={{ marginTop: "40px" }}
+            ></Folders>
         </>
     );
 }

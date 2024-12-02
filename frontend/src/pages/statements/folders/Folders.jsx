@@ -10,6 +10,7 @@ export default function Folders({
     folders = [],
     rerender = () => {},
     loading = true,
+    styles = {},
 }) {
     const navigate = useNavigate();
 
@@ -19,7 +20,12 @@ export default function Folders({
 
     return (
         <div
-            style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px" }}
+            style={{
+                display: "flex",
+                flexWrap: "wrap",
+                marginBottom: "40px",
+                ...styles, // Spread styles to merge with the default styles
+            }}
         >
             {/* Loading Card */}
             {loading ? (
