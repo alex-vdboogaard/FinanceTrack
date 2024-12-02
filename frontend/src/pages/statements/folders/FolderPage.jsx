@@ -16,10 +16,15 @@ export default function FolderPage() {
     const { id } = useParams();
     const [folder, setFolder] = useState({});
     const [rerender, setRerender] = useState(false);
+    const [loadingFolders, setLoadingFolders] = useState(true);
 
     useEffect(() => {
+        setLoadingFolders(true);
         fetchData(`http://localhost:3001/statements/folder/${id}`).then(
-            (data) => setFolder(data)
+            (data) => {
+                setLoadingFolders(false);
+                setFolder(data);
+            }
         );
     }, [id, rerender]);
 
@@ -83,6 +88,7 @@ export default function FolderPage() {
             <Folders
                 rerender={handleRerender}
                 folders={folder.folders}
+                loading={loadingFolders}
             ></Folders>
 
             <div style={{ display: "flex", alignItems: "center" }}>

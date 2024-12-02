@@ -25,38 +25,69 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("pdf");
 
-// GET route to retrieve all top-level folders, statements and recent files
-router.get("/", (req, res) => {
+// GET route to retrieve all top-level folders
+router.get("/folders", (req, res) => {
     const sqlFolders = `SELECT * FROM Folder WHERE user_id = ? AND parent_folder_id IS NULL`;
-    const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? AND folder_id IS NULL`;
-    const sqlRecentFiles = `SELECT * FROM STATEMENT WHERE user_id = ? ORDER BY created_at DESC LIMIT 6`;
 
     connection.query(sqlFolders, [req.session.userId], (err, folderResults) => {
         if (err) return res.status(500).json({ message: err.message });
-        connection.query(
-            sqlStatements,
-            [req.session.userId],
-            (err, statementResults) => {
-                if (err) return res.status(500).json({ message: err.message });
-                connection.query(
-                    sqlRecentFiles,
-                    [req.session.userId],
-                    (err, recentFilesResults) => {
-                        if (err)
-                            return res
-                                .status(500)
-                                .json({ message: err.message });
-                        const data = {};
-                        data.folders = folderResults;
-                        data.statements = statementResults;
-                        data.recentFiles = recentFilesResults;
 
-                        res.status(200).json(data);
-                    }
-                );
-            }
-        );
+        res.status(200).json({ folders: folderResults });
     });
+});
+
+// GET route to retrieve paginated statements
+router.get("/", (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if no page is provided
+    const limit = 6;
+    const offset = (page - 1) * limit;
+
+    // SQL query to get the total count of statements
+    const sqlTotalCount = `SELECT COUNT(*) AS total FROM Statement WHERE user_id = ? AND folder_id IS NULL`;
+
+    connection.query(
+        sqlTotalCount,
+        [req.session.userId],
+        (err, countResults) => {
+            if (err) return res.status(500).json({ message: err.message });
+
+            const totalStatements = countResults[0].total;
+            const totalPages = Math.ceil(totalStatements / limit); // Calculate total pages
+
+            // SQL query to fetch statements with pagination
+            const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? LIMIT ? OFFSET ?`;
+
+            connection.query(
+                sqlStatements,
+                [req.session.userId, limit, offset],
+                (err, statementResults) => {
+                    if (err)
+                        return res.status(500).json({ message: err.message });
+
+                    res.status(200).json({
+                        statements: statementResults,
+                        totalPages: totalPages,
+                        currentPage: page,
+                    });
+                }
+            );
+        }
+    );
+});
+
+// GET route to retrieve recent files
+router.get("/recent-files", (req, res) => {
+    const sqlRecentFiles = `SELECT * FROM STATEMENT WHERE user_id = ? ORDER BY created_at DESC LIMIT 6`;
+
+    connection.query(
+        sqlRecentFiles,
+        [req.session.userId],
+        (err, recentFilesResults) => {
+            if (err) return res.status(500).json({ message: err.message });
+
+            res.status(200).json({ recentFiles: recentFilesResults });
+        }
+    );
 });
 
 // GET route to retrieve all statements and subfolders in a folder
@@ -156,7 +187,6 @@ router.post("/", upload, (req, res) => {
     parent_folder_id = isNaN(parseInt(parent_folder_id, 10))
         ? null
         : parseInt(parent_folder_id, 10);
-    console.log(parent_folder_id);
 
     const filePath = req.file.path;
 

@@ -7,49 +7,76 @@ import UploadStatement from "./UploadStatement.jsx";
 import NewFolder from "./folders/NewFolder.jsx";
 import Folders from "./folders/Folders.jsx";
 import RecentFiles from "./RecentFiles.jsx";
-
-// import RecentFiles from "./RecentFiles.jsx";
-// import Pagination from "../../components/pagination/Pagination.jsx";
+import Pagination from "../../components/pagination/Pagination.jsx";
 
 const Statements = () => {
+    // State for files and folder data
     const [folders, setFolders] = useState([]);
     const [statements, setStatements] = useState([]);
     const [recentFiles, setRecentFiles] = useState([]);
-    const [rerender, setRerender] = useState([]);
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [numPages, setNumPages] = useState(1);
 
-    // const handlePageChange = (page) => {
-    //     setCurrentPage(page);
-    // };
-    // Fetch PDF statements on component mount
+    // Rerender states for each section
+    const [rerender, setRerender] = useState({
+        statements: false,
+        folders: false,
+        recentFiles: false,
+    });
+
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const [numPages, setNumPages] = useState(1);
+
+    // Combined loading state object
+    const [loading, setLoading] = useState({
+        statements: true,
+        folders: true,
+        recentFiles: true,
+    });
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     useEffect(() => {
-        fetchData(`http://localhost:3001/statements`).then((data) => {
-            setStatements(data.statements);
+        setLoading((prev) => ({ ...prev, statements: true }));
+        fetchData(`http://localhost:3001/statements?page=${currentPage}`).then(
+            (data) => {
+                setLoading((prev) => ({ ...prev, statements: false }));
+                setStatements(data.statements);
+                setNumPages(data.totalPages);
+                setCurrentPage(data.currentPage);
+            }
+        );
+    }, [currentPage, rerender.statements]);
+
+    useEffect(() => {
+        setLoading((prev) => ({ ...prev, folders: true }));
+        fetchData(`http://localhost:3001/statements/folders`).then((data) => {
+            setLoading((prev) => ({ ...prev, folders: false }));
             setFolders(data.folders);
-            setRecentFiles(data.recentFiles);
         });
-    }, [rerender]);
+    }, [rerender.folders]);
+
+    useEffect(() => {
+        setLoading((prev) => ({ ...prev, recentFiles: true }));
+        fetchData(`http://localhost:3001/statements/recent-files`).then(
+            (data) => {
+                setLoading((prev) => ({ ...prev, recentFiles: false }));
+                setRecentFiles(data.recentFiles);
+            }
+        );
+    }, [rerender.recentFiles]);
 
     // Handle PDF preview
     const handlePreview = (pdfBuffer) => {
         try {
-            // Convert the buffer array to a Uint8Array
             const uint8Array = new Uint8Array(pdfBuffer.data);
-
-            // Create a Blob from the Uint8Array with MIME type 'application/pdf'
             const blob = new Blob([uint8Array], { type: "application/pdf" });
-
-            // Create a URL for the Blob
             const url = URL.createObjectURL(blob);
-
-            // Open the PDF in a new tab
             const newTab = window.open(url, "_blank");
-
-            // Revoke the object URL after the tab is opened
             if (newTab) {
                 newTab.onload = () => {
-                    URL.revokeObjectURL(url); // Cleanup the URL when the new tab is loaded
+                    URL.revokeObjectURL(url);
                 };
             }
         } catch (error) {
@@ -72,8 +99,20 @@ const Statements = () => {
         }
     };
 
-    const handleRerender = () => {
-        setRerender((prev) => !prev);
+    const handleRerender = (section) => {
+        if (section === "all") {
+            // Toggle all sections
+            setRerender((prev) => {
+                const newRerender = {};
+                for (const key in prev) {
+                    newRerender[key] = !prev[key];
+                }
+                return newRerender;
+            });
+        } else {
+            // Toggle specific section
+            setRerender((prev) => ({ ...prev, [section]: !prev[section] }));
+        }
     };
 
     return (
@@ -82,12 +121,22 @@ const Statements = () => {
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Folders</h2>
-                <NewFolder rerender={handleRerender}></NewFolder>
+                <NewFolder
+                    rerender={() => handleRerender("folders")}
+                ></NewFolder>
             </div>
 
-            <Folders folders={folders} rerender={handleRerender}></Folders>
+            <Folders
+                folders={folders}
+                rerender={() => handleRerender("all")}
+                loading={loading.folders}
+            ></Folders>
 
-            <RecentFiles preview={handlePreview} statements={recentFiles} />
+            <RecentFiles
+                preview={handlePreview}
+                statements={recentFiles}
+                loading={loading.recentFiles}
+            />
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">All files</h2>
@@ -102,7 +151,13 @@ const Statements = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {statements &&
+                    {loading.statements === true ? (
+                        <tr>
+                            <td colSpan="2" className="text-center">
+                                Loading...
+                            </td>
+                        </tr>
+                    ) : (
                         statements.map((statement) => (
                             <tr key={statement.id}>
                                 <td>
@@ -138,17 +193,18 @@ const Statements = () => {
                                     </button>
                                 </td>
                             </tr>
-                        ))}
+                        ))
+                    )}
                 </tbody>
             </table>
 
-            {/* {numPages > 1 && (
+            {numPages > 1 && (
                 <Pagination
                     numPages={numPages}
                     handleChange={handlePageChange}
                     activePage={currentPage}
                 />
-            )} */}
+            )}
         </main>
     );
 };
