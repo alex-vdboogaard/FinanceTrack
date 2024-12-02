@@ -15,10 +15,21 @@ import loansIcon from "../../assets/loans.svg";
 import logoutIcon from "../../assets/logout.svg";
 import arrowRightIcon from "../../assets/arrow-right.svg";
 import arrowLeftIcon from "../../assets/arrow-left.svg";
+import toggleIcon from "../../assets/toggle-arrow.svg";
+import toggledIcon from "../../assets/toggled.svg";
+import netWorthIcon from "../../assets/net-worth.svg";
 
 const Sidebar = () => {
     const location = useLocation();
     const currentPath = location.pathname; // Get current path from router
+
+    // a true value means the toggle for net worth is open
+    let toggled = localStorage.getItem("toggled");
+    if (toggled === null) {
+        toggled = false;
+    } else {
+        toggled = JSON.parse(toggled);
+    }
 
     let collapsed = localStorage.getItem("collapsed");
     if (collapsed === null) {
@@ -28,10 +39,16 @@ const Sidebar = () => {
     }
 
     const [isCollapsed, setIsCollapsed] = useState(collapsed);
+    const [isToggled, setIsToggled] = useState(toggled);
 
     const toggleSidebar = () => {
         localStorage.setItem("collapsed", JSON.stringify(!isCollapsed));
         setIsCollapsed(!isCollapsed);
+    };
+
+    const toggleNetworth = () => {
+        localStorage.setItem("toggled", JSON.stringify(!isToggled)); // Corrected line
+        setIsToggled((prev) => !prev); // Fixed state toggle logic
     };
 
     const isActive = (path) => currentPath === path;
@@ -42,14 +59,12 @@ const Sidebar = () => {
                 window.location.href = "/login";
             }
         });
-    });
+    }, []);
 
     const handleLogout = async () => {
-        fetchData("http://localhost:3001/logout", "POST").then(
-            (successData) => {
-                window.location.href = "/login";
-            }
-        );
+        fetchData("http://localhost:3001/logout", "POST").then(() => {
+            window.location.href = "/login";
+        });
     };
 
     return (
@@ -76,56 +91,86 @@ const Sidebar = () => {
                             {!isCollapsed && <span>Budget</span>}
                         </Link>
                     </li>
-                    <li className={isActive("/bank-accounts") ? "active" : ""}>
-                        <Link to="/bank-accounts">
+                    <li onClick={toggleNetworth}>
+                        <div>
                             <img
                                 className="icon"
-                                src={accountsIcon}
-                                alt="accounts-icon"
+                                src={netWorthIcon}
+                                alt="net worth icon"
                             />
-                            {!isCollapsed && <span>Accounts</span>}
-                        </Link>
+                            {!isCollapsed && <span>Net worth</span>}
+                            {isToggled ? (
+                                <img src={toggledIcon} alt="toggle icon" />
+                            ) : (
+                                <img src={toggleIcon} alt="toggle icon" />
+                            )}
+                        </div>
                     </li>
-                    <li className={isActive("/investments") ? "active" : ""}>
-                        <Link to="/investments">
-                            <img
-                                className="icon"
-                                src={investmentsIcon}
-                                alt="investments-icon"
-                            />
-                            {!isCollapsed && <span>Investments</span>}
-                        </Link>
-                    </li>
-                    <li className={isActive("/savings") ? "active" : ""}>
-                        <Link to="/savings">
-                            <img
-                                className="icon"
-                                src={savingsIcon}
-                                alt="savings-icon"
-                            />
-                            {!isCollapsed && <span>Savings</span>}
-                        </Link>
-                    </li>
-                    <li className={isActive("/assets") ? "active" : ""}>
-                        <Link to="/assets">
-                            <img
-                                className="icon"
-                                src={assetsIcon}
-                                alt="assets-icon"
-                            />
-                            {!isCollapsed && <span>Assets</span>}
-                        </Link>
-                    </li>
-                    <li className={isActive("/loans") ? "active" : ""}>
-                        <Link to="/loans">
-                            <img
-                                className="icon"
-                                src={loansIcon}
-                                alt="loans-icon"
-                            />
-                            {!isCollapsed && <span>Loans</span>}
-                        </Link>
-                    </li>
+                    {isToggled && (
+                        <ul id="toggled-items">
+                            <li
+                                className={
+                                    isActive("/bank-accounts") ? "active" : ""
+                                }
+                            >
+                                <Link to="/bank-accounts">
+                                    <img
+                                        className="icon"
+                                        src={accountsIcon}
+                                        alt="accounts-icon"
+                                    />
+                                    {!isCollapsed && <span>Accounts</span>}
+                                </Link>
+                            </li>
+                            <li
+                                className={
+                                    isActive("/investments") ? "active" : ""
+                                }
+                            >
+                                <Link to="/investments">
+                                    <img
+                                        className="icon"
+                                        src={investmentsIcon}
+                                        alt="investments-icon"
+                                    />
+                                    {!isCollapsed && <span>Investments</span>}
+                                </Link>
+                            </li>
+                            <li
+                                className={isActive("/savings") ? "active" : ""}
+                            >
+                                <Link to="/savings">
+                                    <img
+                                        className="icon"
+                                        src={savingsIcon}
+                                        alt="savings-icon"
+                                    />
+                                    {!isCollapsed && <span>Savings</span>}
+                                </Link>
+                            </li>
+                            <li className={isActive("/assets") ? "active" : ""}>
+                                <Link to="/assets">
+                                    <img
+                                        className="icon"
+                                        src={assetsIcon}
+                                        alt="assets-icon"
+                                    />
+                                    {!isCollapsed && <span>Assets</span>}
+                                </Link>
+                            </li>
+                            <li className={isActive("/loans") ? "active" : ""}>
+                                <Link to="/loans">
+                                    <img
+                                        className="icon"
+                                        src={loansIcon}
+                                        alt="loans-icon"
+                                    />
+                                    {!isCollapsed && <span>Loans</span>}
+                                </Link>
+                            </li>
+                        </ul>
+                    )}
+
                     <li className={isActive("/statements") ? "active" : ""}>
                         <Link to="/statements">
                             <img

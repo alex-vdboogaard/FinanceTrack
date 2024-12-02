@@ -7,10 +7,11 @@
     justify-content: space-between;
     position: sticky;
     top: 0;
+    width: 220px;
 }
 
 .sidebar.collapsed {
-    width: auto;
+    width: 70px;
 }
 
 .toggle-btn {
@@ -27,7 +28,6 @@
     list-style-type: none;
     padding: 0;
     width: auto;
-    margin-top: 42px;
 }
 
 .nav li {
@@ -46,12 +46,32 @@
     width: 100%;
 }
 
+#toggled-items li a {
+    padding: 17px 25px;
+    width: 100%;
+}
+
+.nav li div {
+    padding: 17px 15px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav li div img:last-child {
+    margin-left: 5px;
+}
+
 .nav li:hover {
     background-color: #f5f5f5;
 }
 
 .nav li.active {
     color: #0b1326;
+}
+
+#toggled-items a {
+    padding-left: 10px;
 }
 
 .icon {
