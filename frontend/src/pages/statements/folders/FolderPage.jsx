@@ -15,13 +15,17 @@ export default function FolderPage() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [folder, setFolder] = useState({});
+    const [rerender, setRerender] = useState(false);
 
     useEffect(() => {
         fetchData(`http://localhost:3001/statements/folder/${id}`).then(
             (data) => setFolder(data)
         );
-    }, [id]);
+    }, [id, rerender]);
 
+    const handleRerender = () => {
+        setRerender((prev) => !prev);
+    };
     // Handle PDF preview
     const handlePreview = (base64Pdf) => {
         // Create a blob from the base64 string and generate a URL
@@ -70,10 +74,16 @@ export default function FolderPage() {
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Folders</h2>
-                <NewFolder parentFolderId={id}></NewFolder>
+                <NewFolder
+                    parentFolderId={id}
+                    rerender={handleRerender}
+                ></NewFolder>
             </div>
 
-            <Folders folders={folder.folders}></Folders>
+            <Folders
+                rerender={handleRerender}
+                folders={folder.folders}
+            ></Folders>
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Files</h2>

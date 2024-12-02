@@ -2,9 +2,8 @@ import Modal from "../../../components/modal/Modal";
 import Button from "../../../components/button/Button";
 import { useState } from "react";
 import { fetchData } from "../../../utility/fetchData";
-import pops from "pop-message";
 
-export default function NewFolder({ parentFolderId = null }) {
+export default function NewFolder({ parentFolderId = null, rerender }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [name, setName] = useState("");
     const toggleModal = () => setModalOpen((prev) => !prev);
@@ -21,7 +20,7 @@ export default function NewFolder({ parentFolderId = null }) {
             formData
         ).then((successData) => {
             toggleModal();
-            pops.simplePop("success", successData);
+            rerender();
         });
     };
     return (

@@ -15,7 +15,7 @@ const Statements = () => {
     const [folders, setFolders] = useState([]);
     const [statements, setStatements] = useState([]);
     const [recentFiles, setRecentFiles] = useState([]);
-
+    const [rerender, setRerender] = useState([]);
     // const [currentPage, setCurrentPage] = useState(1);
     // const [numPages, setNumPages] = useState(1);
 
@@ -29,7 +29,7 @@ const Statements = () => {
             setFolders(data.folders);
             setRecentFiles(data.recentFiles);
         });
-    }, []);
+    }, [rerender]);
 
     // Handle PDF preview
     const handlePreview = (pdfBuffer) => {
@@ -72,16 +72,20 @@ const Statements = () => {
         }
     };
 
+    const handleRerender = () => {
+        setRerender((prev) => !prev);
+    };
+
     return (
         <main>
             <h1>Statements</h1>
 
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">Folders</h2>
-                <NewFolder></NewFolder>
+                <NewFolder rerender={handleRerender}></NewFolder>
             </div>
 
-            <Folders folders={folders}></Folders>
+            <Folders folders={folders} rerender={handleRerender}></Folders>
 
             <RecentFiles preview={handlePreview} statements={recentFiles} />
 

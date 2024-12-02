@@ -233,13 +233,13 @@ router.post("/folder", (req, res) => {
 });
 
 // Delete ROUTE for folders
-router.delete("/folder/:id", (req, res) => {
-    const { id } = req.params;
-    const { parent_folder_id = null } = req.body;
+router.delete("/folder", (req, res) => {
+    const { id } = req.body;
+    const idInt = +id; // Converts id to an integer
     const query = `
             DELETE FROM Folder WHERE id = ? AND user_id = ?`;
 
-    const values = [id, req.session.userId];
+    const values = [idInt, req.session.userId];
 
     connection.query(query, values, (err, results) => {
         if (err) {
@@ -248,23 +248,16 @@ router.delete("/folder/:id", (req, res) => {
                 .status(500)
                 .json({ message: "Error deleting the folder." });
         }
-        if (!parent_folder_id) {
-            res.redirect(`http://localhost:5173/statements`);
-        } else {
-            res.redirect(
-                `http://localhost:5173/statements/folder/${parent_folder_id}`
-            );
-        }
+        res.status(201).json({ message: "Folder deleted" });
     });
 });
 
 // PUT ROUTE for folders
-router.put("/folder/:id", (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
+router.put("/folder", (req, res) => {
+    const { id, name } = req.body;
 
-    if (!name) {
-        res.status(400).json({ message: "Please give a name for your folder" });
+    if (!name || !id) {
+        res.status(400).json({ message: "Please provide all details" });
     }
 
     const query = `

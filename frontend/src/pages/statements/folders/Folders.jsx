@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import folderIcon from "../../../assets/folder.svg";
 import ToolTip from "../../../components/tooltip/ToolTip";
 import optionsIcon from "../../../assets/options.svg";
+import FolderOptions from "./FolderOptions";
 
-export default function Folders({ folders = [] }) {
+export default function Folders({ folders = [], rerender = () => {} }) {
     const navigate = useNavigate();
 
     const openFolder = (id) => {
@@ -18,7 +19,10 @@ export default function Folders({ folders = [] }) {
             {folders.map((folder) => (
                 <div className="folder" key={folder.id}>
                     <ToolTip icon={optionsIcon}>
-                        <p>Burger!</p>
+                        <FolderOptions
+                            id={folder.id}
+                            rerender={rerender}
+                        ></FolderOptions>
                     </ToolTip>
                     <img src={folderIcon} alt="folder icon" />
                     <h3
