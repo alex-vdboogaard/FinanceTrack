@@ -6,6 +6,7 @@ import SavingGoals from "./SavingGoals";
 import "./Savings.css";
 import "../../../node_modules/pop-message/pop.css";
 import { fetchData } from "../../utility/fetchData";
+import FilteredFolders from "../../components/filtered-folders/FilteredFolders";
 
 export default function Savings() {
     const [savings, setSavings] = useState([]);
@@ -75,6 +76,7 @@ export default function Savings() {
                     </tr>
                 </tfoot>
             </table>
+            <FilteredFolders name="savings"></FilteredFolders>
             <div
                 style={{
                     display: "flex",

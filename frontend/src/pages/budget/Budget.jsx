@@ -8,6 +8,7 @@ import NewReview from "./NewReview";
 import { useCallback, useState, useEffect } from "react";
 import { fetchData } from "../../utility/fetchData";
 import "./Budget.css";
+import FilteredFolders from "../../components/filtered-folders/FilteredFolders";
 
 export default function Budget() {
     const [expenses, setExpenses] = useState([]);
@@ -41,6 +42,7 @@ export default function Budget() {
             </div>
             <Income setIncome={setIncome} />
             <Expenses setExpenses={setExpenses}></Expenses>
+            <FilteredFolders name="bills"></FilteredFolders>
             <BudgetGraphs
                 expenses={expenses}
                 income={income}

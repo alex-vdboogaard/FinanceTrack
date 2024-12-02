@@ -6,6 +6,8 @@ import LoansList from "./LoansList";
 import { fetchData } from "../../utility/fetchData";
 import "./Loans.css";
 import UpcomingPayment from "./UpcomingPayment";
+import FilteredFolders from "../../components/filtered-folders/FilteredFolders";
+
 export default function Loans() {
     const [loans, setLoans] = useState([]);
     const [newLoanOpen, setNewLoanOpen] = useState(false);
@@ -48,6 +50,7 @@ export default function Loans() {
                 </Modal>
             </div>
             <LoansList loans={loans}></LoansList>
+            <FilteredFolders name="loans"></FilteredFolders>
 
             <h2 className="h2">Upcoming payments</h2>
             <table>
