@@ -41,7 +41,7 @@ export default function Folders({
                             }}
                         >
                             <img src={folderIcon} alt="folder icon" />
-                            <Tag tag={folder.tag}></Tag>
+                            {folder.tag.id && <Tag tag={folder.tag}></Tag>}
                         </div>
 
                         <h3

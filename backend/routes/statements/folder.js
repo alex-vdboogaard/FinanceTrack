@@ -86,7 +86,15 @@ router.get("/:id", (req, res) => {
                             error: err.message,
                         });
                     }
-
+                    const folders = folderResults.map((folder) => ({
+                        id: folder.id,
+                        name: folder.name,
+                        tag: {
+                            id: folder.tag_id,
+                            name: folder.tag_name,
+                            colour: folder.tag_colour,
+                        },
+                    }));
                     // Build and send the response
                     const data = {
                         folder_id,
@@ -98,7 +106,7 @@ router.get("/:id", (req, res) => {
                             colour: tag_colour,
                         },
                         statements,
-                        folders: folderResults,
+                        folders: folders,
                     };
 
                     res.status(200).json(data);
