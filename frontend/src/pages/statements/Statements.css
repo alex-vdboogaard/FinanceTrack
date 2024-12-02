@@ -101,6 +101,7 @@ option {
 
 .folder-options-wrapper img {
     width: 20px;
+    margin-bottom: 2px;
 }
 
 .folder-options-wrapper p {
