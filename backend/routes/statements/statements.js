@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage }).single("pdf");
+const upload = multer({ storage }).array("pdf");
 
 // GET route to retrieve all top-level folders
 router.get("/folders", (req, res) => {
@@ -122,8 +122,8 @@ router.get("/recent-files", (req, res) => {
 
 // POST route to upload and save a new PDF
 router.post("/", upload, (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: "No files uploaded" });
     }
 
     let { parent_folder_id } = req.body;
@@ -131,39 +131,71 @@ router.post("/", upload, (req, res) => {
         ? null
         : parseInt(parent_folder_id, 10);
 
-    const filePath = req.file.path;
+    const filePaths = req.files.map((file) => file.path);
 
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            fs.unlink(filePath, () => {});
-            console.error("Error reading file:", err);
-            return res
-                .status(500)
-                .json({ message: "File read error", error: err.message });
-        }
-
-        const sql =
-            "INSERT INTO Statement (name, pdf_blob, user_id, folder_id) VALUES (?, ?, ?, ?)";
-        connection.query(
-            sql,
-            [req.file.originalname, data, req.session.userId, parent_folder_id],
-            (err, result) => {
-                fs.unlink(filePath, () => {});
-
+    // Process all files concurrently using Promise.all
+    const fileUploadPromises = req.files.map((file) => {
+        return new Promise((resolve, reject) => {
+            fs.readFile(file.path, (err, data) => {
                 if (err) {
-                    console.error("Database error:", err);
-                    return res.status(500).json({ message: err.message });
+                    fs.unlink(file.path, () => {});
+                    console.error("Error reading file:", err);
+                    return reject(err); // Reject on error
                 }
-                if (!parent_folder_id) {
-                    res.redirect(`http://localhost:5173/statements`);
-                } else {
-                    res.redirect(
-                        `http://localhost:5173/statements/folder/${parent_folder_id}`
-                    );
-                }
-            }
-        );
+
+                const sql =
+                    "INSERT INTO Statement (name, pdf_blob, user_id, folder_id) VALUES (?, ?, ?, ?)";
+                connection.query(
+                    sql,
+                    [
+                        file.originalname,
+                        data,
+                        req.session.userId,
+                        parent_folder_id,
+                    ],
+                    (err, result) => {
+                        if (err) {
+                            fs.unlink(file.path, () => {});
+                            console.error("Database error:", err);
+                            return reject(err); // Reject on DB error
+                        }
+
+                        // File inserted, resolve the promise
+                        resolve();
+                    }
+                );
+            });
+        });
     });
+
+    // After all files are uploaded, delete them and send the response
+    Promise.all(fileUploadPromises)
+        .then(() => {
+            // Delete all files after processing them
+            req.files.forEach((file) => {
+                fs.unlink(file.path, (err) => {
+                    if (err) {
+                        console.error("Error deleting file:", err);
+                    }
+                });
+            });
+
+            // Redirect after all files are uploaded
+            if (!parent_folder_id) {
+                res.redirect(`http://localhost:5173/statements`);
+            } else {
+                res.redirect(
+                    `http://localhost:5173/statements/folder/${parent_folder_id}`
+                );
+            }
+        })
+        .catch((err) => {
+            console.error("Error during file upload process:", err);
+            res.status(500).json({
+                message: "File upload failed",
+                error: err.message,
+            });
+        });
 });
 
 // DELETE route to remove a PDF by ID
