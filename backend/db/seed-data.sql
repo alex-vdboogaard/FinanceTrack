@@ -117,6 +117,14 @@ VALUES
 ('Tax Q2', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 1),
 ('Tax Q3', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 2);
 
-
+INSERT INTO TAG (name, colour) VALUES
+('Income', '#4CAF50'),    
+('Expenses', '#FF9800'),    
+('Investments', '#3F51B5'), 
+('Taxes', '#F44336'),      
+('Savings', '#8BC34A'),    
+('Loans', '#9C27B0'),      
+('Retirement', '#607D8B'),  
+('Bills', '#FF5722');       
 
 

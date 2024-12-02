@@ -157,15 +157,23 @@ CREATE TABLE Recurring_income (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
+CREATE TABLE TAG (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    colour VARCHAR(7) NOT NULL
+);
+
 -- Create Folder table for statements
 CREATE TABLE Folder (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     parent_folder_id INT,
     user_id INT NOT NULL,
+    tag_id INT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE,
-    FOREIGN KEY (parent_folder_id) REFERENCES Folder(id) ON DELETE CASCADE
+    FOREIGN KEY (parent_folder_id) REFERENCES Folder(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES Tag(id)
 );
 
 -- Create Statements table (ensure cascade on delete of folders)
