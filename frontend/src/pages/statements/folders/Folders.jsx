@@ -33,14 +33,17 @@ export default function Folders({
                                 rerender={rerender}
                             ></FolderOptions>
                         </ToolTip>
-                        <img src={folderIcon} alt="folder icon" />
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <img src={folderIcon} alt="folder icon" />
+                            <Tag tag={folder.tag}></Tag>
+                        </div>
+
                         <h3
                             onClick={() => openFolder(folder.id)}
                             className="folder-heading"
                         >
                             {folder.name}
                         </h3>
-                        <Tag tag={folder.tag}></Tag>
                         <p>
                             {folder.statements?.length || 0} files -{" "}
                             {folder.statements

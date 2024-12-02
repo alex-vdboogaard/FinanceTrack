@@ -3,6 +3,7 @@
     border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
-    display: inline-block;
     color: white !important;
+    margin-bottom: 7px;
+    margin-left: 10px;
 }
