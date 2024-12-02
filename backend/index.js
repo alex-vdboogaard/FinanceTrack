@@ -63,6 +63,7 @@ app.get("/logged-in", (req, res) => {
         return res.json({ loggedIn: false });
     }
 });
+
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const query =
@@ -145,6 +146,7 @@ app.post("/create-account", async (req, res) => {
         }
     });
 });
+
 app.post("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((err) => {
