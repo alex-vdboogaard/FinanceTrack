@@ -16,7 +16,7 @@ const overview = require("./routes/overview");
 const savings = require("./routes/savings/savings");
 const saving_goals = require("./routes/savings/saving-goals");
 const budget = require("./routes/budget/budget");
-const statements = require("./routes/statements");
+const statements = require("./routes/statements/statements");
 const user = require("./routes/user/user");
 
 const connection = require("./db/db");
