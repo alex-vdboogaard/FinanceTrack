@@ -74,7 +74,11 @@ const Sidebar = () => {
                     <li className={isActive("/overview") ? "active" : ""}>
                         <Link to="/overview">
                             <img
-                                className="icon"
+                                className={
+                                    isActive("/overview")
+                                        ? "active-icon"
+                                        : "icon"
+                                }
                                 src={homeIcon}
                                 alt="home-icon"
                             />
@@ -84,7 +88,9 @@ const Sidebar = () => {
                     <li className={isActive("/budget") ? "active" : ""}>
                         <Link to="/budget">
                             <img
-                                className="icon"
+                                className={
+                                    isActive("/budget") ? "active-icon" : "icon"
+                                }
                                 src={budgetIcon}
                                 alt="budget-icon"
                             />
@@ -115,7 +121,11 @@ const Sidebar = () => {
                             >
                                 <Link to="/bank-accounts">
                                     <img
-                                        className="icon"
+                                        className={
+                                            isActive("/bank-accounts")
+                                                ? "active-icon"
+                                                : "icon"
+                                        }
                                         src={accountsIcon}
                                         alt="accounts-icon"
                                     />
@@ -129,7 +139,11 @@ const Sidebar = () => {
                             >
                                 <Link to="/investments">
                                     <img
-                                        className="icon"
+                                        className={
+                                            isActive("/investments")
+                                                ? "active-icon"
+                                                : "icon"
+                                        }
                                         src={investmentsIcon}
                                         alt="investments-icon"
                                     />
@@ -141,7 +155,11 @@ const Sidebar = () => {
                             >
                                 <Link to="/savings">
                                     <img
-                                        className="icon"
+                                        className={
+                                            isActive("/savings")
+                                                ? "active-icon"
+                                                : "icon"
+                                        }
                                         src={savingsIcon}
                                         alt="savings-icon"
                                     />
@@ -151,7 +169,11 @@ const Sidebar = () => {
                             <li className={isActive("/assets") ? "active" : ""}>
                                 <Link to="/assets">
                                     <img
-                                        className="icon"
+                                        className={
+                                            isActive("/assets")
+                                                ? "active-icon"
+                                                : "icon"
+                                        }
                                         src={assetsIcon}
                                         alt="assets-icon"
                                     />
@@ -161,7 +183,11 @@ const Sidebar = () => {
                             <li className={isActive("/loans") ? "active" : ""}>
                                 <Link to="/loans">
                                     <img
-                                        className="icon"
+                                        className={
+                                            isActive("/loans")
+                                                ? "active-icon"
+                                                : "icon"
+                                        }
                                         src={loansIcon}
                                         alt="loans-icon"
                                     />
@@ -174,7 +200,11 @@ const Sidebar = () => {
                     <li className={isActive("/statements") ? "active" : ""}>
                         <Link to="/statements">
                             <img
-                                className="icon"
+                                className={
+                                    isActive("/statements")
+                                        ? "active-icon"
+                                        : "icon"
+                                }
                                 src={statementsIcon}
                                 alt="statements-icon"
                             />

@@ -81,6 +81,15 @@
     margin-bottom: 4px;
 }
 
+.active-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    max-width: 20px;
+    margin-bottom: 4px;
+    filter: brightness(0) saturate(100%) invert(7%) sepia(19%) saturate(2260%)
+        hue-rotate(186deg) brightness(95%) contrast(99%);
+}
+
 .collapsed .icon {
     margin-right: 0;
 }
