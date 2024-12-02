@@ -92,3 +92,19 @@ select,
 option {
     cursor: pointer;
 }
+
+.folder-options-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.folder-options-wrapper img {
+    width: 20px;
+}
+
+.folder-options-wrapper p {
+    margin: 0px;
+    margin-left: 5px;
+    color: black;
+}
