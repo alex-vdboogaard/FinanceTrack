@@ -11,8 +11,11 @@ router.get("/", async (req, res) => {
             });
             return;
         }
+        const data = {
+            credit_score: credit_score[0],
+        };
 
-        res.status(200).json({ credit_score });
+        res.status(200).json({ data });
     });
 });
 

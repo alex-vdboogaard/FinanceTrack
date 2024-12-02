@@ -16,6 +16,8 @@ export default function CornerWidget() {
     const [notifications, setNotifications] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [userData, setUserData] = useState({});
+    const [creditScore, setCreditScore] = useState(0);
+    const [netWorthData, setNetWorthData] = useState({});
 
     const [showNotificationWidget, setShowNotificationWidget] = useState(false);
     const [showTasksWidget, setShowTasksWidget] = useState(false);
@@ -66,8 +68,14 @@ export default function CornerWidget() {
         fetchData("http://localhost:3001/user/task").then((data) => {
             setTasks(data.tasks);
         });
+        fetchData("http://localhost:3001/user").then((data) => {
+            setUserData(data.user);
+        });
         fetchData("http://localhost:3001/user/credit-score").then((data) => {
-            setUserData(data);
+            setCreditScore(data.credit_score);
+        });
+        fetchData("http://localhost:3001/user/credit-score").then((data) => {
+            setNetWorthData(data);
         });
     }, [rerender]);
     return (
@@ -114,8 +122,9 @@ export default function CornerWidget() {
                 closeUserWidget={() => {
                     showWidget("none");
                 }}
-                data={userData}
-                rerender={handleRerender}
+                user={userData}
+                creditScore={creditScore}
+                netWorth={netWorthData}
             ></UserWidget>
         </div>
     );

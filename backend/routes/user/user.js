@@ -15,6 +15,20 @@ router.use("/credit-score", credit_score);
 router.use("/task", task);
 router.use("/reminder", reminder);
 
+router.get("/", async (req, res) => {
+    const sql = "SELECT * FROM `User` WHERE id = ? LIMIT 1";
+    connection.query(sql, [req.session.userId], (error, results) => {
+        if (error) {
+            console.log(error.message);
+            return res
+                .status(500)
+                .json({ message: "Error getting user details" });
+        }
+        const user = results[0];
+        res.status(200).json({ user });
+    });
+});
+
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");

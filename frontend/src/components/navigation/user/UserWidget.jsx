@@ -1,34 +1,36 @@
 import closeIcon from "../../../assets/close.svg";
 import "./User.css";
 import { useEffect } from "react";
+import logOutIcon from "../../../assets/logout.svg";
+import userIcon from "../../../assets/user.svg";
+import { fetchData } from "../../../utility/fetchData";
 
 export default function UserWidget({
     showUserWidget,
     closeUserWidget,
-    data,
-    rerender,
+    user,
+    creditScore = 0,
+    netWorth = 0,
 }) {
-    const rerenderUser = () => {
-        rerender();
-    };
-
     useEffect(() => {
         const handleEscapeKey = (event) => {
             if (event.key === "Escape") {
                 closeUserWidget();
             }
         };
-
-        // Add event listener when the component mounts
         if (showUserWidget) {
             document.addEventListener("keydown", handleEscapeKey);
         }
-
-        // Cleanup event listener when the component unmounts or widget is hidden
         return () => {
             document.removeEventListener("keydown", handleEscapeKey);
         };
     }, [showUserWidget, closeUserWidget]);
+
+    const handleLogout = async () => {
+        fetchData("http://localhost:3001/logout", "POST").then(() => {
+            window.location.href = "/login";
+        });
+    };
 
     return (
         showUserWidget && (
@@ -41,10 +43,29 @@ export default function UserWidget({
                 >
                     <img src={closeIcon} alt="close icon" />
                 </button>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <h3 className="tasks-title">My Account</h3>
+                <h3 className="tasks-title">My Account</h3>
+                <div className="user-card">
+                    <img
+                        src={user.profile_image || userIcon}
+                        alt="user profile"
+                    />
+                    <div>
+                        <p className="user-fullname">
+                            {user.first_name} {user.last_name}
+                        </p>
+                        <p className="user-grey-data">
+                            Credit score: {creditScore}
+                        </p>
+                        <p className="user-grey-data">
+                            Net worth: R{netWorth.net_worth}
+                        </p>
+                    </div>
+                    <img
+                        onClick={handleLogout}
+                        src={logOutIcon}
+                        alt="log out"
+                    />
                 </div>
-                {data && <p>Credit score: {data.credit_score[0].score}</p>}
             </div>
         )
     );

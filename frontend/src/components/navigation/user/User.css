@@ -19,3 +19,39 @@
 .user-icon {
     margin-right: 0px;
 }
+
+.user-card {
+    width: 100%;
+    border-top: 1px solid grey;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-card div {
+    width: 100%;
+    margin: 0px 20px;
+}
+
+.user-card img:first-child {
+    height: 100%;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 100px;
+}
+
+.user-card img:last-child {
+    cursor: pointer;
+}
+
+.user-fullname {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.user-grey-data {
+    color: #8b8b8b;
+    margin: 0px;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
