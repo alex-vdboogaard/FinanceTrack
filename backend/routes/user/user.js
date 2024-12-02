@@ -15,6 +15,56 @@ router.use("/credit-score", credit_score);
 router.use("/task", task);
 router.use("/reminder", reminder);
 
-router.post("/profile-picture", upload)
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
+const uploadDir = path.join(__dirname, "../../uploads");
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    },
+});
+
+const upload = multer({ storage }).single("png");
+
+router.put("/profile-picture", upload, (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+    }
+    const filePath = req.file.path;
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            fs.unlink(filePath, () => {});
+            console.error("Error reading file:", err);
+            return res
+                .status(500)
+                .json({ message: "Error processing file", error: err.message });
+        }
+
+        const sql = "UPDATE `User` SET profile_image = ? WHERE id = ?";
+        connection.query(sql, [data, req.session.userId], (dbErr, result) => {
+            fs.unlink(filePath, () => {});
+
+            if (dbErr) {
+                console.error("Database error:", dbErr);
+                return res.status(500).json({
+                    message: "Error saving image to the database",
+                    error: dbErr.message,
+                });
+            }
+
+            return res.status(200).json({ message: "Profile picture updated" });
+        });
+    });
+});
 
 module.exports = router;
