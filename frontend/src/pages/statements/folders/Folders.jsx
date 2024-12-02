@@ -4,6 +4,7 @@ import folderIcon from "../../../assets/folder.svg";
 import ToolTip from "../../../components/tooltip/ToolTip";
 import optionsIcon from "../../../assets/options.svg";
 import FolderOptions from "./FolderOptions";
+import Tag from "../../../components/tag/Tag";
 
 export default function Folders({
     folders = [],
@@ -39,6 +40,7 @@ export default function Folders({
                         >
                             {folder.name}
                         </h3>
+                        <Tag tag={folder.tag}></Tag>
                         <p>
                             {folder.statements?.length || 0} files -{" "}
                             {folder.statements

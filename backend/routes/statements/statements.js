@@ -34,12 +34,35 @@ const upload = multer({ storage }).single("pdf");
 
 // GET route to retrieve all top-level folders
 router.get("/folders", (req, res) => {
-    const sqlFolders = `SELECT * FROM Folder WHERE user_id = ? AND parent_folder_id IS NULL`;
+    const sqlFolders = `
+        SELECT 
+            f.id AS folder_id, 
+            f.name AS folder_name, 
+            f.parent_folder_id, 
+            t.id AS tag_id, 
+            t.name AS tag_name, 
+            t.colour AS tag_colour
+        FROM Folder f
+        LEFT JOIN Tag t ON f.tag_id = t.id
+        WHERE f.user_id = ? AND f.parent_folder_id IS NULL
+    `;
 
     connection.query(sqlFolders, [req.session.userId], (err, folderResults) => {
         if (err) return res.status(500).json({ message: err.message });
 
-        res.status(200).json({ folders: folderResults });
+        // Transform the results into the desired structure
+        const folders = folderResults.map((folder) => ({
+            id: folder.folder_id,
+            name: folder.folder_name,
+            parent_folder_id: folder.parent_folder_id,
+            tag: {
+                id: folder.tag_id,
+                name: folder.tag_name,
+                colour: folder.tag_colour,
+            },
+        }));
+
+        res.status(200).json({ folders });
     });
 });
 

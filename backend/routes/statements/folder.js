@@ -15,8 +15,9 @@ router.get("/:id", (req, res) => {
             f.id AS folder_id,
             f.name AS folder_name, 
             f.parent_folder_id,
-            t.name AS tag_name,       -- Added tag name
-            t.colour AS tag_colour    -- Added tag colour
+            t.id AS tag_id,
+            t.name AS tag_name,   
+            t.colour AS tag_colour   
         FROM Folder f
         LEFT JOIN Statement s ON s.folder_id = f.id
         LEFT JOIN Tag t ON f.tag_id = t.id   -- Join Tag table to get tag details for the folder
@@ -28,10 +29,11 @@ router.get("/:id", (req, res) => {
         SELECT 
             f.id, 
             f.name,
-            t.name AS tag_name,      -- Added tag name for subfolders
-            t.colour AS tag_colour   -- Added tag colour for subfolders
+            t.id AS tag_id,
+            t.name AS tag_name,      
+            t.colour AS tag_colour  
         FROM Folder f
-        LEFT JOIN Tag t ON f.tag_id = t.id   -- Join Tag table to get tag details for the folder
+        LEFT JOIN Tag t ON f.tag_id = t.id
         WHERE f.user_id = ? AND f.parent_folder_id = ? 
         ORDER BY f.name`;
 
@@ -58,6 +60,7 @@ router.get("/:id", (req, res) => {
                 folder_id,
                 folder_name,
                 parent_folder_id,
+                tag_id,
                 tag_name,
                 tag_colour,
             } = statementResults[0];
@@ -89,8 +92,11 @@ router.get("/:id", (req, res) => {
                         folder_id,
                         folder_name,
                         parent_folder_id: parent_folder_id || null,
-                        tag_name,
-                        tag_colour,
+                        tag: {
+                            id: tag_id,
+                            name: tag_name,
+                            colour: tag_colour,
+                        },
                         statements,
                         folders: folderResults,
                     };
