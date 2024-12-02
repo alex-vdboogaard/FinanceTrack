@@ -7,8 +7,8 @@ const connection = require("../../db/db");
 const router = express.Router();
 
 //nested routes
-const folder = require("./folders");
-const tag = require("./tags");
+const folder = require("./folder");
+const tag = require("./tag");
 
 router.use("/folder", folder);
 router.use("/tag", tag);
