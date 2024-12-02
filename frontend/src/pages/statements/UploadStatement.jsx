@@ -33,7 +33,8 @@ export default function UploadStatement({ folderId = null }) {
                         name="pdf"
                         required
                         ref={fileInputRef}
-                        multiple // Allows multiple files to be selected
+                        multiple
+                        accept=".pdf" // Restricts file selection to PDF files only
                     />
 
                     <input
