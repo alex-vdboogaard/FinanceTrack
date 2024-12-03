@@ -118,7 +118,10 @@ router.get("/:id", (req, res) => {
 
 // POST ROUTE for new folder
 router.post("/", (req, res) => {
-    const { parentFolderId = null, name, tag_id = null } = req.body;
+    let { parentFolderId = null, name, tag_id = null } = req.body;
+    if (tag_id === "") {
+        tag_id = null;
+    }
     if (!name) {
         return res.status(400).json({ message: "Please name your new folder" });
     }
