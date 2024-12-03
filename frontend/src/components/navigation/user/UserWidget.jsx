@@ -1,9 +1,12 @@
 import closeIcon from "../../../assets/close.svg";
 import "./User.css";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import logOutIcon from "../../../assets/logout.svg";
 import userIcon from "../../../assets/user.svg";
+import expandIcon from "../../../assets/expand.svg";
 import { fetchData } from "../../../utility/fetchData";
+import Modal from "../../modal/Modal";
+import UserAccountModal from "./UserAccountModal";
 
 export default function UserWidget({
     showUserWidget,
@@ -12,6 +15,17 @@ export default function UserWidget({
     creditScore = {},
     netWorth = {},
 }) {
+    const handleExpand = () => {
+        closeUserWidget();
+        setUserModalOpen(true);
+    };
+
+    const handleCloseUserModal = () => {
+        setUserModalOpen(false);
+    };
+
+    const [isUserModalOpen, setUserModalOpen] = useState(false);
+
     useEffect(() => {
         const handleEscapeKey = (event) => {
             if (event.key === "Escape") {
@@ -31,6 +45,7 @@ export default function UserWidget({
             window.location.href = "/login";
         });
     };
+
     const assets = netWorth.assets;
     const bankAccounts = netWorth.bankAccounts;
     const investments = netWorth.investments;
@@ -65,40 +80,58 @@ export default function UserWidget({
     const totalNetWorth = total1 + total2 + total3;
 
     return (
-        showUserWidget && (
-            <div className="user-widget">
-                <button
-                    onClick={() => {
-                        closeUserWidget();
-                    }}
-                    className="close-icon"
-                >
-                    <img src={closeIcon} alt="close icon" />
-                </button>
-                <h3 className="tasks-title">My Account</h3>
-                <div className="user-card">
-                    <img
-                        src={user.profile_image || userIcon}
-                        alt="user profile"
-                    />
-                    <div>
-                        <p className="user-fullname">
-                            {user.first_name} {user.last_name}
-                        </p>
-                        <p className="user-grey-data">
-                            Credit score: {creditScore.score}
-                        </p>
-                        <p className="user-grey-data">
-                            Net worth: R{totalNetWorth}
-                        </p>
+        <>
+            <Modal
+                toggleSidebar={handleCloseUserModal}
+                type={"center"}
+                isOpen={isUserModalOpen}
+            >
+                <UserAccountModal
+                    user={user}
+                    creditScore={creditScore}
+                    netWorth={netWorth}
+                />
+            </Modal>
+            {showUserWidget && (
+                <div className="user-widget">
+                    <button
+                        onClick={() => {
+                            closeUserWidget();
+                        }}
+                        className="close-icon"
+                    >
+                        <img src={closeIcon} alt="close icon" />
+                    </button>
+                    <h3 className="tasks-title">My Account</h3>
+                    <div className="user-card">
+                        <img
+                            src={user.profile_image || userIcon}
+                            alt="user profile"
+                        />
+                        <div>
+                            <p className="user-fullname">
+                                {user.first_name} {user.last_name}
+                            </p>
+                            <p className="user-grey-data">
+                                Credit score: {creditScore.score}
+                            </p>
+                            <p className="user-grey-data">
+                                Net worth: R{totalNetWorth}
+                            </p>
+                        </div>
+                        <img
+                            onClick={handleLogout}
+                            src={logOutIcon}
+                            alt="log out"
+                        />
+                        <img
+                            onClick={handleExpand}
+                            src={expandIcon}
+                            alt="expand icon"
+                        />
                     </div>
-                    <img
-                        onClick={handleLogout}
-                        src={logOutIcon}
-                        alt="log out"
-                    />
                 </div>
-            </div>
-        )
+            )}
+        </>
     );
 }
