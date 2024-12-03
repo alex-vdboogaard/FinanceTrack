@@ -1,6 +1,6 @@
 import closeIcon from "../../../assets/close.svg";
 import "./User.css";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import logOutIcon from "../../../assets/logout.svg";
 import userIcon from "../../../assets/user.svg";
 import { fetchData } from "../../../utility/fetchData";
@@ -9,8 +9,8 @@ export default function UserWidget({
     showUserWidget,
     closeUserWidget,
     user,
-    creditScore = 0,
-    netWorth = 0,
+    creditScore = {},
+    netWorth = {},
 }) {
     useEffect(() => {
         const handleEscapeKey = (event) => {
@@ -31,6 +31,38 @@ export default function UserWidget({
             window.location.href = "/login";
         });
     };
+    const assets = netWorth.assets;
+    const bankAccounts = netWorth.bankAccounts;
+    const investments = netWorth.investments;
+    const total1 = useMemo(
+        () =>
+            (assets || []).reduce(
+                (acc, asset) => acc + parseFloat(asset.currentValue || 0),
+                0
+            ),
+        [assets]
+    );
+
+    const total2 = useMemo(
+        () =>
+            (bankAccounts || []).reduce(
+                (acc, account) => acc + parseFloat(account.balance || 0),
+                0
+            ),
+        [bankAccounts]
+    );
+
+    const total3 = useMemo(
+        () =>
+            (investments || []).reduce(
+                (acc, investment) =>
+                    acc + parseFloat(investment.currentValue || 0),
+                0
+            ),
+        [investments]
+    );
+
+    const totalNetWorth = total1 + total2 + total3;
 
     return (
         showUserWidget && (
@@ -54,10 +86,10 @@ export default function UserWidget({
                             {user.first_name} {user.last_name}
                         </p>
                         <p className="user-grey-data">
-                            Credit score: {creditScore}
+                            Credit score: {creditScore.score}
                         </p>
                         <p className="user-grey-data">
-                            Net worth: R{netWorth.net_worth}
+                            Net worth: R{totalNetWorth}
                         </p>
                     </div>
                     <img

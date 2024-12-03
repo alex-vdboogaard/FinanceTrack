@@ -72,9 +72,9 @@ export default function CornerWidget() {
             setUserData(data.user);
         });
         fetchData("http://localhost:3001/user/credit-score").then((data) => {
-            setCreditScore(data.credit_score);
+            setCreditScore(data.data.credit_score);
         });
-        fetchData("http://localhost:3001/user/credit-score").then((data) => {
+        fetchData("http://localhost:3001/overview").then((data) => {
             setNetWorthData(data);
         });
     }, [rerender]);
