@@ -104,7 +104,7 @@ const Sidebar = () => {
                                 src={netWorthIcon}
                                 alt="net worth icon"
                             />
-                            {!isCollapsed && <span>Net worth</span>}
+                            {!isCollapsed && <p>Net worth</p>}
                             {isToggled ? (
                                 <img src={toggledIcon} alt="toggle icon" />
                             ) : (

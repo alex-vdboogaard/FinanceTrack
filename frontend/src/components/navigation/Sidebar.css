@@ -7,7 +7,8 @@
     justify-content: space-between;
     position: sticky;
     top: 0;
-    width: 220px;
+    max-width: 220px !important;
+    width: 100%;
 }
 
 .sidebar.collapsed {
@@ -27,7 +28,7 @@
 .nav ul {
     list-style-type: none;
     padding: 0;
-    width: auto;
+    width: 100%;
 }
 
 .nav li {
@@ -35,7 +36,7 @@
     align-items: center;
     cursor: pointer;
     color: #808080;
-    width: auto;
+    width: 100%;
     font-size: 20px;
     font-weight: 500;
     transition: background-color 0.3s, color 0.3s;
@@ -52,12 +53,14 @@
 }
 
 .nav li div {
-    padding: 17px 15px;
-    width: 100%;
+    padding: 0px 15px;
     display: flex;
     align-items: center;
 }
 
+.nav li div p {
+    min-width: 130px;
+}
 .nav li div img:last-child {
     margin-left: 5px;
 }
@@ -96,8 +99,4 @@
 
 .nav span {
     transition: opacity 0.3s ease;
-}
-
-.active {
-    color: blue;
 }

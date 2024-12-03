@@ -120,11 +120,13 @@ export default function UserWidget({
                             </p>
                         </div>
                         <img
+                            className="logout-icon"
                             onClick={handleLogout}
                             src={logOutIcon}
                             alt="log out"
                         />
                         <img
+                            className="expand-icon"
                             onClick={handleExpand}
                             src={expandIcon}
                             alt="expand icon"
