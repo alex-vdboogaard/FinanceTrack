@@ -3,7 +3,7 @@ const connection = require("../../db/db");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const query = `SELECT * FROM Credit_Score_History WHERE user_id = ${req.session.userId} ORDER BY YEAR DESC, MONTH DESC LIMIT 1`;
+    const query = `SELECT * FROM Credit_Score_History WHERE user_id = ${req.session.userId} ORDER BY YEAR DESC, MONTH DESC LIMIT 24`;
     connection.query(query, (err, credit_score) => {
         if (err) {
             res.status(500).json({
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
             return;
         }
         const data = {
-            credit_score: credit_score[0],
+            credit_score: credit_score,
         };
 
         res.status(200).json({ data });

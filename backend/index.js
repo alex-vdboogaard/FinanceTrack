@@ -18,6 +18,7 @@ const saving_goals = require("./routes/savings/saving-goals");
 const budget = require("./routes/budget/budget");
 const statements = require("./routes/statements/statements");
 const user = require("./routes/user/user");
+const credit_scores = require("./routes/user/credit_score");
 
 const connection = require("./db/db");
 app.use(express.json());
@@ -50,6 +51,7 @@ app.use("/savings/goal", saving_goals);
 app.use("/budget", budget);
 app.use("/statements", statements);
 app.use("/user", user);
+app.use("/user/credit_score", credit_scores);
 
 const saltRounds = 10;
 
