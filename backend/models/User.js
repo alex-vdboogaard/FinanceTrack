@@ -4,6 +4,7 @@ class User {
     password,
     firstName,
     lastName = null,
+    dob = null,
     dateJoined = new Date()
   ) {
     this.username = username;
@@ -11,6 +12,7 @@ class User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.dateJoined = dateJoined;
+    this.dob = dob;
   }
 }
 

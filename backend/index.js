@@ -101,7 +101,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/create-account", async (req, res) => {
-    const { username, password, firstName, lastName } = req.body;
+    const { username, password, firstName, lastName, dob } = req.body;
 
     // Validate the input fields
     if (!username || !password || !firstName) {
@@ -126,12 +126,12 @@ app.post("/create-account", async (req, res) => {
 
             // Insert the new user into the database
             const insertUserQuery = `
-                INSERT INTO \`User\` (username, password, first_name, last_name)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO \`User\` (username, password, first_name, last_name, dob)
+                VALUES (?, ?, ?, ?, ?)
             `;
             connection.query(
                 insertUserQuery,
-                [username, hashedPassword, firstName, lastName || null],
+                [username, hashedPassword, firstName, lastName || null, dob || null],
                 (err, results) => {
                     if (err) {
                         return res

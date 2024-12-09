@@ -1,9 +1,9 @@
 -- Insert data into User table
 use FinanceTrack;
 
-INSERT INTO `User` (username, password, first_name, last_name)
+INSERT INTO `User` (username, password, first_name, last_name, dob)
 VALUES 
-('test', '$2b$10$BVKfXEk6k90jDRSIldm1se60t4hIzggxdN5AiOxFRRLLYf7Z86Wfm', 'John', 'Cena');
+('test', '$2b$10$BVKfXEk6k90jDRSIldm1se60t4hIzggxdN5AiOxFRRLLYf7Z86Wfm', 'John', 'Cena', '1987-01-01');
 
 -- Create budget for user
 INSERT INTO Budget(income, expenses, savings, invest, user_id)
