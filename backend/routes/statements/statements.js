@@ -105,6 +105,18 @@ router.get("/", (req, res) => {
     );
 });
 
+router.get("/search/:query", (req, res) => {
+    const {query} = req.params;
+    const sql = `SELECT s.id, s.name, s.folder_id, f.name FROM Statement AS s LEFT JOIN Folder AS f ON s.folder_id = f.id WHERE s.user_id = ${req.session.userId} AND s.name LIKE '%${query}%'`;
+    connection.query(
+        sql,
+        (err, files) => {
+            if (err) return res.status(500).json({ message: err.message });
+            res.status(200).json({ files });
+        }
+    );
+})
+
 // GET route to retrieve recent files
 router.get("/recent-files", (req, res) => {
     const sqlRecentFiles = `SELECT * FROM STATEMENT WHERE user_id = ? ORDER BY created_at DESC LIMIT 6`;
