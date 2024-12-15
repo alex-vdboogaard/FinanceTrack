@@ -9,6 +9,7 @@ import Folders from "./folders/Folders.jsx";
 import RecentFiles from "./RecentFiles.jsx";
 import Pagination from "../../components/pagination/Pagination.jsx";
 import StatementsList from "./StatementsList.jsx";
+import SearchStatement from "./SearchStatement.jsx";
 
 const Statements = () => {
     // State for files and folder data
@@ -142,6 +143,7 @@ const Statements = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">All files</h2>
                 <UploadStatement />
+                <SearchStatement></SearchStatement>
             </div>
 
             <StatementsList statements={statements} loading={loading}></StatementsList>
