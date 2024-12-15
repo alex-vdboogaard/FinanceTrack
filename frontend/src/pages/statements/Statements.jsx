@@ -8,6 +8,7 @@ import NewFolder from "./folders/NewFolder.jsx";
 import Folders from "./folders/Folders.jsx";
 import RecentFiles from "./RecentFiles.jsx";
 import Pagination from "../../components/pagination/Pagination.jsx";
+import StatementsList from "./StatementsList.jsx";
 
 const Statements = () => {
     // State for files and folder data
@@ -143,60 +144,7 @@ const Statements = () => {
                 <UploadStatement />
             </div>
 
-            <table className="statements-table">
-                <thead>
-                    <tr>
-                        <th>Filename</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loading.statements === true ? (
-                        <tr>
-                            <td colSpan="2" className="text-center">
-                                Loading...
-                            </td>
-                        </tr>
-                    ) : (
-                        statements.map((statement) => (
-                            <tr key={statement.id}>
-                                <td>
-                                    <div className="file-td">
-                                        <img
-                                            className="file-icon"
-                                            src="./src/assets/file.svg"
-                                            alt="file icon"
-                                        />
-                                        {statement.name}
-                                    </div>
-                                </td>
-                                <td>
-                                    <button
-                                        onClick={() =>
-                                            handlePreview(statement.pdf_blob)
-                                        }
-                                    >
-                                        <img
-                                            src="../src/assets/view.svg"
-                                            alt="preview"
-                                        />
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            handleDelete(statement.id)
-                                        }
-                                    >
-                                        <img
-                                            src="../src/assets/delete.svg"
-                                            alt="delete icon"
-                                        />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+            <StatementsList statements={statements} loading={loading}></StatementsList>
 
             {numPages > 1 && (
                 <Pagination
