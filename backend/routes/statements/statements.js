@@ -85,7 +85,7 @@ router.get("/", (req, res) => {
             const totalPages = Math.ceil(totalStatements / limit); // Calculate total pages
 
             // SQL query to fetch statements with pagination
-            const sqlStatements = `SELECT * FROM Statement WHERE user_id = ? LIMIT ? OFFSET ?`;
+            const sqlStatements = `SELECT s.id, f.id AS folder_id, s.name, s.folder_id, f.name as folder_name FROM Statement AS s LEFT JOIN Folder AS f ON s.folder_id = f.id WHERE s.user_id = ? LIMIT ? OFFSET ?`;
 
             connection.query(
                 sqlStatements,
@@ -107,7 +107,7 @@ router.get("/", (req, res) => {
 
 router.get("/search/:query", (req, res) => {
     const {query} = req.params;
-    const sql = `SELECT s.id, s.name, s.folder_id, f.name FROM Statement AS s LEFT JOIN Folder AS f ON s.folder_id = f.id WHERE s.user_id = ${req.session.userId} AND s.name LIKE '%${query}%'`;
+    const sql = `SELECT s.id, f.id AS folder_id, s.name, s.folder_id, f.name as folder_name FROM Statement AS s INNER JOIN Folder AS f ON s.folder_id = f.id WHERE s.user_id = ${req.session.userId} AND s.name LIKE '%${query}%'`;
     connection.query(
         sql,
         (err, files) => {

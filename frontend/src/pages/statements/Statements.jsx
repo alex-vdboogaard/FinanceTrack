@@ -143,9 +143,8 @@ const Statements = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <h2 className="h2">All files</h2>
                 <UploadStatement />
-                <SearchStatement></SearchStatement>
             </div>
-
+            <SearchStatement></SearchStatement>
             <StatementsList statements={statements} loading={loading}></StatementsList>
 
             {numPages > 1 && (

@@ -121,3 +121,13 @@ option {
     margin-left: 5px;
     color: black;
 }
+
+.grey-link {
+    color: grey;
+}
+
+.search-input {
+    border-radius: 30px;
+    max-width: 200px !important;
+    width: 100%;
+}
