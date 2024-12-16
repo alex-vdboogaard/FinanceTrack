@@ -77,6 +77,7 @@ export default function ReminderWidget() {
         reminders.map((reminder) => {
           return (
             <Reminder
+              key={reminder.id}
               reminder={reminder}
               handleDelete={() => handleDelete(false, reminder)}
             />

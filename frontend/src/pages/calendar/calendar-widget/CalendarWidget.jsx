@@ -1,22 +1,27 @@
 import { useState } from "react";
 import Button from "../../../components/button/Button";
 import Calendar from "./Calendar";
+import { getCurrentMonthInfo } from "../../../utility/dates";
+
 export default function CalendarWidget() {
-  const [rerender, setRerender] = useState("");
-  const [activeDay, setActiveDay] = useState(1);
-  const [month, setMonth] = useState("");
+  const [rerender, setRerender] = useState(false);
+  const [dateInfo, setDateInfo] = useState(getCurrentMonthInfo());
   const [newEventName, setNewEventName] = useState("");
+  const [activeDay, setActiveDay] = useState(1);
+
   const handleRerender = () => {
     setRerender((prev) => !prev);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    //add event logic
     handleRerender();
   };
+
   const handleChange = (e) => {
     setNewEventName(e.target.value);
   };
+
   return (
     <div className="calendar-widget calendar">
       <div>
@@ -27,7 +32,7 @@ export default function CalendarWidget() {
             <input
               className="normal-input"
               type="text"
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
             />
           </div>
           <Button className="primary-btn" type="submit" onClick={handleSubmit}>
@@ -36,10 +41,11 @@ export default function CalendarWidget() {
         </form>
       </div>
       <Calendar
-        rerender={handleRerender}
+        dateInfo={dateInfo}
+        setDateInfo={setDateInfo}
         activeDay={activeDay}
         setActiveDay={setActiveDay}
-      ></Calendar>
+      />
     </div>
   );
 }

@@ -27,9 +27,27 @@
   width: 100%;
 }
 
+.calendar div:first-child {
+  margin-right: 20px;
+}
+
+.calendar-date-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-date-wrapper button {
+  margin: 0px;
+}
+
+.calendar-date-wrapper button:first-child {
+  margin-right: 10px;
+}
+
 .calendar-days h3 {
   text-decoration: none;
   margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 .days-wrapper {
@@ -37,19 +55,20 @@
   flex-wrap: wrap;
 }
 
-.days-wrapper a {
+.days-wrapper button {
   width: 30px;
   height: 30px;
-  padding: 10px;
-  display: inline;
+  padding: 20px;
+  display: flex;
   align-items: center;
   justify-content: center;
   align-self: center;
   border-radius: 50px;
   cursor: pointer;
+  font-size: 17px;
 }
 
-.days-wrapper a:hover {
+.days-wrapper button:hover {
   background-color: black;
   color: white;
 }
