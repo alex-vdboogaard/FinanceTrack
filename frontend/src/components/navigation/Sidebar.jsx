@@ -18,6 +18,7 @@ import arrowLeftIcon from "../../assets/arrow-left.svg";
 import toggleIcon from "../../assets/toggle-arrow.svg";
 import toggledIcon from "../../assets/toggled.svg";
 import netWorthIcon from "../../assets/net-worth.svg";
+import calendarIcon from "../../assets/calendar.svg";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -168,10 +169,10 @@ const Sidebar = () => {
             <Link to="/calendar">
               <img
                 className={isActive("/calendar") ? "active-icon" : "icon"}
-                src={statementsIcon}
+                src={calendarIcon}
                 alt="calendar-icon"
               />
-              {!isCollapsed && <span>Statements</span>}
+              {!isCollapsed && <span>Calendar</span>}
             </Link>
           </li>
           <li className={isActive("/statements") ? "active" : ""}>

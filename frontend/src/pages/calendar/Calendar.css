@@ -15,3 +15,46 @@
   height: 100%;
   position: relative;
 }
+
+.calendar-widget h2 {
+  margin-top: 0px;
+}
+
+.calendar {
+  display: flex;
+  align-items: start;
+  max-width: 800px;
+  width: 100%;
+}
+
+.calendar-days h3 {
+  text-decoration: none;
+  margin-top: 0px;
+}
+
+.days-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.days-wrapper a {
+  width: 30px;
+  height: 30px;
+  padding: 10px;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.days-wrapper a:hover {
+  background-color: black;
+  color: white;
+}
+
+.active-day {
+  background-color: black;
+  color: white;
+}
