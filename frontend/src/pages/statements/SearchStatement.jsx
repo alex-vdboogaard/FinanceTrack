@@ -56,7 +56,7 @@ export default function SearchStatement() {
             top: "9px",
           }}
         >
-          <img src={searchIcon} />
+          <img src={searchIcon} style={{ marginTop: "4px" }} />
         </Button>
       </form>
       {searchOpen && (
