@@ -28,11 +28,11 @@ export default function CalendarWidget() {
         <h2 className="h2">New event</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
-            <label htmlFor="Event name">Event name</label>
             <input
-              className="normal-input"
+              className="normal-input new-event-input"
               type="text"
               onChange={handleChange}
+              placeholder="event name"
             />
           </div>
           <Button className="primary-btn" type="submit" onClick={handleSubmit}>

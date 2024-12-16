@@ -77,3 +77,9 @@
   background-color: black;
   color: white;
 }
+
+.new-event-input {
+  max-width: 200px;
+  border-radius: 30px;
+  border: 1px solid grey;
+}
