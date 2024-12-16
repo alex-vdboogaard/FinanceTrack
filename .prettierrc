@@ -1,0 +1,25 @@
+{
+  "singleQuote": false,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "trailingComma": "es5",
+  "arrowParens": "always",
+  "printWidth": 80,
+  "proseWrap": "preserve",
+  "endOfLine": "lf",
+  "quoteProps": "as-needed",
+  "htmlWhitespaceSensitivity": "css",
+  "bracketSpacing": true,
+  "jsxSingleQuote": false,
+  "overrides": [
+    {
+      "files": "*.sql",
+      "options": {
+        "parser": "sql",
+        "useTabs": true,
+        "tabWidth": 4
+      }
+    }
+  ]
+}
