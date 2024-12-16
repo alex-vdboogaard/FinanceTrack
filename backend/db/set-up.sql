@@ -270,6 +270,7 @@ VALUES
 ('Tools'),
 ('Appliances'),
 ('Furniture'),
+('Equity')
 ('Other');
 
 -- Insert data into Expense_category table

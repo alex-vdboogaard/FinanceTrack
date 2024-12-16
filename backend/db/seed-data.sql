@@ -14,7 +14,7 @@ VALUES
 INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id)
 VALUES 
 ('House', 300000.00, 320000.00, 1,1), 
-('Tesla Stock', 5000.00, 7000.00, 2,1), 
+('Tesla Stock', 5000.00, 7000.00, 11,1), 
 ('Car', 25000.00, 18000.00, 3,1);
 
 -- Insert data into Recurring_expense table
