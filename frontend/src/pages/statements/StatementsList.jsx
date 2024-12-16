@@ -1,10 +1,13 @@
 import pops from "pop-message";
 import { Link } from "react-router-dom";
 import { fetchData } from "../../utility/fetchData";
-export default function StatementsList({ statements, loading }) {
+export default function StatementsList({ statements, setStatements, loading }) {
   // Handle PDF preview
   const handlePreview = (pdfBuffer) => {
     try {
+      if (!pdfBuffer || !pdfBuffer.data) {
+        throw new Error("Invalid PDF buffer data.");
+      }
       const uint8Array = new Uint8Array(pdfBuffer.data);
       const blob = new Blob([uint8Array], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);

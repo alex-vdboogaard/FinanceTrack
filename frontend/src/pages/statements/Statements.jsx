@@ -143,6 +143,7 @@ const Statements = () => {
       <SearchStatement></SearchStatement>
       <StatementsList
         statements={statements}
+        setStatements={setStatements}
         loading={loading}
       ></StatementsList>
 
