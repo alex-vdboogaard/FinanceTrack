@@ -76,6 +76,18 @@ CREATE TABLE Investment (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
+
+-- Create Investment History Table
+CREATE TABLE Investment_History (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    invested DECIMAL(10, 2) NOT NULL,
+    currentValue DECIMAL(10, 2) NOT NULL,
+    investment_id INT NOT NULL,
+    year INT NOT NULL,
+    month INT NOT NULL,
+    FOREIGN KEY (investment_id) REFERENCES Investment(id) ON DELETE CASCADE
+);
+
 -- Create Bank Account Category Table
 CREATE TABLE Bank_account_category (
     id INT PRIMARY KEY AUTO_INCREMENT,
