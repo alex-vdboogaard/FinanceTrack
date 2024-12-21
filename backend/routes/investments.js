@@ -47,6 +47,22 @@ router.get("/history/:id", (req, res) => {
   });
 });
 
+router.post("/history", (req, res) => {
+  const { id, value, invested, currentValue, investment_id, year, month } =
+    req.body;
+  console.log(req.body);
+  if (!id || !value || !year || !month || !invested || !currentValue) {
+    return res.status(400).json({ message: "All fields required" });
+  }
+  const sql = `INSERT INTO investment_history (invested, currentValue, investment_id, year, month) VALUES (${invested},${value},${investment_id},${year},${month})`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error " + err.message });
+    }
+    return res.status(201).json({ message: "Investment history added" });
+  });
+});
+
 router.post("/", (req, res) => {
   let { description, invested, currentValue, type } = req.body;
   description = description.replace(/'/g, '"');

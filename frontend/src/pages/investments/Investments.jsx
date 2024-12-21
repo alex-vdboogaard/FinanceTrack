@@ -10,6 +10,7 @@ import InvestmentPieChart from "./InvestmentPieChart";
 import InvestmentBarChart from "./InvestmentBarChart";
 import FilteredFolders from "../../components/filtered-folders/FilteredFolders";
 import IndividualInvestment from "./investment-modal/Individual-Investment";
+import openIcon from "../../assets/open.svg";
 
 export default function Investments() {
   const [investments, setInvestments] = useState([]);
@@ -220,7 +221,7 @@ export default function Investments() {
                       handleOpenInvestment(investment);
                     }}
                   >
-                    Open
+                    <img src={openIcon} alt="open" />
                   </button>
                 </td>
               </tr>
