@@ -36,29 +36,12 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = `SELECT * FROM investment WHERE id = ${id} AND user_id = ${req.session.userId}`;
-  connection.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error" + err.message });
-    }
-    if (results.length === 0) {
-      return res.status(401).json({ message: "Investment does not exist " });
-    }
-    return res.status(200).json({ investment: results[0] });
-  });
-});
-
 router.get("/history/:id", (req, res) => {
   const { id } = req.params;
   const sql = `SELECT * FROM investment_history WHERE investment_id = ${id}`;
   connection.query(sql, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error" + err.message });
-    }
-    if (results.length === 0) {
-      return res.status(401).json({ message: "Investment does not exist " });
     }
     return res.status(200).json({ history: results });
   });
