@@ -3,10 +3,10 @@ import "./App.css";
 
 // Routes
 import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    useLocation,
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
 } from "react-router-dom";
 
 // Components
@@ -27,43 +27,45 @@ import CreateAccount from "./pages/utility/CreateAccount";
 import FolderPage from "./pages/statements/folders/FolderPage";
 import Loans from "./pages/loans/Loans";
 import LoanPage from "./pages/loans/LoanPage";
+import Calendar from "./pages/calendar/Calendar";
 
 function App() {
-    return (
-        <Router>
-            <AppContent />
-        </Router>
-    );
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
 }
 
 function AppContent() {
-    const location = useLocation();
+  const location = useLocation();
 
-    return (
-        <>
-            {location.pathname !== "/login" &&
-                location.pathname !== "/create-account" && <Sidebar />}
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/create-account" element={<CreateAccount />} />
-                <Route path="/overview" element={<Home />} />
-                <Route path="/budget" element={<Budget />} />
-                <Route path="/assets" element={<Assets />} />
-                <Route path="/loans" element={<Loans />} />
-                <Route path="/loans/:id" element={<LoanPage />} />
-                <Route path="/bank-accounts" element={<BankAccounts />} />
-                <Route path="/investments" element={<Investments />} />
-                <Route path="/savings" element={<Savings />} />
-                <Route path="/statements" element={<Statements />} />
-                <Route path="/statements/folder/:id" element={<FolderPage />} />
-                {/* Catch not existent routes */}
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-            {location.pathname !== "/login" &&
-                location.pathname !== "/create-account" && <CornerWidget />}
-        </>
-    );
+  return (
+    <>
+      {location.pathname !== "/login" &&
+        location.pathname !== "/create-account" && <Sidebar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/overview" element={<Home />} />
+        <Route path="/budget" element={<Budget />} />
+        <Route path="/assets" element={<Assets />} />
+        <Route path="/loans" element={<Loans />} />
+        <Route path="/loans/:id" element={<LoanPage />} />
+        <Route path="/bank-accounts" element={<BankAccounts />} />
+        <Route path="/investments" element={<Investments />} />
+        <Route path="/savings" element={<Savings />} />
+        <Route path="/statements" element={<Statements />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/statements/folder/:id" element={<FolderPage />} />
+        {/* Catch not existent routes */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {location.pathname !== "/login" &&
+        location.pathname !== "/create-account" && <CornerWidget />}
+    </>
+  );
 }
 
 export default App;

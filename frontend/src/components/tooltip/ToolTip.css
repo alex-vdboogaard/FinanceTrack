@@ -1,24 +1,25 @@
 .tool-tip {
-    position: absolute;
-    top: 100%;
-    transform: translateX(-70%);
-    background-color: white;
-    color: black;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 999;
+  position: absolute;
+  top: 100%;
+  transform: translateX(-70%);
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 999;
+  border: 1px solid rgb(239, 239, 239);
 }
 
 .tooltip-container {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-    right: 5px;
-    top: 5px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  right: 5px;
+  top: 5px;
 }
 
 .tooltip-container img {
-    padding: 5px;
+  padding: 5px;
 }
