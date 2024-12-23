@@ -126,5 +126,34 @@ VALUES
 ('Tax Q2', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 1),
 ('Tax Q3', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 2);
    
+INSERT INTO Tax_period (amount, year, user_id)
+VALUES
+(2200.00, 2024,1),
+(1900.00, 2023, 1),
+(1700.00, 2022, 1),
+(1500.00, 2021,1);
 
+INSERT INTO TFSA_contribution (amount, month, year, user_id) 
+VALUES
+(500.00, 1, 2024, 1),
+(700.00, 2, 2024, 1),
+(650.00, 3, 2024, 1),
+(450.00, 4, 2024, 1);
 
+INSERT INTO Tax_line_item (name, amount, due_to_sars, user_id) 
+VALUES
+('Income Tax', 1000.00, 100.5, 1),
+('Capital Gains Tax', 200.50, 0, 2),
+('Dividend Tax', 300.75, 1, 3),
+('VAT', 450.00, 1, 1),
+('Corporate Tax', 1250.00, 0, 2),
+('Property Tax', 800.00, 1, 3);
+
+INSERT INTO Tax_line_item (name, amount, due_to_sars, user_id) 
+VALUES
+('Income Tax', 1000.00, 1000.00, 1), -- Full liability
+('Capital Gains Tax', 200.50, 150.50, 1), -- Partial payment made
+('Dividend Tax', 300.75, 300.75, 1), -- Full liability
+('VAT', 450.00, 350.00, 1), -- Partial payment made
+('Corporate Tax', 1250.00, 1250.00, 1), -- Full liability
+('Property Tax', 800.00, 750.00, 1); -- Partial payment made

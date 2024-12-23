@@ -2,25 +2,6 @@ const express = require("express");
 const connection = require("../../db/db");
 const router = express.Router();
 
-//current credit score
-router.get("/current", async (req, res) => {
-    const query = `SELECT * FROM Credit_Score_History WHERE user_id = ${req.session.userId} ORDER BY YEAR DESC, MONTH DESC LIMIT 1`;
-    connection.query(query, (err, credit_score) => {
-        if (err) {
-            res.status(500).json({
-                message: "Error reading from the database" + err.message,
-            });
-            return;
-        }
-        const data = {
-            credit_score: credit_score,
-        };
-
-        res.status(200).json({ data });
-    });
-});
-
-//gets 24 most-recent credit scores
 router.get("/", async (req, res) => {
     const query = `SELECT * FROM Credit_Score_History WHERE user_id = ${req.session.userId} ORDER BY YEAR DESC, MONTH DESC LIMIT 24`;
     connection.query(query, (err, credit_score) => {
