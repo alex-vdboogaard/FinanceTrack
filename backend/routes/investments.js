@@ -48,13 +48,11 @@ router.get("/history/:id", (req, res) => {
 });
 
 router.post("/history", (req, res) => {
-  const { id, value, invested, currentValue, investment_id, year, month } =
-    req.body;
-  console.log(req.body);
-  if (!id || !value || !year || !month || !invested || !currentValue) {
+  const { id, invested, current, year, month } = req.body;
+  if (!id || !year || !month || !invested || !current) {
     return res.status(400).json({ message: "All fields required" });
   }
-  const sql = `INSERT INTO investment_history (invested, currentValue, investment_id, year, month) VALUES (${invested},${value},${investment_id},${year},${month})`;
+  const sql = `INSERT INTO investment_history (invested, currentValue, investment_id, year, month) VALUES (${invested},${current},${id},${year},${month})`;
   connection.query(sql, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error " + err.message });
