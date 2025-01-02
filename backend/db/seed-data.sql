@@ -157,20 +157,11 @@ VALUES
 (650.00, 3, 2024, 1),
 (450.00, 4, 2024, 1);
 
-INSERT INTO Tax_line_item (name, amount, due_to_sars, user_id) 
+INSERT INTO Tax_line_item (name, amount, user_id) 
 VALUES
-('Income Tax', 1000.00, 100.5, 1),
-('Capital Gains Tax', 200.50, 0, 2),
-('Dividend Tax', 300.75, 1, 3),
-('VAT', 450.00, 1, 1),
-('Corporate Tax', 1250.00, 0, 2),
-('Property Tax', 800.00, 1, 3);
-
-INSERT INTO Tax_line_item (name, amount, due_to_sars, user_id) 
-VALUES
-('Income Tax', 1000.00, 1000.00, 1), -- Full liability
-('Capital Gains Tax', 200.50, 150.50, 1), -- Partial payment made
-('Dividend Tax', 300.75, 300.75, 1), -- Full liability
-('VAT', 450.00, 350.00, 1), -- Partial payment made
-('Corporate Tax', 1250.00, 1250.00, 1), -- Full liability
-('Property Tax', 800.00, 750.00, 1); -- Partial payment made
+('Income Tax', 1000.00, 1), 
+('Capital Gains Tax', 200.50, 1), 
+('Dividend Tax', 300.75, 1), 
+('VAT', 450.00, 1), 
+('Corporate Tax', 1250.00, 1), 
+('Property Tax', 800.00, 1);
