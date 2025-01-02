@@ -19,6 +19,7 @@ const budget = require("./routes/budget/budget");
 const statements = require("./routes/statements/statements");
 const user = require("./routes/user/user");
 const credit_scores = require("./routes/user/credit_score");
+const tax = require("./routes/user/tax");
 
 const connection = require("./db/db");
 app.use(express.json());
@@ -52,6 +53,7 @@ app.use("/budget", budget);
 app.use("/statements", statements);
 app.use("/user", user);
 app.use("/user/credit_score", credit_scores);
+app.use("/user/tax", tax);
 
 const saltRounds = 10;
 
