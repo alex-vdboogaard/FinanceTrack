@@ -269,6 +269,33 @@ CREATE TABLE Notification (
     FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
 );
 
+-- Create Tax period table
+CREATE TABLE Tax_period(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(10,2) NOT NULL,
+    year Year NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
+-- Create Tax-free savings account contribution
+CREATE TABLE TFSA_contribution (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(10,2) NOT NULL,
+    month INT NOT NULL,
+    year Year NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
+
+-- Create Tax line item table
+CREATE TABLE Tax_line_item(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    amount DECIMAL(10,2),
+    user_id INT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES `User`(id) ON DELETE CASCADE
+);
 -- Insert data into Asset_Type table
 INSERT INTO Asset_Type (name)
 VALUES 
@@ -282,6 +309,7 @@ VALUES
 ('Tools'),
 ('Appliances'),
 ('Furniture'),
+('Equity'),
 ('Other');
 
 -- Insert data into Expense_category table

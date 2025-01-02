@@ -14,7 +14,7 @@ VALUES
 INSERT INTO Asset (name, boughtFor, currentValue, asset_type_id, user_id)
 VALUES 
 ('House', 300000.00, 320000.00, 1,1), 
-('Tesla Stock', 5000.00, 7000.00, 2,1), 
+('Tesla Stock', 5000.00, 7000.00, 11,1), 
 ('Car', 25000.00, 18000.00, 3,1);
 
 -- Insert data into Recurring_expense table
@@ -143,5 +143,25 @@ VALUES
 ('Tax Q2', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 1),
 ('Tax Q3', 'blob:http://localhost:5173/947b5aa6-6444-41f2-9cb7-31a86c72c626', 1, 2);
    
+INSERT INTO Tax_period (amount, year, user_id)
+VALUES
+(2200.00, 2024,1),
+(1900.00, 2023, 1),
+(1700.00, 2022, 1),
+(1500.00, 2021,1);
 
+INSERT INTO TFSA_contribution (amount, month, year, user_id) 
+VALUES
+(500.00, 1, 2024, 1),
+(700.00, 2, 2024, 1),
+(650.00, 3, 2024, 1),
+(450.00, 4, 2024, 1);
 
+INSERT INTO Tax_line_item (name, amount, user_id) 
+VALUES
+('Income Tax', 1000.00, 1), 
+('Capital Gains Tax', 200.50, 1), 
+('Dividend Tax', 300.75, 1), 
+('VAT', 450.00, 1), 
+('Corporate Tax', 1250.00, 1), 
+('Property Tax', 800.00, 1);
