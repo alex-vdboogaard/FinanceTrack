@@ -41,6 +41,23 @@ VALUES
 ('Apple stocks', 500, 1000, 1, 1),
 ('Coca Cola stocks', 1000, 3000, 1, 1);
 
+-- Insert seed data into Investment_History
+INSERT INTO Investment_History (invested, currentValue, investment_id, year, month)
+VALUES
+    (1000.00, 1100.00, 1, 2023, 1),
+    (2000.00, 2100.00, 1, 2023, 2),
+    (1500.00, 1400.00, 1, 2023, 3),
+    (3000.00, 3200.00, 1, 2023, 4),
+    (2500.00, 2600.00, 1, 2023, 5),
+    (1800.00, 1700.00, 1, 2023, 6),
+    (2200.00, 2300.00, 1, 2023, 7),
+    (4000.00, 4500.00, 1, 2023, 8),
+    (3500.00, 3700.00, 1, 2023, 9),
+    (5000.00, 4800.00, 1, 2023, 10),
+    (6000.00, 6200.00, 1, 2023, 11),
+    (7000.00, 7100.00, 1, 2023, 12);
+
+
 -- Insert data into Bank_account table
 INSERT INTO Bank_account (description, balance, category_id, bank_id, user_id)
 VALUES 
