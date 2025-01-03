@@ -4,18 +4,18 @@ import deleteIcon from "../../assets/delete.svg";
 import pops from "pop-message";
 import { fetchData } from "../../utility/fetchData";
 export default function Summary() {
-  const year = getCurrentMonthInfo().year;
-  const [items, setItems] = useState([
-    { name: "Salary", amount: 13000, due: 2000 },
-  ]);
+  const [year, setYear] = useState(getCurrentMonthInfo().year);
+  const [items, setItems] = useState([]);
+  const [totalOwed, setTotalOwed] = useState(0);
+  const [rerender, setRerender] = useState(false);
+
   const calculateTotals = (items) => {
     const totalDue = items.reduce((acc, item) => acc + parseFloat(item.due), 0);
     setTotalOwed(totalDue);
   };
 
-  const [totalOwed, setTotalOwed] = useState(0);
-
   const url = "http://localhost:3001/user/tax";
+
   const handleSave = (item) => {
     fetchData(url, "PUT", item);
   };
@@ -38,14 +38,31 @@ export default function Summary() {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
     setItems(updatedItems);
-    calculateTotals(updatedAssets);
+    calculateTotals(updatedItems);
+  };
+
+  const handleRerender = () => {
+    setRerender((prev) => !prev);
+  };
+
+  const handleNew = () => {
+    const formData = {
+      name: "Item",
+      amount: 0,
+      due: 0,
+      year: year,
+    };
+    fetchData(url, "POST", formData).then(() => {
+      handleRerender();
+    });
   };
 
   useEffect(() => {
     fetchData(url).then((data) => {
       setItems(data.items);
+      calculateTotals(items);
     });
-  }, []);
+  }, [year, rerender]);
 
   return (
     <div className="summary-wrapper">
@@ -53,7 +70,9 @@ export default function Summary() {
       <table>
         <thead>
           <tr className="no-border">
-            <th>Name</th>
+            <th>
+              Item <button onClick={handleNew}>+</button>
+            </th>
             <th>Amount (R)</th>
             <th>Due to SARS (R)</th>
             <th>Actions</th>
@@ -68,7 +87,7 @@ export default function Summary() {
                     type="text"
                     value={item.name}
                     onChange={(e) =>
-                      handleUpdate(index, "name", e.target.value, item)
+                      handleUpdate(index, "name", e.target.value)
                     }
                     onBlur={(e) => handleSave(item)}
                   />
@@ -78,28 +97,18 @@ export default function Summary() {
                     type="number"
                     value={item.amount}
                     onChange={(e) =>
-                      handleUpdate(
-                        index,
-                        "amount",
-                        parseFloat(e.target.value),
-                        item
-                      )
+                      handleUpdate(index, "amount", parseFloat(e.target.value))
                     }
                     onBlur={() => handleSave(item)}
                   />
                 </td>
                 <td>
-                  <span>{item.due >= 0 ? "+ " : "- "}</span>
+                  <span>{item.due >= 0 ? "+ " : ""}</span>
                   <input
                     type="number"
                     value={item.due}
                     onChange={(e) =>
-                      handleUpdate(
-                        index,
-                        "due",
-                        parseFloat(e.target.value),
-                        item
-                      )
+                      handleUpdate(index, "due", parseFloat(e.target.value))
                     }
                     onBlur={() => handleSave(item)}
                   />

@@ -17,20 +17,43 @@ router.get("/", (req, res) => {
 
 // add a new tax item
 router.post("/", (req, res) => {
-  const { amount, year } = req.body;
-  const query = "INSERT INTO Tax_period (amount, year, user_id) VALUES (?,?,?)";
+  const { name, amount, due, year } = req.body;
+  const query =
+    "INSERT INTO Tax_Line_Item (name, amount, due, year, user_id) VALUES (?,?,?,?,?)";
   connection.query(
     query,
-    [amount, year, req.session.userId],
+    [name, amount, due, year, req.session.userId],
     (err, results) => {
       if (err) {
-        return res
-          .status(500)
-          .json({ message: "Error adding tax period payment" });
+        return res.status(500).json({ message: "Error adding tax item" });
       }
       res.status(201).json({
         message: "Tax payment added",
         paymentId: results.insertId,
+      });
+    }
+  );
+});
+
+// update a tax item
+router.put("/", (req, res) => {
+  const { id, name, amount, due, year } = req.body;
+  const query =
+    "UPDATE Tax_Line_Item SET name = ?, amount = ?, due = ?, year = ? WHERE id = ? AND user_id = ?";
+  connection.query(
+    query,
+    [name, amount, due, year, id, req.session.userId],
+    (err, results) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error updating tax item" + err.message });
+      }
+      if (!results) {
+        return res.status();
+      }
+      res.status(201).json({
+        message: "Tax payment updated",
       });
     }
   );
