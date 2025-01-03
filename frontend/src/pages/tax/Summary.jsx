@@ -15,7 +15,7 @@ export default function Summary() {
 
   const [totalOwed, setTotalOwed] = useState(0);
 
-  const url = "http://localhost:3001/tax/summary";
+  const url = "http://localhost:3001/user/tax";
   const handleSave = (item) => {
     fetchData(url, "PUT", item);
   };
@@ -61,51 +61,57 @@ export default function Summary() {
           </tr>
         </thead>
         <tbody>
-          {items.map((item, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleUpdate(index, "name", e.target.value, item)
-                  }
-                  onBlur={(e) => handleSave(item)}
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={item.amount}
-                  onChange={(e) =>
-                    handleUpdate(
-                      index,
-                      "amount",
-                      parseFloat(e.target.value),
-                      item
-                    )
-                  }
-                  onBlur={() => handleSave(item)}
-                />
-              </td>
-              <td>
-                <span>{item.due >= 0 ? "+ " : "- "}</span>
-                <input
-                  type="number"
-                  value={item.due}
-                  onChange={(e) =>
-                    handleUpdate(index, "due", parseFloat(e.target.value), item)
-                  }
-                  onBlur={() => handleSave(item)}
-                />
-              </td>
-              <td className="delete-icon">
-                <button onClick={() => handleDelete(item)}>
-                  <img src={deleteIcon} />
-                </button>
-              </td>
-            </tr>
-          ))}
+          {items &&
+            items.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    value={item.name}
+                    onChange={(e) =>
+                      handleUpdate(index, "name", e.target.value, item)
+                    }
+                    onBlur={(e) => handleSave(item)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={item.amount}
+                    onChange={(e) =>
+                      handleUpdate(
+                        index,
+                        "amount",
+                        parseFloat(e.target.value),
+                        item
+                      )
+                    }
+                    onBlur={() => handleSave(item)}
+                  />
+                </td>
+                <td>
+                  <span>{item.due >= 0 ? "+ " : "- "}</span>
+                  <input
+                    type="number"
+                    value={item.due}
+                    onChange={(e) =>
+                      handleUpdate(
+                        index,
+                        "due",
+                        parseFloat(e.target.value),
+                        item
+                      )
+                    }
+                    onBlur={() => handleSave(item)}
+                  />
+                </td>
+                <td className="delete-icon">
+                  <button onClick={() => handleDelete(item)}>
+                    <img src={deleteIcon} />
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
         <tfoot>
           <tr>

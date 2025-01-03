@@ -2,4 +2,5 @@
   border: 2px solid #e6e7eb;
   padding: 20px 40px;
   max-height: 600px;
+  overflow-y: auto;
 }
