@@ -2,7 +2,7 @@ const express = require("express");
 const connection = require("../../db/db");
 const router = express.Router();
 
-// get all past tax period payments
+// get all past tax item
 router.get("/", (req, res) => {
   const query = "SELECT * FROM Tax_Line_Item WHERE user_id = ?";
   connection.query(query, [req.session.userId], (err, items) => {
@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// add a new tax period payment
+// add a new tax item
 router.post("/", (req, res) => {
   const { amount, year } = req.body;
   const query = "INSERT INTO Tax_period (amount, year, user_id) VALUES (?,?,?)";
@@ -36,6 +36,7 @@ router.post("/", (req, res) => {
   );
 });
 
+//delete tax item
 router.delete("/", (req, res) => {
   const { id } = req.body;
   const query = "DELETE FROM Tax_Line_Item WHERE id = ? AND user_id = ?";
@@ -81,6 +82,28 @@ router.post("/tfsa-contribution", (req, res) => {
       }
       res.status(201).json({
         message: "Tax-free savings account contribution added.",
+        contributionId: results.insertId,
+      });
+    }
+  );
+});
+
+//edit tfsa contribution
+router.put("/tfsa-contribution", (req, res) => {
+  const { id, amount, month, year } = req.body;
+  const query =
+    "UPDATE TFSA_contribution SET amount = ?, month = ?, year = ? WHERE id = ? AND user_id = ?";
+  connection.query(
+    query,
+    [amount, month, year, id, req.session.userId],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Error updating the TFSA contribution",
+        });
+      }
+      res.status(201).json({
+        message: "TFSA contribution added.",
         contributionId: results.insertId,
       });
     }
