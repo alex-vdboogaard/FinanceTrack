@@ -8,13 +8,12 @@ export default function Summary() {
   const [items, setItems] = useState([]);
   const [totalOwed, setTotalOwed] = useState(0);
   const [rerender, setRerender] = useState(false);
+  const url = "http://localhost:3001/user/tax";
 
   const calculateTotals = (items) => {
     const totalDue = items.reduce((acc, item) => acc + parseFloat(item.due), 0);
     setTotalOwed(totalDue);
   };
-
-  const url = "http://localhost:3001/user/tax";
 
   const handleSave = (item) => {
     fetchData(url, "PUT", item);
@@ -60,9 +59,12 @@ export default function Summary() {
   useEffect(() => {
     fetchData(`${url}/${year}`).then((data) => {
       setItems(data.items);
-      calculateTotals(items);
     });
   }, [year, rerender]);
+
+  useEffect(() => {
+    calculateTotals(items);
+  }, [items]);
 
   return (
     <div className="summary-wrapper">
