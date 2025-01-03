@@ -58,7 +58,7 @@ export default function Summary() {
   };
 
   useEffect(() => {
-    fetchData(url).then((data) => {
+    fetchData(`${url}/${year}`).then((data) => {
       setItems(data.items);
       calculateTotals(items);
     });
@@ -66,7 +66,24 @@ export default function Summary() {
 
   return (
     <div className="summary-wrapper">
-      <h2 className="h2">Summary for {year}</h2>
+      <h2 className="h2">
+        Summary for{" "}
+        <select
+          className="normal-select"
+          value={year}
+          onChange={(e) => setYear(() => parseInt(e.target.value, 10))}
+          onBlur={(e) => setYear(() => parseInt(e.target.value, 10))}
+        >
+          {Array.from({ length: 21 }, (_, i) => {
+            const yearOption = new Date().getFullYear() - 10 + i;
+            return (
+              <option key={yearOption} value={yearOption}>
+                {yearOption}
+              </option>
+            );
+          })}
+        </select>
+      </h2>
       <table>
         <thead>
           <tr className="no-border">
@@ -79,7 +96,11 @@ export default function Summary() {
           </tr>
         </thead>
         <tbody>
-          {items &&
+          {items.length === 0 ? (
+            <tr>
+              <td colSpan={"4"}>No items</td>
+            </tr>
+          ) : (
             items.map((item, index) => (
               <tr key={index}>
                 <td>
@@ -119,7 +140,8 @@ export default function Summary() {
                   </button>
                 </td>
               </tr>
-            ))}
+            ))
+          )}
         </tbody>
         <tfoot>
           <tr>
