@@ -19,19 +19,18 @@ export default function Summary() {
   const handleSave = (item) => {
     fetchData(url, "PUT", item);
   };
-  const handleDelete = async (asset) => {
+
+  const handleDelete = async (item) => {
     const confirm = await pops.confirmPop(
-      `Are you sure you want to delete '${asset.name}'?`
+      `Are you sure you want to delete '${item.name}'?`
     );
     if (confirm) {
-      fetchData(url, "DELETE", { id: asset.id, userId: asset.userId }).then(
-        () => {
-          const updatedItems = items.filter((item) => item.id !== item.id);
-          setItems(updatedItems);
-          calculateTotals(updatedItems);
-          pops.simplePop("success", "Item deleted");
-        }
-      );
+      fetchData(url, "DELETE", item).then(() => {
+        const updatedItems = items.filter((i) => i.id !== item.id);
+        setItems(updatedItems);
+        calculateTotals(updatedItems);
+        pops.simplePop("success", "Item deleted");
+      });
     }
   };
 

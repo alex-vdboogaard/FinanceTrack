@@ -36,6 +36,22 @@ router.post("/", (req, res) => {
   );
 });
 
+router.delete("/", (req, res) => {
+  const { id } = req.body;
+  const query = "DELETE FROM Tax_Line_Item WHERE id = ? AND user_id = ?";
+  connection.query(query, [id, req.session.userId], (err, affected) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Error deleting from the database" });
+    }
+    if (affected.length === 0) {
+      res.status(400).json({ message: "Item not found" });
+    }
+    res.status(200).json({ message: "Item deleted" });
+  });
+});
+
 //get all tfsa contributions
 router.get("/tfsa-contribution", (req, res) => {
   const query = "SELECT * FROM TFSA_contribution WHERE user_id = ?";
