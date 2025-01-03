@@ -28,6 +28,7 @@ import FolderPage from "./pages/statements/folders/FolderPage";
 import Loans from "./pages/loans/Loans";
 import LoanPage from "./pages/loans/LoanPage";
 import Calendar from "./pages/calendar/Calendar";
+import Tax from "./pages/tax/Tax";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function AppContent() {
         <Route path="/statements" element={<Statements />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/statements/folder/:id" element={<FolderPage />} />
+        <Route path="/tax" element={<Tax />} />
         {/* Catch not existent routes */}
         <Route path="*" element={<NotFound />} />
       </Routes>

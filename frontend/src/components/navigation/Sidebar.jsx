@@ -19,6 +19,7 @@ import toggleIcon from "../../assets/toggle-arrow.svg";
 import toggledIcon from "../../assets/toggled.svg";
 import netWorthIcon from "../../assets/net-worth.svg";
 import calendarIcon from "../../assets/calendar.svg";
+import taxIcon from "../../assets/tax.svg";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -165,6 +166,17 @@ const Sidebar = () => {
               </li>
             </ul>
           )}
+          <li className={isActive("/tax") ? "active" : ""}>
+            <Link to="/tax">
+              <img
+                style={{ marginTop: "2px" }}
+                className={isActive("/tax") ? "active-icon" : "icon"}
+                src={taxIcon}
+                alt="tax-icon"
+              />
+              {!isCollapsed && <span>Tax</span>}
+            </Link>
+          </li>
           <li className={isActive("/calendar") ? "active" : ""}>
             <Link to="/calendar">
               <img
