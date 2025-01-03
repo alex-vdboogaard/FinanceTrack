@@ -3,9 +3,10 @@ const connection = require("../../db/db");
 const router = express.Router();
 
 // get all past tax item
-router.get("/", (req, res) => {
-  const query = "SELECT * FROM Tax_Line_Item WHERE user_id = ?";
-  connection.query(query, [req.session.userId], (err, items) => {
+router.get("/:year", (req, res) => {
+  const { year = new Date().getFullYear() } = req.params;
+  const query = "SELECT * FROM Tax_Line_Item WHERE user_id = ? AND year = ?";
+  connection.query(query, [req.session.userId, year], (err, items) => {
     if (err) {
       return res
         .status(500)
