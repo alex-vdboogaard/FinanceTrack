@@ -157,11 +157,11 @@ VALUES
 (650.00, 3, 2024, 1),
 (450.00, 4, 2024, 1);
 
-INSERT INTO Tax_line_item (name, amount, user_id) 
+INSERT INTO Tax_line_item (name, year, amount, due, user_id) 
 VALUES
-('Income Tax', 1000.00, 1), 
-('Capital Gains Tax', 200.50, 1), 
-('Dividend Tax', 300.75, 1), 
-('VAT', 450.00, 1), 
-('Corporate Tax', 1250.00, 1), 
-('Property Tax', 800.00, 1);
+('Income Tax',2024, 30000.00, 10000.00, 1), 
+('Capital Gains Tax', 2024, 1500.00, 500.00, 1), 
+('Dividend Tax',2024, -300.00, 0.00, 1), -- Indicates a refund of 300
+('VAT', 4500.00, 2024,1500.00, 1), 
+('Corporate Tax', 2024,-2000.00, 0.00, 1), -- Indicates a refund of 2000
+('Property Tax', 2024,1200.00, 600.00, 1); 
