@@ -18,7 +18,6 @@ import arrowLeftIcon from "../../assets/arrow-left.svg";
 import toggleIcon from "../../assets/toggle-arrow.svg";
 import toggledIcon from "../../assets/toggled.svg";
 import netWorthIcon from "../../assets/net-worth.svg";
-import calendarIcon from "../../assets/calendar.svg";
 import taxIcon from "../../assets/tax.svg";
 
 const Sidebar = () => {
@@ -169,7 +168,6 @@ const Sidebar = () => {
           <li className={isActive("/tax") ? "active" : ""}>
             <Link to="/tax">
               <img
-                style={{ marginTop: "2px" }}
                 className={isActive("/tax") ? "active-icon" : "icon"}
                 src={taxIcon}
                 alt="tax-icon"
