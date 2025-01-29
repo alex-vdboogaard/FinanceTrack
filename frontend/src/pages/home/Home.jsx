@@ -9,93 +9,85 @@ import AssetDiv from "./AssetDiv";
 import NetWorthPie from "./NetWorthPie";
 
 export default function Home() {
-    const [bankAccounts, setBankAccounts] = useState([]);
-    const [investments, setInvestments] = useState([]);
-    const [assets, setAssets] = useState([]);
-    const [firstName, setFirstName] = useState("firstName");
+  const [bankAccounts, setBankAccounts] = useState([]);
+  const [investments, setInvestments] = useState([]);
+  const [assets, setAssets] = useState([]);
+  const [firstName, setFirstName] = useState("firstName");
 
-    // Calculate totals using useMemo
-    const totalBankAccounts = useMemo(
-        () =>
-            bankAccounts.reduce(
-                (acc, a) => acc + parseFloat(a.balance || 0),
-                0
-            ),
-        [bankAccounts]
-    );
+  // Calculate totals using useMemo
+  const totalBankAccounts = useMemo(
+    () => bankAccounts.reduce((acc, a) => acc + parseFloat(a.balance || 0), 0),
+    [bankAccounts]
+  );
 
-    const totalInvestments = useMemo(
-        () =>
-            investments.reduce(
-                (acc, i) => acc + parseFloat(i.currentValue || 0),
-                0
-            ),
-        [investments]
-    );
+  const totalInvestments = useMemo(
+    () =>
+      investments.reduce((acc, i) => acc + parseFloat(i.currentValue || 0), 0),
+    [investments]
+  );
 
-    const totalAssets = useMemo(
-        () =>
-            assets.reduce((acc, a) => acc + parseFloat(a.currentValue || 0), 0),
-        [assets]
-    );
+  const totalAssets = useMemo(
+    () => assets.reduce((acc, a) => acc + parseFloat(a.currentValue || 0), 0),
+    [assets]
+  );
 
-    const currentHour = new Date().getHours();
-    const greeting =
-        currentHour < 12
-            ? "Good morning"
-            : currentHour < 18
-            ? "Good afternoon"
-            : "Good evening";
+  const currentHour = new Date().getHours();
+  const greeting =
+    currentHour < 12
+      ? "Good morning"
+      : currentHour < 18
+      ? "Good afternoon"
+      : "Good evening";
 
-    useEffect(() => {
-        fetchData("http://localhost:3001/overview").then((data) => {
-            setBankAccounts(data.bankAccounts);
-            setInvestments(data.investments);
-            setAssets(data.assets);
-            setFirstName(data.firstName);
-        });
-    }, []);
+  useEffect(() => {
+    fetchData("http://localhost:3001/overview").then((data) => {
+      setBankAccounts(data.bankAccounts);
+      setInvestments(data.investments);
+      setAssets(data.assets);
+      setFirstName(data.firstName);
+    });
+  }, []);
 
-    return (
-        <main>
-            <h1>
-                {greeting}, {firstName}
-            </h1>
-            <div
-                style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignItems: "flex-start",
-                }}
-            >
-                <Widget width="500px" maxHeight={"500px"}>
-                    <NetWorthPie
-                        assets={assets}
-                        investments={investments}
-                        bankAccounts={bankAccounts}
-                    />
-                </Widget>
-                <Widget width="500px" maxHeight="500px">
-                    <h2>Bank accounts: R{totalBankAccounts}</h2>
-                    {bankAccounts.map((account, index) => (
-                        <BankAccountDiv key={index} account={account} />
-                    ))}
-                </Widget>
-                <Widget width="500px" maxHeight="500px">
-                    <h2>Investments: R{totalInvestments}</h2>
-                    {investments.map((inv, index) => (
-                        <InvestmentDiv key={index} investment={inv} />
-                    ))}
-                </Widget>
-                <Widget width="500px" maxHeight="400px">
-                    <h2>Assets: R{totalAssets}</h2>
-                    <div style={{ display: "flex", overflowX: "auto" }}>
-                        {assets.map((asset, index) => (
-                            <AssetDiv key={index} asset={asset} />
-                        ))}
-                    </div>
-                </Widget>
-            </div>
-        </main>
-    );
+  return (
+    <main>
+      <h1>
+        {greeting}, {firstName}
+      </h1>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "flex-start",
+        }}
+      >
+        <Widget width="600px" maxHeight={"500px"}>
+          <NetWorthPie
+            assets={assets}
+            investments={investments}
+            bankAccounts={bankAccounts}
+          />
+        </Widget>
+        <Widget width="600px" height="500px">
+          <h2>Bank accounts: R{totalBankAccounts}</h2>
+          {bankAccounts.map((account, index) => (
+            <BankAccountDiv key={index} account={account} />
+          ))}
+        </Widget>
+        <Widget width="600px" height="500px">
+          <h2>Investments: R{totalInvestments}</h2>
+          {investments.map((inv, index) => (
+            <InvestmentDiv key={index} investment={inv} />
+          ))}
+        </Widget>
+        <Widget width="600px" height="500px">
+          <h2>Assets: R{totalAssets}</h2>
+          <div>
+            {assets.map((asset, index) => (
+              <AssetDiv key={index} asset={asset} />
+            ))}
+          </div>
+        </Widget>
+      </div>
+    </main>
+  );
 }
