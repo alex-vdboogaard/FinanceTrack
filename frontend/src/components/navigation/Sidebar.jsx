@@ -177,16 +177,6 @@ const Sidebar = () => {
               {!isCollapsed && <span>Tax</span>}
             </Link>
           </li>
-          <li className={isActive("/calendar") ? "active" : ""}>
-            <Link to="/calendar">
-              <img
-                className={isActive("/calendar") ? "active-icon" : "icon"}
-                src={calendarIcon}
-                alt="calendar-icon"
-              />
-              {!isCollapsed && <span>Calendar</span>}
-            </Link>
-          </li>
           <li className={isActive("/statements") ? "active" : ""}>
             <Link to="/statements">
               <img
