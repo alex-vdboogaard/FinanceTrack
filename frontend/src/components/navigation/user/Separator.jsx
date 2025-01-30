@@ -1,7 +1,7 @@
 export default function Separator() {
   const styles = {
     borderTop: "1px solid #bbb",
-    maxWidth: "500px",
+    maxWidth: "99%",
     width: "100%",
   };
 

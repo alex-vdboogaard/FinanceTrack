@@ -84,6 +84,7 @@ export default function UserWidget({
         toggleSidebar={handleCloseUserModal}
         type={"center"}
         isOpen={isUserModalOpen}
+        styles={{ minHeight: "80%", minWidth: "70%" }}
       >
         <UserAccountModal
           user={user}
