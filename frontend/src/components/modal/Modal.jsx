@@ -3,7 +3,13 @@ import "./Modal.css";
 import closeIcon from "../../assets/close.svg";
 import { useEffect } from "react";
 
-const Modal = ({ isOpen, toggleSidebar, children, type = null }) => {
+const Modal = ({
+  isOpen,
+  toggleSidebar,
+  children,
+  type = null,
+  styles = null,
+}) => {
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === "Escape" && isOpen) {
@@ -24,7 +30,7 @@ const Modal = ({ isOpen, toggleSidebar, children, type = null }) => {
 
   if (type === "center") {
     return (
-      <div className={`center-modal ${isOpen ? "open" : ""}`}>
+      <div style={styles} className={`center-modal ${isOpen ? "open" : ""}`}>
         <button className="modal-toggle-right" onClick={toggleSidebar}>
           <img src={closeIcon} alt="close icon" />
         </button>
