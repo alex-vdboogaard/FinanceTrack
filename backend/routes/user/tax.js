@@ -1,6 +1,9 @@
 const express = require("express");
 const connection = require("../../db/db");
+const ValidateLoggedIn = require("../../middleware/ValidateLoggedIn");
 const router = express.Router();
+
+router.use(ValidateLoggedIn);
 
 // get all past tax item
 router.get("/:year", (req, res) => {
