@@ -1,6 +1,7 @@
 import Separator from "./Separator";
 import ProfilePhotoSection from "./Account-Sections/ProfilePictureSection";
 import FullNameSection from "./Account-Sections/FullNameSection";
+import BackupsSection from "./Account-Sections/BackupsSection";
 export default function UserAccountModal({ user, creditScore, netWorth }) {
   return (
     <>
@@ -12,6 +13,7 @@ export default function UserAccountModal({ user, creditScore, netWorth }) {
       <Separator></Separator>
       <FullNameSection></FullNameSection>
       <Separator></Separator>
+      <BackupsSection></BackupsSection>
     </>
   );
 }
