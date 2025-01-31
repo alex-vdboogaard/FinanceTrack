@@ -37,6 +37,7 @@ export default function ProfilePhotoSection() {
       const data = await response.json();
       if (response.ok) {
         simplePop("success", data.message);
+        setModalOpen(false);
         handleRefresh();
       } else {
         simplePop("error", data.message);
@@ -53,7 +54,12 @@ export default function ProfilePhotoSection() {
     <>
       <p className="grey-section-label">Profile picture</p>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img alt="profile photo" className="profile-photo-bubble" src={photo} />
+        <img
+          style={{ objectFit: "cover" }}
+          alt="profile photo"
+          className="profile-photo-bubble"
+          src={photo}
+        />
         <Button
           className="primary-btn"
           styles={{ marginRight: "13px" }}
@@ -72,6 +78,7 @@ export default function ProfilePhotoSection() {
           setModalOpen(false);
         }}
         type={"center"}
+        styles={{ minHeight: "20%" }}
       >
         <h2 className="h2">Upload profile photo</h2>
         <form
@@ -91,6 +98,7 @@ export default function ProfilePhotoSection() {
             ref={fileInputRef}
             id="file-input"
             accept=".png"
+            style={{ marginBottom: "20px" }}
           />
           <Button
             className="secondary-btn"
