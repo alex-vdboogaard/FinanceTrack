@@ -31,16 +31,18 @@ router.get("/", (req, res) => {
 
   connection.query(sql, [req.session.userId], (err, results) => {
     if (err) return res.status(500).json({ message: err.message });
-
-    if (results.length === 0 || !results[0].profile_photo) {
-      return res.status(404).json({ message: "No profile picture found" });
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (results[0].profile_photo === null) {
+      return res.status(200).json({ image: null });
     }
 
     const imageBuffer = results[0].profile_photo;
     const base64Image = imageBuffer.toString("base64");
     const imageSrc = `data:image/png;base64,${base64Image}`;
 
-    res.json({ image: imageSrc }); // Send the image as a Base64 string
+    res.status(200).json({ image: imageSrc }); // Send the image as a Base64 string
   });
 });
 
@@ -74,4 +76,14 @@ router.post("/", upload, (req, res) => {
   });
 });
 
+// DELETE route to remove profule photo
+router.delete("/", (req, res) => {
+  const sql = "UPDATE `User` SET profile_photo = null WHERE id = ?";
+
+  connection.query(sql, [req.session.userId], (err, results) => {
+    if (err) return res.status(500).json({ message: err.message });
+
+    res.status(200).json({ message: "Profile photo removed" });
+  });
+});
 module.exports = router;

@@ -2,7 +2,8 @@ import Button from "../../../button/Button";
 import { fetchData } from "../../../../utility/fetchData";
 import { useState, useRef, useEffect } from "react";
 import Modal from "../../../modal/Modal";
-import { simplePop } from "pop-message";
+import { confirmPop, simplePop } from "pop-message";
+import UserIcon from "../../../../assets/no-photo.jpg";
 
 export default function ProfilePhotoSection() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -50,6 +51,17 @@ export default function ProfilePhotoSection() {
   const handleRefresh = () => {
     setRefresh((prev) => !prev);
   };
+
+  const handleDeletePicture = async () => {
+    const confirm = await confirmPop("Remove profile photo?");
+    if (confirm) {
+      fetchData("http://localhost:3001/user/profile-photo", "DELETE").then(
+        (successData) => {
+          handleRefresh();
+        }
+      );
+    }
+  };
   return (
     <>
       <p className="grey-section-label">Profile picture</p>
@@ -58,7 +70,7 @@ export default function ProfilePhotoSection() {
           style={{ objectFit: "cover" }}
           alt="profile photo"
           className="profile-photo-bubble"
-          src={photo}
+          src={photo !== null ? photo : UserIcon}
         />
         <Button
           className="primary-btn"
