@@ -36,8 +36,11 @@ router.get("/", (req, res) => {
       return res.status(404).json({ message: "No profile picture found" });
     }
 
-    res.setHeader("Content-Type", "image/png"); // Set response type
-    res.send(results[0].profile_photo); // Send the binary image data
+    const imageBuffer = results[0].profile_photo;
+    const base64Image = imageBuffer.toString("base64");
+    const imageSrc = `data:image/png;base64,${base64Image}`;
+
+    res.json({ image: imageSrc }); // Send the image as a Base64 string
   });
 });
 
