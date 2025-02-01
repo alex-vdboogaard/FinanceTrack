@@ -1,65 +1,59 @@
 input,
 select,
 textarea {
-    margin: 0;
-    padding: 0;
-    border: none;
-    outline: none;
-    background: transparent;
-    font: inherit;
-    color: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
 }
 
 .h2 {
-    padding-left: 0px;
+  padding-left: 0px;
 }
 
 select,
 option {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* Optional: Customize focus state for better accessibility */
 input:focus,
 select:focus,
 textarea:focus {
-    outline: 2px solid #0057b300;
-    background-color: none;
+  outline: 2px solid #0057b300;
+  background-color: none;
 }
 
-
-
 label {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .normal-input {
-    margin-top: 8px;
-    border: 1px solid grey;
-    padding: 15px 20px;
+  margin-top: 8px;
+  border: 1px solid grey;
+  padding: 15px 20px;
 }
 
 .input-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 400px;
 }
 
 .delete-icon {
-    width: 100%;
-    height: 100%;
-    padding: 0px 0px 0px 20px;
-}
-
-.savings-row {
-    padding: 10px 10px;
+  width: 100%;
+  height: 100%;
+  padding: 0px 0px 0px 20px;
 }
 
 h3 {
-    margin: 0px;
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight: 500;
-    text-decoration: underline;
+  margin: 0px;
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  text-decoration: underline;
 }
