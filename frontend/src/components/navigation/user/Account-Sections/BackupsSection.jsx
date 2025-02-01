@@ -31,16 +31,14 @@ export default function BackupsSection() {
   };
 
   const handleRestore = async (backup) => {
-    const confirm = confirmPop(
+    const confirm = await confirmPop(
       "Restoring this backup will erase all current data. Proceed?"
     );
     if (confirm) {
       fetchData(
-        "http://localhost:3001/backup/restore",
-        "POST",
-        backup.name
+        `http://localhost:3001/backup/restore?name=${backup.name}`
       ).then((successData) => {
-        navigate("/overview");
+        navigate("http://localhost:5173/overview");
       });
     }
   };
