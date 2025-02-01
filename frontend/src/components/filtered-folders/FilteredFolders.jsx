@@ -12,9 +12,13 @@ export default function FilteredFolders({ title = "", name }) {
     });
   }, []);
 
+  if (folders.length === 0) {
+    return null;
+  }
+
   return (
     <>
-      {title && <h2 className="h2">{title}</h2>}
+      {title && folders.length > 0 && <h2 className="h2">{title}</h2>}
       <Folders
         folders={folders}
         loading={loading}
