@@ -108,18 +108,29 @@ router.post("/", ValidateLoggedIn, async (req, res) => {
           .map((key) => `\`${key}\``)
           .join(", ");
         const values = rows
-          .map(
-            (row) =>
-              `(${Object.values(row)
-                .map((value) => {
-                  if (value === null) return "NULL";
-                  if (value instanceof Date) {
-                    return `'${value.toISOString().slice(0, 19).replace("T", " ")}'`;
-                  }
-                  return `'${value}'`;
-                })
-                .join(", ")})`
-          )
+          .map((row) => {
+            const rowValues = Object.values(row)
+              .map((value) => {
+                if (value === null) return "NULL";
+                // Check if the value is a date
+                if (value instanceof Date) {
+                  return `'${value.toISOString().slice(0, 19).replace("T", " ")}'`;
+                }
+                // Check if the value is a Buffer (for binary data)
+                if (Buffer.isBuffer(value)) {
+                  // Convert to hex and format as a MySQL hex literal
+                  return `X'${value.toString("hex")}'`;
+                }
+                // Escape single quotes in string values (basic escaping)
+                if (typeof value === "string") {
+                  return `'${value.replace(/'/g, "''")}'`;
+                }
+                // For numbers or other types, just cast them to string
+                return `'${value}'`;
+              })
+              .join(", ");
+            return `(${rowValues})`;
+          })
           .join(",\n");
         sqlDump += `INSERT INTO \`${tableName}\` (${keys}) VALUES\n${values};\n\n`;
       }
