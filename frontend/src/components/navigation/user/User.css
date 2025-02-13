@@ -67,3 +67,16 @@
 .toggle-icon {
   padding: 17px 0px;
 }
+
+.grey-section-label {
+  font-size: 18px;
+  color: #4b4b4b;
+  margin-bottom: 27px;
+}
+
+.profile-photo-bubble {
+  border-radius: 100px;
+  margin-right: 20px;
+  height: 100px;
+  width: 100px;
+}

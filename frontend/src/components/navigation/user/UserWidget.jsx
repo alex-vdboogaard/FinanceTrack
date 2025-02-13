@@ -78,12 +78,13 @@ export default function UserWidget({
 
   const totalNetWorth = total1 + total2 + total3;
 
-  return (
-    <>
+  if (isUserModalOpen) {
+    return (
       <Modal
         toggleSidebar={handleCloseUserModal}
         type={"center"}
         isOpen={isUserModalOpen}
+        styles={{ minHeight: "80%", minWidth: "70%" }}
       >
         <UserAccountModal
           user={user}
@@ -91,6 +92,11 @@ export default function UserWidget({
           netWorth={netWorth}
         />
       </Modal>
+    );
+  }
+
+  return (
+    <>
       {showUserWidget && (
         <div className="user-widget">
           <button

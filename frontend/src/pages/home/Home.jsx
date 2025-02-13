@@ -60,7 +60,7 @@ export default function Home() {
           alignItems: "flex-start",
         }}
       >
-        <Widget width="600px" maxHeight={"500px"}>
+        <Widget width="600px" height={"500px"}>
           <NetWorthPie
             assets={assets}
             investments={investments}

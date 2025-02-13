@@ -17,7 +17,7 @@ CREATE TABLE `User` (
     last_name VARCHAR(100) DEFAULT NULL,
     dob DATE DEFAULT NULL,
     date_joined DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    profile_image LONGBLOB DEFAULT NULL
+    profile_photo LONGBLOB DEFAULT NULL
 );
 
 -- Create Credit_Score_History Table

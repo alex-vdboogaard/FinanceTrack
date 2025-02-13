@@ -1,7 +1,19 @@
+import Separator from "./Separator";
+import ProfilePhotoSection from "./Account-Sections/ProfilePictureSection";
+import FullNameSection from "./Account-Sections/FullNameSection";
+import BackupsSection from "./Account-Sections/BackupsSection";
 export default function UserAccountModal({ user, creditScore, netWorth }) {
-    return (
-        <>
-            <h2>Account</h2>
-        </>
-    );
+  return (
+    <>
+      <h2 className="h2" style={{ marginTop: "0px" }}>
+        Account
+      </h2>
+      <Separator top={true}></Separator>
+      <ProfilePhotoSection></ProfilePhotoSection>
+      <Separator></Separator>
+      <FullNameSection></FullNameSection>
+      <Separator></Separator>
+      <BackupsSection></BackupsSection>
+    </>
+  );
 }
