@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utility/fetchData";
 import deleteIcon from "../../../../assets/delete.svg";
 import { formatDate } from "../../../../utility/dates";
-import { confirmPop, simplePop } from "pop-message";
+import { confirmPop, inputPop, simplePop } from "pop-message";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../button/Button";
 
@@ -21,7 +21,10 @@ export default function BackupsSection() {
       "Are you sure you want to delete this backup?"
     );
     if (confirm) {
-      fetchData("http://localhost:3001/backup", "DELETE", backup.name).then(
+      const formData = {
+        name: backup.name,
+      };
+      fetchData("http://localhost:3001/backup", "DELETE", formData).then(
         (successData) => {
           simplePop("success", "Backup deleted");
           handleRefresh();
@@ -35,23 +38,46 @@ export default function BackupsSection() {
       "Restoring this backup will erase all current data. Proceed?"
     );
     if (confirm) {
-      fetchData(
-        `http://localhost:3001/backup/restore?name=${backup.name}`
-      ).then((successData) => {
-        navigate("http://localhost:5173/overview");
-      });
+      const formData = {
+        name: backup.name,
+      };
+      fetchData(`http://localhost:3001/backup/restore`, "POST", formData).then(
+        (successData) => {
+          navigate("http://localhost:5173/overview");
+        }
+      );
+    }
+  };
+
+  const handleNewBackup = async () => {
+    const name = await inputPop("Name your backup:");
+    if (name) {
+      const formData = {
+        name,
+      };
+      fetchData("http://localhost:3001/backup", "POST", formData).then(
+        (successData) => {
+          simplePop("success", "Backup created");
+        }
+      );
     }
   };
 
   useEffect(() => {
     fetchData("http://localhost:3001/backup").then((backups) => {
       setBackups(backups);
+      handleRefresh();
     });
   }, [refresh]);
 
   return (
     <>
-      <p className="grey-section-label">Backups</p>
+      <p className="grey-section-label">
+        Backups{" "}
+        <Button className="secondary-btn" onClick={() => handleNewBackup()}>
+          +
+        </Button>
+      </p>
       <table style={{ marginBottom: "50px" }}>
         <thead>
           <tr className="no-border">

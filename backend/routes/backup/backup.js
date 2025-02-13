@@ -29,7 +29,7 @@ router.get("/", ValidateLoggedIn, (req, res) => {
 // 2. Create a Backup
 router.post("/", ValidateLoggedIn, async (req, res) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const name = req.query.name || `Backup-${timestamp}`;
+  const name = req.body.name || `Backup-${timestamp}`;
   const backupFile = path.join(backupDirectory, `${name}.sql`);
 
   try {
@@ -148,7 +148,7 @@ router.post("/", ValidateLoggedIn, async (req, res) => {
 
 // 3. Restore a Backup
 router.post("/restore", ValidateLoggedIn, async (req, res) => {
-  let { name } = req.query;
+  let { name } = req.body;
   name = name + ".sql";
 
   if (!name) {
@@ -177,6 +177,24 @@ router.post("/restore", ValidateLoggedIn, async (req, res) => {
   } catch (error) {
     console.error("Error during restore:", error);
     res.status(500).send("Restore failed.");
+  }
+});
+
+// 4. Delete a Backup
+router.delete("/", ValidateLoggedIn, (req, res) => {
+  const { name } = req.body;
+  const backupFile = path.join(backupDirectory, `${name}`);
+
+  if (!fs.existsSync(backupFile)) {
+    return res.status(404).json({ message: "Backup file not found." });
+  }
+
+  try {
+    fs.unlinkSync(backupFile);
+    res.status(200).json({ message: "Backup deleted" });
+  } catch (error) {
+    console.error("Error deleting backup:", error);
+    res.status(500).json({ message: "Failed to delete backup." });
   }
 });
 
