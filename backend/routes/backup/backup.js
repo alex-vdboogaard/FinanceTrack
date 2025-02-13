@@ -138,7 +138,6 @@ router.post("/", ValidateLoggedIn, async (req, res) => {
 
     // Write the SQL file
     fs.writeFileSync(backupFile, sqlDump);
-    console.log("Backup created:", backupFile);
     res.send(`Backup successful! File saved as: ${name}.sql`);
   } catch (error) {
     console.error("Error during backup:", error);
